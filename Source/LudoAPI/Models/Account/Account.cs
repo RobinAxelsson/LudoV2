@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using LudoTranslation;
 
 namespace LudoAPI.Models.Account
 {
@@ -13,7 +12,7 @@ namespace LudoAPI.Models.Account
         [Required]
         public string Password { get; set; }
         [Required]
-        public TranslationEngine.Language Language { get; set; }
+        public string Language { get; set; }
         public string Role { get; set; }
     }
 }

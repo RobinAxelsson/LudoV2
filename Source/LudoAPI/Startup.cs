@@ -31,16 +31,7 @@ namespace LudoAPI
             
             //This seems to be required for auth to work for Ludo, but not for StarWars.
             //Further investigation required. Nuget issues?
-            services.AddAuthorization(options =>
-            {
-                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
-                    JwtBearerDefaults.AuthenticationScheme);
-
-                defaultAuthorizationPolicyBuilder =
-                    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-
-                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-            });
+          
             
             services.AddAuthentication(options =>
                 {
@@ -79,7 +70,7 @@ namespace LudoAPI
             app.UseRouting();
 
             app.UseAuthorization();
-
+            app.UseAuthentication();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }

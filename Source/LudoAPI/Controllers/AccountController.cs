@@ -52,7 +52,8 @@ namespace LudoAPI.Controllers
             var lang = TranslationEngine.ParseEnum(model.PreferredLanguage);
             if (TranslationEngine.EnumExists(model.PreferredLanguage))
             {
-                account.Language = TranslationEngine.ParseEnum(model.PreferredLanguage);
+                
+                account.Language = model.PreferredLanguage;
                 _repository.Add(account);
                 _repository.SaveChanges();
                 return Ok(account.Language.ToString());
