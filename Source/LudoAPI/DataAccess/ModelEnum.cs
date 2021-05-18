@@ -4,26 +4,10 @@
     //https://www.entityframeworktutorial.net/EntityFramework5/enum-in-entity-framework5.aspx //Enumsettings in SSM
     public static class ModelEnum
     {
-        public enum BoardDirection
+        public enum PlayerType
         {
-            Up,
-            Right,
-            Down,
-            Left
-        }
-        public enum TeamColor
-        {
-            Blue,
-            Red,
-            Yellow,
-            Green
-        }
-        public enum EndResult
-        {
-            First = 1,
-            Second = 2,
-            Third = 3,
-            Fourth = 4
+            Stephan,
+            Remote
         }
         public enum GameStatus
         {

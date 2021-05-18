@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using LudoAPI.Translation;
+using LudoTranslation;
 
 namespace LudoAPI.Models.Account
 {

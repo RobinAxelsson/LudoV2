@@ -16,4 +16,9 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.7.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\LudoGame\LudoGame.csproj" />
+      <ProjectReference Include="..\LudoTranslation\LudoTranslation.csproj" />
+    </ItemGroup>
+
 </Project>
