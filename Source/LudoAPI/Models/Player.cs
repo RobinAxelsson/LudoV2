@@ -1,11 +1,8 @@
 ﻿using System.Collections.Generic;
 using LudoAPI.DataAccess;
 using LudoGame.GameEngine;
-using LudoGame.GameEngine.Classes;
-using LudoGame.GameEngine.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
-namespace LudoServiceLib.GameEngine.Models
+namespace LudoAPI.Models
 {
     public record Player
     {
