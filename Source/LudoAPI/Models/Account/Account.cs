@@ -4,6 +4,7 @@ namespace LudoAPI.Models.Account
 {
     public record Account
     {
+        [Key]
         public int Id { get; set; }
         [Required]
         public string PlayerName { get; set; }

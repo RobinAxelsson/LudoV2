@@ -40,6 +40,7 @@ namespace LudoAPI.Controllers
         [Route("Register")]
         public IActionResult Register([FromBody] RegisterModel model)
         {
+            var te = new TranslationEngine();
             if (_repository.Accounts.SingleOrDefault(a => a.PlayerName == model.AccountName) != null)
                 return Conflict();
             var account = new Account
@@ -49,19 +50,21 @@ namespace LudoAPI.Controllers
                 PlayerName = model.AccountName,
                 Role = Role.User
             };
-            var lang = TranslationEngine.ParseEnum(model.PreferredLanguage);
-            if (TranslationEngine.EnumExists(model.PreferredLanguage))
+            if (TranslationEngine.Languages.Contains(model.PreferredLanguage))
             {
-                
                 account.Language = model.PreferredLanguage;
                 _repository.Add(account);
                 _repository.SaveChanges();
-                return Ok(account.Language.ToString());
+                return Ok(account.Language);
             }
-            var enums = Enum.GetValues<TranslationEngine.Language>()
-                    .Select(language => language.ToString()).ToList();
+            /*
+            We cannot input the list as a parameter in the message below because-
+            it will be typed to a .ToString() which results in just "System.Collection.List"
+            So we format a string instead
+            */
+            var languages = TranslationEngine.Languages.GetLanguages();
                 var message = "The chosen language was not found. Please pick one of below:\n";
-                enums.ForEach(l => message+= l + "\n");
+                languages.ForEach(l => message+= l + "\n");
                 return NotFound(message);
         }
         [HttpPost]

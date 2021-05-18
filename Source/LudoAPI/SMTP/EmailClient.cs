@@ -3,15 +3,24 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
+using LudoAPI.DataAccess;
 using LudoAPI.Models;
 using LudoAPI.Models.Account;
 using LudoTranslation;
+using Microsoft.Extensions.Configuration;
 
 namespace LudoAPI.SMTP
 {
-    public static class EmailClient
+    public class EmailClient
     {
-        public static void SendInvite(string recipient, Game game, Account host)
+        private readonly ILudoRepository _repository;
+        private readonly IConfiguration _configuration;
+        public EmailClient(ILudoRepository repository, IConfiguration configuration)
+        {
+            _repository = repository;
+            _configuration = configuration;
+        }
+        public void SendInvite(string[] recipients, Game game, Account host)
         {
             //Standard SMTP server for gmail
             var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -21,37 +30,29 @@ namespace LudoAPI.SMTP
                 Credentials = new NetworkCredential("ludoinvites.pgbsnh20@gmail.com", "kanelbulle123"),
                 EnableSsl = true,
             };
-            var message = new MailMessage
+            var accounts = _repository.Accounts;
+            //Send each email separate so we can use the target's native language
+            //This is also to avoid each user to see every recipient and exposing their addresses.
+            foreach (var account in accounts)
             {
-                From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
-                Subject = $"{host.PlayerName} " + Dict.Email_Subject,
-                IsBodyHtml = true,
-                Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
-            };
-            message.To.Add(recipient);
-            smtpClient.Send(message);
+                if (recipients.Contains(account.EmailAdress))
+                {
+                    var te = new TranslationEngine();
+                    te.InitializeLanguage(account.Language);
+                    var message = new MailMessage
+                    {
+                        From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
+                        Subject = $"{host.PlayerName} " + Dict.Email_Subject,
+                        IsBodyHtml = true,
+                        Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
+             
+                    };
+                    message.To.Add(account.EmailAdress);
+                    smtpClient.Send(message);
+                }
+            }
         }
-        public static void SendInvite(string[] recipients, Game game, Account host)
-        {
-            //Standard SMTP server for gmail
-            var smtpClient = new SmtpClient("smtp.gmail.com")
-            {
-                //Standard SMTP port
-                Port = 587, 
-                Credentials = new NetworkCredential("ludoinvites.pgbsnh20@gmail.com", "kanelbulle123"),
-                EnableSsl = true,
-            };
-            var message = new MailMessage
-            {
-                From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
-                Subject = $"{host.PlayerName} " + Dict.Email_Subject,
-                IsBodyHtml = true,
-                Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
-            };
-            recipients.ToList().ForEach(s => message.To.Add(s));
-            smtpClient.Send(message);
-        }
-        private static string GenerateBody(string gameId, string accountId, string gameUrl)
+        private string GenerateBody(string gameId, string accountId, string gameUrl)
         {
             var doc = File.ReadAllText(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) +
                              "/SMTP/Resources/emailbody_raw.html");

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace LudoAPI.Controllers.Bodies
 {
@@ -6,8 +7,6 @@ namespace LudoAPI.Controllers.Bodies
     { 
         [Required(ErrorMessage = "Hostname is required")]
         public string HostAccountName { get; set; }
-        
-        [Required(ErrorMessage = "User Name is required")]
         public string[] Recipients { get; set; }
     }
 }

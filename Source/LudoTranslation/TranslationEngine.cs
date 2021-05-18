@@ -6,19 +6,19 @@ using System.Reflection;
 
 namespace LudoTranslation
 {
-    public static class TranslationEngine
+    public class TranslationEngine
     {
-        private static readonly Dictionary<string, string> Dictionary;
+        private readonly Dictionary<string, string> Dictionary;
 
-        static TranslationEngine()
+         public TranslationEngine()
         {
             Dictionary = new Dictionary<string, string>();
         }
 
-        public static void InitializeLanguage(string lang)
+        public void InitializeLanguage(string lang)
         {
             var line = "";
-            var reader = new StreamReader(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/Translation/Translations/" + lang + ".lang");
+            var reader = new StreamReader(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/Translations/" + lang + ".lang");
             while ((line = reader.ReadLine()) != null && !string.IsNullOrWhiteSpace(line) && line.Contains("=="))
             {
                 var lineSplit = line.Split("==");
@@ -28,22 +28,33 @@ namespace LudoTranslation
             }
         }
 
-        public enum Language
+        public static class Languages
         {
-            en_US,
-            sv_SE
+            public const string en_US = "en_US";
+            public const string sv_SE = "sv_SE";
+            public static bool Contains(string input)
+            {
+                return typeof(Languages).GetFields().Select(f => f.Name.ToLower()).ToList().Contains(input.ToLower());
+            }
+            public static List<string> GetLanguages()
+            {
+                return typeof(Languages).GetFields().Select(f => f.Name).ToList();
+            }
         }
-
-        public static Language ParseEnum(string language)
+        /*
+         * Archived code.
+           Language used to be an enum
+           
+        public Language ParseEnum(string language)
         {
             var success = Enum.TryParse(language, true, out Language lang);
             return success ? lang : Language.en_US;
         }
-        public static bool EnumExists(string language)
+        public bool EnumExists(string language)
         {
             var success = Enum.TryParse(language, true, out Language lang);
             return success;
         }
-
+        */
     }
 }
