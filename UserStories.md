@@ -6,12 +6,11 @@
 
 As User I want to:
 
-Create public game*
 Create new boards/games*
 Send invite e-mails from account**
 Create private game with friends**
-Be invited by e-mail**
 Create account***
+Create public game***
 Quick find game***
 Play against AI***
 Log in and view account***

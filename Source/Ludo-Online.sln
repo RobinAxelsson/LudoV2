@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo-Web.MVC-Game", "Ludo-Web.MVC-Game\Ludo-Web.MVC-Game.csproj", "{4EA26E5A-51E7-441C-B475-BF2BE0A1F5AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ludo-Web.MVC-Platform", "Ludo-Web.MVC-Platform\Ludo-Web.MVC-Platform.csproj", "{8ED8EFED-30FD-437C-B2E5-9686FB804254}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoAPI", "LudoAPI\LudoAPI.csproj", "{B9964042-AFFB-45A5-B50A-87786CD049DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4EA26E5A-51E7-441C-B475-BF2BE0A1F5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EA26E5A-51E7-441C-B475-BF2BE0A1F5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EA26E5A-51E7-441C-B475-BF2BE0A1F5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EA26E5A-51E7-441C-B475-BF2BE0A1F5AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED8EFED-30FD-437C-B2E5-9686FB804254}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED8EFED-30FD-437C-B2E5-9686FB804254}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED8EFED-30FD-437C-B2E5-9686FB804254}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED8EFED-30FD-437C-B2E5-9686FB804254}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9964042-AFFB-45A5-B50A-87786CD049DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9964042-AFFB-45A5-B50A-87786CD049DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9964042-AFFB-45A5-B50A-87786CD049DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9964042-AFFB-45A5-B50A-87786CD049DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {204E39A1-8C98-4D07-86DE-166EE75E9483}
+	EndGlobalSection
+EndGlobal

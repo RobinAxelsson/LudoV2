@@ -1,0 +1,41 @@
+﻿    11e12
+    0 a r4
+    0 a 2
+ 5  0 a 2
+1l110 a 11112
+0     a     2
+fbbbbbsdddddh
+0     c     2
+03333 c 233n3
+    0 c 2  7
+    0 c 2
+   6y c 2
+    03g33
+/*
+
+0-up
+1-right
+2-down
+3-left
+
+a - red safe zone, down
+b - blue safe zone, right
+c - yellow safe zone, up
+d - green safe zone, left
+
+e - red exit, down
+f - blue exit, right
+g - yellow exit, up
+h - green exit, left
+
+r - red start, down
+l - blue start, right
+y - yellow start, up
+n - green start, left
+
+4 - red base, left
+5 - blue base, down
+6 - yellow base, right
+7 - green base, up
+
+s - finish
