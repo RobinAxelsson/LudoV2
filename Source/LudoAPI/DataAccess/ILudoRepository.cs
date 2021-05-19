@@ -8,6 +8,7 @@ namespace LudoAPI.DataAccess
     {
         IQueryable<Account> Accounts { get; }
         IQueryable<Game> Games { get; }
+        IQueryable<Player> Players { get; }
         IQueryable<AccountToken> AccountTokens { get; }
         void Add<TEntityType>(TEntityType entity);
         void Update<TEntityType>(TEntityType entity);
