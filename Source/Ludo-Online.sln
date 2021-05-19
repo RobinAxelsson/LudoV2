@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoAPI", "LudoAPI\LudoAPI.csproj", "{B9964042-AFFB-45A5-B50A-87786CD049DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoGame", "LudoGame\LudoGame.csproj", "{6EE26AF5-5EE4-41B1-8F7B-36848B379805}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoGame", "LudoGame\LudoGame.csproj", "{6EE26AF5-5EE4-41B1-8F7B-36848B379805}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoTranslation", "LudoTranslation\LudoTranslation.csproj", "{7D29E7B1-51C9-47AE-882C-A3A70303F246}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoTranslation", "LudoTranslation\LudoTranslation.csproj", "{7D29E7B1-51C9-47AE-882C-A3A70303F246}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoGameTest", "LudoGameTest\LudoGameTest.csproj", "{8B726E03-2B9B-4FED-917E-A0B0B42D11F4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{7D29E7B1-51C9-47AE-882C-A3A70303F246}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D29E7B1-51C9-47AE-882C-A3A70303F246}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D29E7B1-51C9-47AE-882C-A3A70303F246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B726E03-2B9B-4FED-917E-A0B0B42D11F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B726E03-2B9B-4FED-917E-A0B0B42D11F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B726E03-2B9B-4FED-917E-A0B0B42D11F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B726E03-2B9B-4FED-917E-A0B0B42D11F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
