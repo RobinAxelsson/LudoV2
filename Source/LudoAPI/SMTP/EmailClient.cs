@@ -13,6 +13,7 @@ namespace LudoAPI.SMTP
 {
     public class EmailClient
     {
+        private Dict dict;
         private readonly ILudoRepository _repository;
         private readonly IConfiguration _configuration;
         public EmailClient(ILudoRepository repository, IConfiguration configuration)
@@ -38,11 +39,12 @@ namespace LudoAPI.SMTP
                 if (recipients.Contains(account.EmailAdress))
                 {
                     var te = new TranslationEngine();
-                    te.InitializeLanguage(account.Language);
+                    dict = te.InitializeLanguage(account.Language);
+                   
                     var message = new MailMessage
                     {
                         From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
-                        Subject = $"{host.PlayerName} " + Dict.Email_Subject,
+                        Subject = $"{host.PlayerName} " + dict.Email_Subject,
                         IsBodyHtml = true,
                         Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
              
@@ -54,13 +56,14 @@ namespace LudoAPI.SMTP
         }
         private string GenerateBody(string gameId, string accountId, string gameUrl)
         {
+            
             var doc = File.ReadAllText(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) +
                              "/SMTP/Resources/emailbody_raw.html");
             doc = doc
                 .Replace("GAMEID", gameId)
                 .Replace("ACCOUNTID", accountId)
-                .Replace("INVITEDTITLE", Dict.Email_Title)
-                .Replace("SUBTITLE", Dict.Email_Subtitle)
+                .Replace("INVITEDTITLE", dict.Email_Title)
+                .Replace("SUBTITLE", dict.Email_Subtitle)
                 .Replace("JOINGAMEURI", gameUrl);
             //Above path will need to be updated.
             File.WriteAllText(@"C:\Users\Albin\Desktop\test.html", doc);

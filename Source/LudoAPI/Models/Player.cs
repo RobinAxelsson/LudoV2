@@ -8,7 +8,8 @@ namespace LudoAPI.Models
     public record Player
     {
         [Key]
-        public int GameId { get; set; }
+        public int PlayerId { get; set; }
+        public Game Game { get; set; }
         public int AccountId { get; set; }
         public bool NextToThrow { get; set; }
         public int Result { get; set; }

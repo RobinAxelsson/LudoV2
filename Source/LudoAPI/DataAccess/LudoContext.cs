@@ -9,6 +9,7 @@ namespace LudoAPI.DataAccess
         public LudoContext(DbContextOptions<LudoContext> options) : base(options) { }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Game> Games { get; set; }
+        public DbSet<Player> Players { get; set; }
         public DbSet<AccountToken> AccountTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

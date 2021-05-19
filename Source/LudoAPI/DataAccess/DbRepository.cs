@@ -10,10 +10,11 @@ namespace LudoAPI.DataAccess
         public DbRepository(LudoContext db) => _db = db;
         public IQueryable<Account> Accounts => _db.Accounts;
         public IQueryable<Game> Games => _db.Games;
+        public IQueryable<Player> Players => _db.Players;
         public IQueryable<AccountToken> AccountTokens => _db.AccountTokens;
         public void Add<TEntityType>(TEntityType entity) => _db.Add(entity);
         public void Remove<TEntityType>(TEntityType entity) => _db.Remove(entity);
         public void SaveChanges() => _db.SaveChanges();
-        public void Update<TEntityType>(TEntityType entity) => _db.Remove(entity);
+        public void Update<TEntityType>(TEntityType entity) => _db.Update(entity);
     }
 }
