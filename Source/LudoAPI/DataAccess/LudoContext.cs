@@ -12,8 +12,14 @@ namespace LudoAPI.DataAccess
         public DbSet<AccountToken> AccountTokens { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-         
-        }
+            modelBuilder.Entity<Player>()
+                .HasKey(o => new { o.GameId, o.AccountId }); //Composite key => only same Account once in every game.
 
+            modelBuilder.Entity<Player>()
+                .HasAlternateKey(o => new { o.Color, o.GameId }); //Unique constraint color and game => no duplicate colors.
+
+            modelBuilder.Entity<Account>()
+                .HasAlternateKey(o => new { o.EmailAdress }); //Same e-mail is only allowed once.
+        }
     }
 }

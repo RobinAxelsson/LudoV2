@@ -7,9 +7,8 @@ namespace LudoAPI.Models
 {
     public record Player
     {
-        [Key]
-        public int GameId { get; set; }
         public int AccountId { get; set; }
+        public int GameId { get; set; }
         public bool NextToThrow { get; set; }
         public int Result { get; set; }
         public ICollection<Coordinates> PawnCoords { get; set; }
