@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using LudoAPI.DataAccess;
-using LudoGame.GameEngine;
 using System.ComponentModel.DataAnnotations;
+using LudoGame.GameEngine;
 
 namespace LudoAPI.Models
 {

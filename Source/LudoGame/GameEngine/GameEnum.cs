@@ -1,4 +1,6 @@
-﻿namespace LudoGame.GameEngine
+﻿using System;
+
+namespace LudoGame.GameEngine
 {
     public static class GameEnum
     {
