@@ -4,8 +4,7 @@ namespace LudoGame.GameEngine.Interfaces
 {
     public interface IGamePlay
     {
-        void SetUpTeams(IGameInfo gameInfo);
-        List<IGamePlayer> GetPlayers();
-        void Start();
+        List<IGamePlayer> ReadPlayers();
+        void Start(IGameInfo gameInfo);
     }
 }

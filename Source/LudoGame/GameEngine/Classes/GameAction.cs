@@ -120,6 +120,8 @@ namespace LudoGame.GameEngine.Classes
             
             if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.Color);
             if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.Color);
+            enemies.Add(pawn);
+            _gameEvent.InvokeOnMoveEvent(enemies.ToArray()); //enemies plus own.
         }
         private void ChangeCoordinates(List<Pawn> pawns, GameSquare targetSquare)
         {

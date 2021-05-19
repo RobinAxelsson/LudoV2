@@ -15,13 +15,12 @@ namespace LudoGame.GameEngine.Configuration
                 .AddScoped<IBoardCollection, IBoardCollection>()
                 .AddScoped<IGameAction, GameAction>()
                 .AddScoped<IGamePlay, GamePlay>()
-                .AddScoped<IGameEvent, GameEvent>()
-                .AddScoped<IFunctionRegistrar, FunctionRegistrar>()
+                .AddScoped<IGameFunction, GameFunction>()
+                .AddScoped<IGameEvent, DefaultGameEvent>()
                 .AddScoped<IOptionsValidator, OptionsValidator>()
-                .AddSingleton<IFunctionRegistrar, FunctionRegistrar>()
+                .AddSingleton<IGameFunction, GameFunction>()
                 .AddSingleton<IBoardOrm, BoardOrm>();
                 
-
             return container.BuildServiceProvider();
         }
     }

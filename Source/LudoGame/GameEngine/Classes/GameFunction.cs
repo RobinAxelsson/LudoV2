@@ -5,14 +5,16 @@ using LudoGame.GameEngine.Interfaces;
 
 namespace LudoGame.GameEngine.Classes
 {
-    public class FunctionRegistrar : IFunctionRegistrar
+    public class GameFunction : IGameFunction
     {
+        public GameFunction()
+        {
+            RollDice = rollDice;
+            GetFirstPlayer = getFirstPlayer;
+        }
         private readonly Random _rand = new();
-        public void RegRollDice(Func<int> rollDice) => rollDice = RollDice;
-        private int RollDice() => _rand.Next(100, 699) / 100;
-        public void RegFirstPlayer(Func<List<IGamePlayer>, IGamePlayer> getFirstPlayer) =>
-        getFirstPlayer = GetFirstPlayer;
-        private IGamePlayer GetFirstPlayer(List<IGamePlayer> players)
+        private int rollDice() => _rand.Next(100, 699) / 100;
+        private IGamePlayer getFirstPlayer(List<IGamePlayer> players)
         {
             var firsts = players.Where(p => p.NextToThrow == true).ToList();
             if (firsts.Any() == false || firsts.Count() > 1)
@@ -25,5 +27,7 @@ namespace LudoGame.GameEngine.Classes
             }
             return players.Find(p => p.NextToThrow == true) ?? throw new NullReferenceException();
         }
+        public Func<int> RollDice { get; }
+        public Func<List<IGamePlayer>, IGamePlayer> GetFirstPlayer { get; }
     }
 }

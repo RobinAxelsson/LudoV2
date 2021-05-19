@@ -11,31 +11,33 @@ namespace LudoGame.GameEngine.Classes
         private readonly IGameAction _action;
         private OrderedPlayerCollection _orderedPlayers;
         private readonly IGameEvent _gameEvent;
-        public GamePlay(IOptionsValidator validator, IGameAction action, IFunctionRegistrar registrar, IGameEvent gameEvent)
+        public GamePlay(IOptionsValidator validator, IGameAction action, IGameFunction gameFunctions, IGameEvent gameEvent)
         {
             _validator = validator;
             _action = action;
             _gameEvent = gameEvent;
-            registrar.RegFirstPlayer(_getFirstPlayer);
-            registrar.RegRollDice(_rollDice);
+            _getFirstPlayer = gameFunctions.GetFirstPlayer;
+            _rollDice = gameFunctions.RollDice;
         }
 
-        private Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
-        private Func<int> _rollDice;
-        public void SetUpTeams(IGameInfo gameInfo)
+        private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
+        private readonly Func<int> _rollDice;
+        private void SetUpTeams(IGameInfo gameInfo)
         {
             var players = gameInfo.Players;
             _orderedPlayers = new OrderedPlayerCollection(players, _getFirstPlayer);
             var pawns = _orderedPlayers.SelectMany(p => p.Pawns).ToList();
             _action.SetUpPawns(pawns);
         }
-
-        public List<IGamePlayer> GetPlayers()
+        public List<IGamePlayer> ReadPlayers()
         {
             return _orderedPlayers.Select(p => p).ToList();
         }
-        public void Start()
+        public void Start(IGameInfo gameInfo)
         {
+            SetUpTeams(gameInfo);
+
+            _gameEvent.InvokeOnNewGameEvent();
             while (true)
             {
                 foreach (var player in _orderedPlayers)
