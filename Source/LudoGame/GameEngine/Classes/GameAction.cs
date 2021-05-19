@@ -9,30 +9,17 @@ namespace LudoGame.GameEngine.Classes
     public class GameAction : IGameAction
     {
         private readonly IBoardCollection _boardCollection;
-
-        public GameAction(IBoardCollection collection)
+        private readonly IGameEvent _gameEvent;
+        public GameAction(IBoardCollection collection, IGameEvent gameEvent)
         {
             _boardCollection = collection;
+            _gameEvent = gameEvent;
         }
-        public event Action<TeamColor, int> OnMoveEvent;
-        public event Action<TeamColor> OnTakeOutTwoEvent;
-        public event Action OnNewGameEvent;
-        public event Action OnRestartedGameEvent;
-
-        public event Action<Pawn> OnBounceEvent;
-        public event Action<Pawn, int> OnGoalEvent;
-        public event Action<Pawn> OnAllTeamPawnsOutEvent;
-        public event Action<Pawn, TeamColor, int> OnEradicationEvent;
-        public event Action<TeamColor> GameLoserEvent;
-        public event Action GameOverEvent;
-        public event Action<Pawn> OnSafeZoneEvent;
-
         public void Act(Pawn[] pawns, int diceRoll)
         {
             if (pawns.Length == 0) return;
             if (pawns.Length == 2)
             {
-                OnTakeOutTwoEvent?.Invoke(pawns[0].Color);
                 foreach (var p in pawns)
                 {
                     Move(p, 1);
@@ -41,7 +28,6 @@ namespace LudoGame.GameEngine.Classes
             }
             if (pawns.Length == 1)
             {
-                OnMoveEvent?.Invoke(pawns[0].Color, diceRoll);
                 Move(pawns[0], diceRoll);
             }
             throw new Exception("Invalid pawn count");
@@ -61,7 +47,6 @@ namespace LudoGame.GameEngine.Classes
                         ChangeCoordinates(pawn, baseSquare);
                     }
                 }
-                OnNewGameEvent?.Invoke();
                 return;
             }
 
@@ -70,12 +55,10 @@ namespace LudoGame.GameEngine.Classes
                 allPawns.ForEach(p => ChangeCoordinates(
                     p, _boardCollection.BaseSquare(p.Color))
                 );
-                OnNewGameEvent?.Invoke();
                 return;
             }
 
             _boardCollection.SetPawns(allPawns);
-            OnRestartedGameEvent?.Invoke();
         }
         private void Move(Pawn pawn, int dice)
         {
@@ -103,18 +86,17 @@ namespace LudoGame.GameEngine.Classes
 
                     if (_boardCollection.GetTeamPawns(pawn.Color).Count == 0)
                     {
-                        OnAllTeamPawnsOutEvent?.Invoke(pawn);
+                        _gameEvent.InvokeOnAllTeamPawnsOutEvent(pawn.Color);
                     }
                     else
                     {
-                        OnGoalEvent?.Invoke(pawn, _boardCollection.GetTeamPawns(pawn.Color).Count);
+                        _gameEvent.InvokeOnGoalEvent(pawn.Color, _boardCollection.GetTeamPawns(pawn.Color).Count);
                     }
 
                     bool onlyOneTeamLeft = _boardCollection.TeamsLeft().Count == 1;
                     if (onlyOneTeamLeft)
                     {
-                        GameLoserEvent?.Invoke(_boardCollection.TeamsLeft()[0]);
-                        GameOverEvent?.Invoke();
+                        _gameEvent.InvokeOnGameOverEvent();
                     }
                     ChangeCoordinates(pawn, _boardCollection.WinnerSquare());
                     _boardCollection.RemovePawn(pawn);
@@ -133,13 +115,12 @@ namespace LudoGame.GameEngine.Classes
                 ChangeCoordinates(enemies, eradicateBase);
             }
 
-            if (pawnsToEradicate != 0) OnEradicationEvent?.Invoke(pawn, (TeamColor)enemyColor, pawnsToEradicate);
+            if (pawnsToEradicate != 0) _gameEvent.InvokeOnEradicationEvent(pawn.Color, (TeamColor)enemyColor, pawnsToEradicate);
             ChangeCoordinates(pawn, tempSquare);
-
-            if (bounced == true) OnBounceEvent?.Invoke(pawn);
-            if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) OnSafeZoneEvent?.Invoke(pawn);
+            
+            if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.Color);
+            if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.Color);
         }
-
         private void ChangeCoordinates(List<Pawn> pawns, GameSquare targetSquare)
         {
             foreach (var p in pawns)

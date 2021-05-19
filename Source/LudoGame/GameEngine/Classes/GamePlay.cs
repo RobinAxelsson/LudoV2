@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LudoGame.GameEngine.Interfaces;
 
@@ -8,40 +9,50 @@ namespace LudoGame.GameEngine.Classes
     {
         private readonly IOptionsValidator _validator;
         private readonly IGameAction _action;
-        private readonly IDice _dice;
-        private PlayerRotator _playerRotator;
-        private List<IGamePlayer> _players;
-        public GamePlay(IOptionsValidator validator, IGameAction action, IDice dice)
+        private OrderedPlayerCollection _orderedPlayers;
+        private readonly IGameEvent _gameEvent;
+        public GamePlay(IOptionsValidator validator, IGameAction action, IFunctionRegistrar registrar, IGameEvent gameEvent)
         {
             _validator = validator;
             _action = action;
-            _dice = dice;
+            _gameEvent = gameEvent;
+            registrar.RegFirstPlayer(_getFirstPlayer);
+            registrar.RegRollDice(_rollDice);
         }
+
+        private Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
+        private Func<int> _rollDice;
         public void SetUpTeams(IGameInfo gameInfo)
         {
-            _players = gameInfo.Players;
-            _playerRotator = new PlayerRotator(_players);
-            var pawns = _players.SelectMany(p => p.Pawns).ToList();
+            var players = gameInfo.Players;
+            _orderedPlayers = new OrderedPlayerCollection(players, _getFirstPlayer);
+            var pawns = _orderedPlayers.SelectMany(p => p.Pawns).ToList();
             _action.SetUpPawns(pawns);
         }
 
-        public List<IGamePlayer> GetPlayerSetUps()
+        public List<IGamePlayer> GetPlayers()
         {
-            return _players;
+            return _orderedPlayers.Select(p => p).ToList();
         }
         public void Start()
         {
             while (true)
             {
-                int diceRoll = _dice.Roll();
-                var activePlayer = _playerRotator.CurrentPlayer();
-                var playerOption = _validator.GetPlayerOption(activePlayer.Color, diceRoll);
-                var pawns = activePlayer.ChoosePlay(playerOption);
-                bool valid = _validator.ValidateResponse(playerOption, pawns);
-                if (valid) _action.Act(pawns, diceRoll); //else handle exception
-                _playerRotator.NextPlayer();
+                foreach (var player in _orderedPlayers)
+                {
+                    int diceRoll = _rollDice();
+                    var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
+                    var pawns = player.ChoosePlay(playerOption);
+                    bool valid = _validator.ValidateResponse(playerOption, pawns);
+                    if (valid) _action.Act(pawns, diceRoll);
+                    else
+                    {
+                        player.ChoosePlay(playerOption);
+                        _gameEvent.InvokeOnInvalidResponseEvent(player);
+                    }
+                }
+                _gameEvent.InvokeOnRoundCompletedEvent();
             }
-           
         }
     }
 }
