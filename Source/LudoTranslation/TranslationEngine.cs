@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -27,7 +28,6 @@ namespace LudoTranslation
                     prop.SetValue(null, Dictionary.SingleOrDefault(k => k.Key == prop.Name).Value);
             }
         }
-
         public static class Languages
         {
             public const string en_US = "en_US";
