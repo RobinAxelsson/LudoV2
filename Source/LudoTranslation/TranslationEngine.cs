@@ -32,10 +32,12 @@ namespace LudoTranslation
         }
         public static class Languages
         {
+            
             public const string en_US = "en_US";
             public const string sv_SE = "sv_SE";
             public static bool Contains(string input)
             {
+                
                 return typeof(Languages).GetFields().Select(f => f.Name.ToLower()).ToList().Contains(input.ToLower());
             }
             public static List<string> GetLanguages()

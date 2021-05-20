@@ -7,6 +7,7 @@ using LudoAPI.Models;
 using LudoAPI.Models.Account;
 using LudoAPI.SMTP;
 using LudoGame.GameEngine;
+using LudoGame.GameEngine.Classes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -108,7 +109,7 @@ namespace LudoAPI.Controllers
             if (account == null) return NotFound($"Couldn't find account");
             var game = _repository.Games.SingleOrDefault(g => g.GameId == gameId);
             if (game == null) return NotFound($"Could not find a game with the ID: {gameId}");
-            var gamePlayers = _repository.Players.Where(p => p.Game.GameId == gameId).ToList();
+            var gamePlayers = _repository.Players.Include(g => g.Game).Where(p => p.Game.GameId == gameId).ToList();
             if (gamePlayers.Count == 4) return Conflict("Lobby is full");
             var takenColors = gamePlayers.Select(p => (int) p.Color).ToList();
             //Select random not taken color
@@ -127,6 +128,41 @@ namespace LudoAPI.Controllers
             _repository.Update(player);
             _repository.SaveChanges();
             return Ok(game);
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("AddAI")]
+        public IActionResult AddAI(string gameId)
+        {
+            var token = Request.Headers.FirstOrDefault(p => p.Key == "Authorization")
+                .Value.FirstOrDefault()
+                ?.Replace("Bearer ", "");
+            var account = _repository.AccountTokens.Include(a => a.Account)
+                .SingleOrDefault(t => t.Token == token)
+                ?.Account;
+            if (account == null) return NotFound($"Couldn't find account");
+            var game = _repository.Games.SingleOrDefault(g => g.GameId == gameId);
+            if (game == null) return NotFound($"Could not find a game with the ID: {gameId}");
+            var gamePlayers = _repository.Players.Include(g => g.Game).Where(p => p.Game.GameId == gameId).ToList();
+            if (gamePlayers.Count == 4) return Conflict("Lobby is full");
+            var takenColors = gamePlayers.Select(p => (int) p.Color).ToList();
+            //Select random not taken color
+            var rng = -1; //placeholder value
+       
+            do
+            { 
+                rng = new Random().Next(0, 3);
+            } while (takenColors.Contains(rng));
+
+            var player = new Player()
+            {
+                Color = (GameEnum.TeamColor) rng,
+                Game = game,
+                Type = ModelEnum.PlayerType.Stephan
+            };
+                _repository.Add(player);
+                _repository.SaveChanges();
+                return Ok(game);
         }
     }
 }
