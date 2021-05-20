@@ -57,7 +57,7 @@ namespace LudoAPI.SMTP
         private string GenerateBody(string gameId, string accountId, string gameUrl)
         {
             
-            var doc = File.ReadAllText(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) +
+            var doc = File.ReadAllText(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) +
                              "/SMTP/Resources/emailbody_raw.html");
             doc = doc
                 .Replace("GAMEID", gameId)
