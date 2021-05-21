@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LudoGame.GameEngine.Interfaces;
 
@@ -27,6 +28,8 @@ namespace LudoGame.GameEngine.Classes
             if (option.CanTakeOutTwo == true && pawnResponse.Length == 2) return true;
             var pawn = pawnResponse[0];
             if (option.PawnsToMove.Contains(pawn, _pawnComparer)) return true;
+            if (pawnResponse.Length == 0 && option.PawnsToMove.Length > 0)
+                throw new Exception("Player have to move if they can");
             return false;
         }
         private Pawn[] SelectablePawns(GameEnum.TeamColor color, int diceRoll)

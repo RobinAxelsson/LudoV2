@@ -18,8 +18,11 @@ namespace LudoGame.GameEngine.Classes
             _gameEvent = gameEvent;
             _getFirstPlayer = gameFunctions.GetFirstPlayer;
             _rollDice = gameFunctions.RollDice;
+            _gameKeep = gameFunctions.GameKeep;
         }
 
+        private int _roundCount = 0;
+        private readonly Func<int, bool> _gameKeep;
         private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
         private readonly Func<int> _rollDice;
         private void SetUpTeams(IGameInfo gameInfo)
@@ -38,7 +41,7 @@ namespace LudoGame.GameEngine.Classes
             SetUpTeams(gameInfo);
 
             _gameEvent.InvokeOnNewGameEvent();
-            while (true)
+            while (_gameKeep(_roundCount))
             {
                 foreach (var player in _orderedPlayers)
                 {

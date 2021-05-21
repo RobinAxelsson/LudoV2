@@ -8,7 +8,7 @@ namespace LudoGame.GameEngine.Classes
 {
     public class BoardOrm : IBoardOrm
     {
-        private const string _filePath = @"LudoORM/Map/BoardMap.txt";
+        private const string _filePath = @"GameEngine\Data\BoardMap.txt";
         public List<GameSquare> Map()
         {
             var squares = new List<GameSquare>();
@@ -19,7 +19,7 @@ namespace LudoGame.GameEngine.Classes
                 var chr = charCoord.chr;
                 int x = charCoord.X;
                 int y = charCoord.Y;
-
+                
                 GameSquare newSquare =
                     chr == '0' ? new StandardSquare(x, y, GameEnum.BoardDirection.Up) :
                     chr == '1' ? new StandardSquare(x, y, GameEnum.BoardDirection.Right) :
@@ -46,6 +46,7 @@ namespace LudoGame.GameEngine.Classes
                     chr == '6' ? new BaseSquare(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Right) :
                     chr == '7' ? new BaseSquare(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Up) :
 
+                    chr == 'w' ? new WinnerSquare(x, y) :
                     chr == 's' ? new GoalSquare(x, y) : throw new NullReferenceException();
 
                 squares.Add(newSquare);

@@ -19,7 +19,7 @@ namespace LudoGame.GameEngine.Classes
             var firsts = players.Where(p => p.NextToThrow == true).ToList();
             if (firsts.Any() == false || firsts.Count() > 1)
             {
-                var startIndex = new Random().Next(100, 499) / 100;
+                var startIndex = new Random().Next(0, 399) / 100;
                 players.ForEach(p => p.NextToThrow = false);
                 var firstPlayer = players[startIndex];
                 firstPlayer.NextToThrow = true;

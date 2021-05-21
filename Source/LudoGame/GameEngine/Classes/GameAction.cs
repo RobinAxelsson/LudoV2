@@ -20,6 +20,7 @@ namespace LudoGame.GameEngine.Classes
             if (pawns.Length == 0) return;
             if (pawns.Length == 2)
             {
+                if (diceRoll != 6) throw new Exception("Pawns can not be two if dice is not 6.");
                 foreach (var p in pawns)
                 {
                     Move(p, 1);
@@ -30,7 +31,10 @@ namespace LudoGame.GameEngine.Classes
             {
                 Move(pawns[0], diceRoll);
             }
-            throw new Exception("Invalid pawn count");
+            else
+            {
+                throw new Exception("Invalid pawn count");
+            }
         }
         public void SetUpPawns(List<Pawn> allPawns)
         {
@@ -45,8 +49,10 @@ namespace LudoGame.GameEngine.Classes
                     {
                         var pawn = new Pawn(colors[t]);
                         ChangeCoordinates(pawn, baseSquare);
+                        allPawns.Add(pawn);
                     }
                 }
+                _boardCollection.SetPawns(allPawns);
                 return;
             }
 
@@ -117,7 +123,7 @@ namespace LudoGame.GameEngine.Classes
 
             if (pawnsToEradicate != 0) _gameEvent.InvokeOnEradicationEvent(pawn.Color, (TeamColor)enemyColor, pawnsToEradicate);
             ChangeCoordinates(pawn, tempSquare);
-            
+
             if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.Color);
             if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.Color);
             enemies.Add(pawn);
