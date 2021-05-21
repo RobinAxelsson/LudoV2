@@ -19,5 +19,12 @@ namespace LudoGame.GameEngine
             Yellow,
             Green
         }
+
+        public enum GameStatus
+        {
+            Playing,
+            Waiting,
+            Ended
+        }
     }
 }

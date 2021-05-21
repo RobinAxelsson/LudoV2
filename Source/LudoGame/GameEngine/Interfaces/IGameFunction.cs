@@ -7,6 +7,6 @@ namespace LudoGame.GameEngine.Interfaces
     {
         public Func<int> RollDice { get; }
         public Func<List<IGamePlayer>, IGamePlayer> GetFirstPlayer { get; }
-        public Func<int, bool> GameKeep { get; }
+        public Func<IGamePlay, bool> ContinuePlay { get; }
     }
 }

@@ -15,10 +15,17 @@ namespace LudoGameTest.Stubs
         }
         public Func<int> RollDice { get; }
         public Func<List<IGamePlayer>, IGamePlayer> GetFirstPlayer { get; }
-        public Func<int, bool> GameKeep { get; }
+        public Func<IGamePlay, bool> ContinuePlay { get; }
+        public Func<int, bool> EndGame { get; }
         private int rollDice()
         {
             return 1;
+        }
+
+        private bool continuePlay(IGamePlay gamePlay)
+        {
+            if (gamePlay.RoundCount > 0) return false;
+            return true;
         }
     }
 }

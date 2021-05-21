@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using LudoGame.GameEngine.Interfaces;
 
@@ -11,6 +12,7 @@ namespace LudoGame.GameEngine.Classes
         {
             RollDice = rollDice;
             GetFirstPlayer = getFirstPlayer;
+            ContinuePlay = continuePlay;
         }
         private readonly Random _rand = new();
         private int rollDice() => _rand.Next(100, 699) / 100;
@@ -27,7 +29,13 @@ namespace LudoGame.GameEngine.Classes
             }
             return players.Find(p => p.NextToThrow == true) ?? throw new NullReferenceException();
         }
+        private bool continuePlay(IGamePlay gamePlay)
+        {
+            if (gamePlay.GameStatus == GameEnum.GameStatus.Ended) return false;
+            return true;
+        }
         public Func<int> RollDice { get; }
         public Func<List<IGamePlayer>, IGamePlayer> GetFirstPlayer { get; }
+        public Func<IGamePlay, bool> ContinuePlay { get; }
     }
 }

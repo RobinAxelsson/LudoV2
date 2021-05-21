@@ -18,11 +18,10 @@ namespace LudoGame.GameEngine.Classes
             _gameEvent = gameEvent;
             _getFirstPlayer = gameFunctions.GetFirstPlayer;
             _rollDice = gameFunctions.RollDice;
-            _gameKeep = gameFunctions.GameKeep;
+            _continuePlay = gameFunctions.ContinuePlay;
         }
 
-        private int _roundCount = 0;
-        private readonly Func<int, bool> _gameKeep;
+        private readonly Func<IGamePlay, bool> _continuePlay;
         private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
         private readonly Func<int> _rollDice;
         private void SetUpTeams(IGameInfo gameInfo)
@@ -32,6 +31,8 @@ namespace LudoGame.GameEngine.Classes
             var pawns = _orderedPlayers.SelectMany(p => p.Pawns).ToList();
             _action.SetUpPawns(pawns);
         }
+        public GameEnum.GameStatus GameStatus { get; set; }
+        public int RoundCount { get; set; }
         public List<IGamePlayer> ReadPlayers()
         {
             return _orderedPlayers.Select(p => p).ToList();
@@ -41,7 +42,7 @@ namespace LudoGame.GameEngine.Classes
             SetUpTeams(gameInfo);
 
             _gameEvent.InvokeOnNewGameEvent();
-            while (_gameKeep(_roundCount))
+            while (_continuePlay(this))
             {
                 foreach (var player in _orderedPlayers)
                 {
@@ -56,6 +57,8 @@ namespace LudoGame.GameEngine.Classes
                         _gameEvent.InvokeOnInvalidResponseEvent(player);
                     }
                 }
+
+                RoundCount++;
                 _gameEvent.InvokeOnRoundCompletedEvent();
             }
         }
