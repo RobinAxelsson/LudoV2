@@ -26,16 +26,6 @@ namespace LudoAPI.Controllers
             _repository = repository;
            _configuration = configuration;
         }
-        
-        
-        [Authorize]
-        [HttpGet]
-        [Route("GetAccounts")]
-        public List<Account> GetAccounts()
-        {
-       
-            return new List<Account>();
-        }   
         [HttpPost]
         [Route("Register")]
         public IActionResult Register([FromBody] RegisterModel model)
@@ -43,6 +33,10 @@ namespace LudoAPI.Controllers
             var te = new TranslationEngine();
             if (_repository.Accounts.SingleOrDefault(a => a.PlayerName == model.AccountName) != null)
                 return Conflict();
+            if (_repository.Accounts.SingleOrDefault(a => a.EmailAdress == model.Email) != null)
+                return Conflict();
+            
+            
             var account = new Account
             {
                 EmailAdress = model.Email,

@@ -10,7 +10,6 @@ namespace LudoAPI.Models
         [Key]
         public string GameId { get; set; }
         public string Url { get; set; }
-        public ICollection<Player> Players { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public ModelEnum.GameStatus GameStatus { get; set; }

@@ -1,13 +1,13 @@
 ﻿
 
 namespace LudoTranslation {
-    public static class Dict
+    public record Dict
     {
-        public static string Welcome { get; private set; }
-        public static string FirstName { get; private set; }
-        public static string LastName { get; private set; }
-        public static string Email_Subtitle { get; private set; }
-        public static string Email_Title { get; private set; }
-        public static string Email_Subject { get; private set; }
+        public string Welcome { get; private set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
+        public string Email_Subtitle { get; private set; }
+        public string Email_Title { get; private set; }
+        public string Email_Subject { get; private set; }
     }
 }
