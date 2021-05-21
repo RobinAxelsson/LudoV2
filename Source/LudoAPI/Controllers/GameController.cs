@@ -94,9 +94,10 @@ namespace LudoAPI.Controllers
             _repository.SaveChanges();
             return Ok(game);
         }
-                [Authorize]
+        
+        [Authorize]
         [HttpPost]
-        [Route("CreateGame")]
+        [Route("InvitePlayer")]
         public IActionResult InvitePlayer(string gameId, string[] recipients)
         {
             var token = Request.Headers.FirstOrDefault(p => p.Key == "Authorization")
