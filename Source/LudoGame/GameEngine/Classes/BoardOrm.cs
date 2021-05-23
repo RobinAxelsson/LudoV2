@@ -11,15 +11,23 @@ namespace LudoGame.GameEngine.Classes
         private const string _filePath = @"GameEngine\Data\BoardMap.txt";
         public List<GameSquare> Map()
         {
+            return map(_filePath);
+        }
+        public List<GameSquare> Map(string filePath)
+        {
+            return map(filePath);
+        }
+        private List<GameSquare> map(string filePath)
+        {
             var squares = new List<GameSquare>();
-            var charCoords = ReadCharCoords(_filePath);
+            var charCoords = ReadCharCoords(filePath);
 
             foreach (var charCoord in charCoords)
             {
                 var chr = charCoord.chr;
                 int x = charCoord.X;
                 int y = charCoord.Y;
-                
+
                 GameSquare newSquare =
                     chr == '0' ? new StandardSquare(x, y, GameEnum.BoardDirection.Up) :
                     chr == '1' ? new StandardSquare(x, y, GameEnum.BoardDirection.Right) :
@@ -54,6 +62,7 @@ namespace LudoGame.GameEngine.Classes
 
             return squares;
         }
+
         private List<(char chr, int X, int Y)> ReadCharCoords(string filePath)
         {
 
@@ -76,5 +85,6 @@ namespace LudoGame.GameEngine.Classes
             }
             return charCoord;
         }
+        
     }
 }
