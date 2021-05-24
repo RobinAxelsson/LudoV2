@@ -10,39 +10,41 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/Register.css">
-    <title></title>
+    <title>
+      @Model.Dictionary.Register_PageHeaderTitle
+    </title>
 </head>
 <body>
-    <div class="Logo">
-        <img src="images/LudoBanner_NoShadow.png"> 
-    </div>
-    <div class="page">
-        <h1>Please register to play</h1>
+<div class="Logo">
+  <img src="images/LudoBanner_NoShadow.png" alt="Yeet!">
+</div>
+<div class="page">
+        <h1>@Model.Dictionary.Register_BodyTitle</h1>
         <label class="field field_v1">
-          <input class="field__input" placeholder="e.g. BigBlack1337">
+          <input class="field__input" placeholder="@Model.Dictionary.Register_AccountNamePlaceholderText">
           <span class="field__label-wrap">
-            <span class="field__label">Account name</span>
+            <span class="field__label">@Model.Dictionary.Register_AccountName</span>
           </span>
         </label>
         <label class="field field_v2">
-          <input class="field__input" placeholder="Please type something secure... do it for me!" type="password">
+          <input class="field__input" placeholder="@Model.Dictionary.Register_PasswordPlaceholderText" type="password">
           <span class="field__label-wrap">
-            <span class="field__label">Password</span>
+            <span class="field__label">@Model.Dictionary.Register_Password</span>
           </span>
         </label>    
         <label class="field field_v2">
-          <input class="field__input" placeholder="And now just repeat it!" type="password">
+          <input class="field__input" placeholder="@Model.Dictionary.Register_RetypePasswordPlaceholderText" type="password">
           <span class="field__label-wrap">
-            <span class="field__label">Repeat password</span>
+            <span class="field__label">@Model.Dictionary.Register_RetypePassword</span>
           </span>
         </label>
         <label class="field field_v3">
-            <input class="field__input" placeholder="You do have an email, don't you?" type="email">
+            <input class="field__input" placeholder="@Model.Dictionary.Register_EmailPlaceholderText" type="email">
             <span class="field__label-wrap">
-              <span class="field__label">E-mail</span>
+              <span class="field__label">@Model.Dictionary.Register_Email</span>
             </span>
           </label>
-          <button type="button" class="btn">Register</button>
+          <button type="button" class="btn">@Model.Dictionary.Register_RegisterButton</button>
       </div>
       
 </body>

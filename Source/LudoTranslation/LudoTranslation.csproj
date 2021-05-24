@@ -5,10 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Translations\en_US.lang">
+    <None Update="Translations\EN.lang">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Translations\sv_SE.lang">
+    <None Update="Translations\SE.lang">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

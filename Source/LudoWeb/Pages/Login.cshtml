@@ -1,5 +1,5 @@
 ﻿@page
-@model LudoWeb.Pages.login
+@model LudoWeb.Pages.Login
 
 @{
     Layout = null;
@@ -10,27 +10,28 @@
 <html>
 <head>
     <link rel="stylesheet" href="css/Login.css">
-    <title>Please login</title>
+    <title>@Model.Dictionary.Login_PageHeaderTitle</title>
 </head>
 <body>
 <div>
+    
     <div class="Logo">
-        <img src="images/LudoBanner_NoShadow.png"> 
+        <img src="images/LudoBanner_NoShadow.png">
     </div>
     <div class="LoginBox">
-        
+
         <form>
-            <span class="text-center">Please login to play</span>
-        <div class="input-container">
-            <input type="text" required=""/>
-            <label>Account name</label>		
-        </div>
-        <div class="input-container">		
-            <input type="password" required=""/>
-            <label>Password</label>
-        </div>
-            <button type="button" class="btn">Login</button>
-    </form>	
+            <span class="text-center">@Model.Dictionary.Login_BodyTitle</span>
+            <div class="input-container">
+                <input type="text" required=""/>
+                <label>@Model.Dictionary.Login_AccountName</label>
+            </div>
+            <div class="input-container">
+                <input type="password" required=""/>
+                <label>@Model.Dictionary.Login_Password</label>
+            </div>
+            <button type="button" class="btn">@Model.Dictionary.Login_LoginButton</button>
+        </form>
     </div>
 </div>
 </body>

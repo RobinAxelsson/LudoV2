@@ -1,0 +1,23 @@
+﻿Email_Subtitle==has requested your presence in his Ludo game!
+Email_Title==You have been invited!
+Email_Subject==wants to play Ludo!
+
+
+Login_BodyTitle==Please login to play
+Login_AccountName==Account name
+Login_Password==Password
+Login_LoginButton==Login
+Login_PageHeaderTitle==Login to play
+
+
+Register_BodyTitle==Please register to play
+Register_AccountName==Account name
+Register_Password==Password
+Register_RetypePassword==Repeat password
+Register_RegisterButton==Let's go!
+Register_PageHeaderTitle==Ludo registration form
+Register_Email==E-mail
+Register_EmailPlaceholderText==You do have an email, don't you?
+Register_PasswordPlaceholderText==Please type something secure... do it for me!
+Register_RetypePasswordPlaceholderText==And now just repeat it!
+Register_AccountNamePlaceholderText==e.g. BigBlack1337

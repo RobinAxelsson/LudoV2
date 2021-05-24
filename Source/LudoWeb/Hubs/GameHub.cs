@@ -1,7 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using LudoAPI.Models;
-using LudoGame.GameEngine.Classes;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb.Hubs

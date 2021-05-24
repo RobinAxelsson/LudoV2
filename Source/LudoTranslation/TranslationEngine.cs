@@ -21,8 +21,10 @@ namespace LudoTranslation
             var dict = new Dict();
             var line = "";
             var reader = new StreamReader(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/Translations/" + lang + ".lang");
-            while ((line = reader.ReadLine()) != null && !string.IsNullOrWhiteSpace(line) && line.Contains("=="))
+            while ((line = reader.ReadLine()) != null)
             {
+                //Don't do anything if line is just blank or doesn't contain double equals
+                if (string.IsNullOrWhiteSpace(line) || !line.Contains("==")) continue; 
                 var lineSplit = line.Split("==");
                 Dictionary.Add(lineSplit[0], lineSplit[1]);
                 foreach (var prop in dict.GetType().GetProperties())
@@ -33,8 +35,8 @@ namespace LudoTranslation
         public static class Languages
         {
             
-            public const string en_US = "en_US";
-            public const string sv_SE = "sv_SE";
+            public const string EN = "EN";
+            public const string SE = "SE";
             public static bool Contains(string input)
             {
                 
