@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using LudoTranslation;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LudoWeb.Pages
 {
@@ -8,5 +9,6 @@ namespace LudoWeb.Pages
         {
             
         }
+        
     }
 }
