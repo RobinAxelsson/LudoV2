@@ -44,6 +44,11 @@ namespace LudoTranslation
             {
                 return typeof(Languages).GetFields().Select(f => f.Name).ToList();
             }
+
+            public static string Parse(string input)
+            {
+                return typeof(Languages).GetFields().Select(f => f.Name).SingleOrDefault(l => string.Equals(l, input, StringComparison.InvariantCultureIgnoreCase));
+            }
         }
         /*
          * Archived code.
