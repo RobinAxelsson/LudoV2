@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
 
@@ -8,19 +9,20 @@ namespace LudoGame.GameEngine.Classes
 {
     public class BoardOrm : IBoardOrm
     {
-        private const string _filePath = @"GameEngine\Data\BoardMap.txt";
         public List<GameSquare> Map()
         {
-            return map(_filePath);
+            var boardLines = BoardReadEmbedded().Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            return map(boardLines);
         }
         public List<GameSquare> Map(string filePath)
         {
-            return map(filePath);
+            var boardLines = File.ReadAllLines(filePath);
+            return map(boardLines);
         }
-        private List<GameSquare> map(string filePath)
+        private List<GameSquare> map(string[] boardLines)
         {
             var squares = new List<GameSquare>();
-            var charCoords = ReadCharCoords(filePath);
+            var charCoords = ReadCharCoords(boardLines);
 
             foreach (var charCoord in charCoords)
             {
@@ -63,11 +65,22 @@ namespace LudoGame.GameEngine.Classes
             return squares;
         }
 
-        private List<(char chr, int X, int Y)> ReadCharCoords(string filePath)
+        //The file is embedded so all projects can use it with the library
+        private string BoardReadEmbedded()
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = "LudoGame.GameEngine.Data.BoardMap.txt";
+
+            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+        private List<(char chr, int X, int Y)> ReadCharCoords(string[] lines)
         {
 
             var charCoord = new List<(char chr, int X, int Y)>();
-            string[] lines = File.ReadAllLines(filePath);
 
             int x = 0;
             int y = 0;

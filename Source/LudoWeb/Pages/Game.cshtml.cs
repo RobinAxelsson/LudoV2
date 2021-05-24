@@ -51,7 +51,7 @@ namespace LudoWeb.Pages
         }
         public Board(IBoardOrm boardOrm)
         {
-            _gameSquares = boardOrm.Map(@"Pages\Board\BoardMap.txt");
+            _gameSquares = boardOrm.Map();
             XCount = _gameSquares.Select(s => s.BoardX).Max() + 1;
             YCount = _gameSquares.Select(s => s.BoardY).Max() + 1;
             var win = _gameSquares.Find(s => s.GetType() == typeof(WinnerSquare));
