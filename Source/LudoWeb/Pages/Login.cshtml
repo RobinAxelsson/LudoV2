@@ -1,0 +1,37 @@
+﻿@page
+@model LudoWeb.Pages.login
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <link rel="stylesheet" href="css/Login.css">
+    <title>Please login</title>
+</head>
+<body>
+<div>
+    <div class="Logo">
+        <img src="images/LudoBanner_NoShadow.png"> 
+    </div>
+    <div class="LoginBox">
+        
+        <form>
+            <span class="text-center">Please login to play</span>
+        <div class="input-container">
+            <input type="text" required=""/>
+            <label>Account name</label>		
+        </div>
+        <div class="input-container">		
+            <input type="password" required=""/>
+            <label>Password</label>
+        </div>
+            <button type="button" class="btn">Login</button>
+    </form>	
+    </div>
+</div>
+</body>
+</html>
