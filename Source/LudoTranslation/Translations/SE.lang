@@ -14,10 +14,11 @@ Register_BodyTitle==Vänligen registrera dig för att spela
 Register_AccountName==Användarnamn
 Register_Password==Lösenord
 Register_RetypePassword==Upprepa lösenord
-Register_RegisterButton==Nu kör vi!
+Register_RegisterButton==Spela
 Register_PageHeaderTitle==Registrera dig på Ludo
 Register_Email==E-post
 Register_EmailPlaceholderText==Du har väl en e-post?
 Register_PasswordPlaceholderText==Ta något säkert för guds skull!
 Register_RetypePasswordPlaceholderText==Upprepa nu ditt lösenord. Försök att inte sudda tre gånger!
 Register_AccountNamePlaceholderText==t.ex. BigBlack1337
+Register_ChooseLanguage==Välj språk

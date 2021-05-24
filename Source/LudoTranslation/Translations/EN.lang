@@ -14,10 +14,11 @@ Register_BodyTitle==Please register to play
 Register_AccountName==Account name
 Register_Password==Password
 Register_RetypePassword==Repeat password
-Register_RegisterButton==Let's go!
+Register_RegisterButton==Play
 Register_PageHeaderTitle==Ludo registration form
 Register_Email==E-mail
 Register_EmailPlaceholderText==You do have an email, don't you?
 Register_PasswordPlaceholderText==Please type something secure... do it for me!
 Register_RetypePasswordPlaceholderText==And now just repeat it!
 Register_AccountNamePlaceholderText==e.g. BigBlack1337
+Register_ChooseLanguage==Choose preferred language
