@@ -2,7 +2,7 @@
 
 namespace LudoWeb.Pages
 {
-    public class login : PageModel
+    public class Login : PageModel
     {
         public void OnGet()
         {
