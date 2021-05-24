@@ -99,7 +99,7 @@ RESET STYLES
     box-sizing: border-box;
     pointer-events: none;
     cursor: text;
-    color:rgb(245, 75, 75);
+    color: rgb(255, 255, 255);
     position: absolute;
     top: 0;
     right: 0;
@@ -194,7 +194,7 @@ RESET STYLES
   
   .field{
     --fieldBorderColor: #f8f41f;
-    --fieldBorderColorActive: #0cec0c;
+    --fieldBorderColorActive: #1f7af1;
   }
   
   /*
