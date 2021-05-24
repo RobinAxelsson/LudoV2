@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using LudoWeb.ChatModels;
 
 namespace LudoWeb
 {
@@ -24,6 +25,8 @@ namespace LudoWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+            services.AddSignalR();
+            services.AddSingleton<ChatHubData>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +53,7 @@ namespace LudoWeb
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
         }
     }
