@@ -13,9 +13,6 @@ var mainLoopId = setInterval(function(){
         await connection.invoke("SendCookie", loginCookie);
     }
     async function login() {
-        if (connection.connectionStarted) {
-            console.log("yea!");
-        }
         var accountName = document.getElementById("txt_account").value;
         var password = document.getElementById("txt_password").value;
         await connection.invoke("SendLoginData", accountName, password);

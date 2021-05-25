@@ -72,7 +72,7 @@ namespace LudoDataAccess
                     _repository.Add(token);
                     _repository.SaveChanges();
                     var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
-                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax");
+                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/");
                 }
             }
             else
@@ -89,7 +89,7 @@ namespace LudoDataAccess
                     _repository.Add(token);
                     _repository.SaveChanges();
                     var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
-                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax");
+                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/");
                 }
             }
             return
