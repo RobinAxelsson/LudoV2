@@ -20,12 +20,6 @@ namespace LudoWeb.Pages
             var languageIso2 = RegionInfo.CurrentRegion.TwoLetterISORegionName;
             Dictionary = engine.InitializeLanguage(TranslationEngine.Languages.Contains(languageIso2) ? languageIso2 : "EN");
         }
-
-        public void LoginAccount(string username, string password)
-        {
-            var result = _dbm.Login(username, password);
-            Debug.Write($"{result.success}\n{result.message}");
-        }
     }
 
  

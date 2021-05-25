@@ -79,6 +79,7 @@ namespace LudoDataAccess
                     var tokenId = Guid.NewGuid().ToString("N");
                     var token = new AccountToken()
                     {
+                        Account = account,
                         Token = tokenId,
                         ExpiryDate = DateTime.UtcNow.AddHours(3)
                     };
