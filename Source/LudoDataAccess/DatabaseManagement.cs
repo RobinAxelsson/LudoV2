@@ -4,6 +4,7 @@ using LudoDataAccess.Authentication;
 using LudoDataAccess.Database;
 using LudoDataAccess.Models.Account;
 using LudoTranslation;
+using Microsoft.EntityFrameworkCore;
 
 namespace LudoDataAccess
 {
@@ -70,7 +71,8 @@ namespace LudoDataAccess
                     };
                     _repository.Add(token);
                     _repository.SaveChanges();
-                    return (true, tokenId);
+                    var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
+                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax");
                 }
             }
             else
@@ -86,11 +88,25 @@ namespace LudoDataAccess
                     };
                     _repository.Add(token);
                     _repository.SaveChanges();
-                    return (true, tokenId);
+                    var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
+                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax");
                 }
             }
             return
                 (false, "Incorrect username or password");
+        }
+
+        public (bool success, string message) ValidateToken(string token)
+        {
+            var accountToken = _repository.AccountTokens.Include(t => t.Account).SingleOrDefault(t => t.Token == token);
+            if (accountToken != null)
+            {
+                if (accountToken.ExpiryDate > DateTime.UtcNow)
+                {
+                    return (true, "Token is valid");
+                }
+            }
+            return (false, "Invalid token");
         }
     }
 }

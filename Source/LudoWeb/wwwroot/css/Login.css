@@ -105,3 +105,20 @@ body{
 	font-size:12px;
 	
 }
+.notifylbl {
+    font-family: "Pontano Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(255, 106, 106);
+    margin-top: -15px;
+    display: none;
+}
+#overlay{
+    opacity:0.8;
+    background-color: #000000;
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0px;
+    left:0px;
+    z-index:1000;
+   
+}

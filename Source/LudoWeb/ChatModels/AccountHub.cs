@@ -21,5 +21,12 @@ namespace LudoWeb.ChatModels
             var result = _dbm.Login(username, password);
             await Clients.Caller.SendAsync("LoginResult", result.success, result.message);
         }
+        public async Task SendCookie(string cookie)
+        {
+            if (cookie.Contains("="))
+                cookie = cookie.Split("=")[1];
+            var result = _dbm.ValidateToken(cookie);
+            await Clients.Caller.SendAsync("CookieResult", result.success, result.message);
+        }
     }
 }

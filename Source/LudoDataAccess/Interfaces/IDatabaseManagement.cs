@@ -6,5 +6,6 @@
             string preferredLanguage);
 
         public (bool success, string message) Login(string username, string password);
+        public (bool success, string message) ValidateToken(string token);
     }
 }
