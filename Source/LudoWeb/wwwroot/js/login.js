@@ -46,3 +46,19 @@ function redirect() {
     console.log("https://" + host + "/GroupChat");
     window.location.replace("https://" + host + "/GroupChat");
 }
+document.getElementById("txt_password").addEventListener("keyup", function(event) {
+    if (event.key.toLowerCase() === "enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById("btn_login").click();
+    }
+});
+document.getElementById("txt_account").addEventListener("keyup", function(event) {
+    if (event.key.toLowerCase() === "enter") {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+        document.getElementById("btn_login").click();
+    }
+});
