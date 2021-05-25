@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LudoWeb.ChatModels;
-using Microsoft.EntityFrameworkCore;
+using LudoWeb.GameClasses;
 
 namespace LudoWeb
 {
@@ -32,6 +32,7 @@ namespace LudoWeb
             services.AddSingleton<IBoardOrm, BoardOrm>();
             services.AddSingleton<IDatabaseManagement, DatabaseManagement>();
        
+            services.AddSingleton<IHtmlBoardBuilder, HtmlBoardBuilder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +60,7 @@ namespace LudoWeb
             {
                 endpoints.MapRazorPages();
                 endpoints.MapHub<ChatHub>("/chatHub");
+                endpoints.MapHub<GameHub>("/gameHub");
             });
         }
     }

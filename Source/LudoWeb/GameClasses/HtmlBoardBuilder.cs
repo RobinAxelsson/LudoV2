@@ -1,14 +1,14 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+using LudoWeb.ViewModel;
 
-namespace LudoWeb.Pages
+namespace LudoWeb.GameClasses
 {
-    public class Board : PageModel
+    public class HtmlBoardBuilder : IHtmlBoardBuilder
     {
         private List<GameSquare> _gameSquares;
         public int XCount { get; }
@@ -47,7 +47,7 @@ namespace LudoWeb.Pages
             }
             _gameSquares.Remove(original);
         }
-        public Board(IBoardOrm boardOrm)
+        public HtmlBoardBuilder(IBoardOrm boardOrm)
         {
             _gameSquares = boardOrm.Map();
             XCount = _gameSquares.Select(s => s.BoardX).Max() + 1;
@@ -57,28 +57,11 @@ namespace LudoWeb.Pages
             var blueBase = GetBase(GameEnum.TeamColor.Blue);
             PasteFourSquares(blueBase, 0, 0);
             var redBase = GetBase(GameEnum.TeamColor.Red);
-            PasteFourSquares(redBase, 0, YCount-2);
+            PasteFourSquares(redBase, 0, YCount - 2);
             var greenBase = GetBase(GameEnum.TeamColor.Green);
             PasteFourSquares(greenBase, XCount - 2, YCount - 2);
             var yellowBase = GetBase(GameEnum.TeamColor.Yellow);
             PasteFourSquares(yellowBase, XCount - 2, 0);
-        }
-        public void OnGet()
-        {
-        }
-    }
-    public class GameSquareViewModel
-    {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public string Id { get; set; }
-        public string Color { get; set; }
-        public GameSquareViewModel(GameSquare gameSquare)
-        {
-            Color = gameSquare.Color.ToString().ToLower();
-            X = gameSquare.BoardX;
-            Y = gameSquare.BoardY;
-            Id = X + "," + Y;
         }
     }
 }
