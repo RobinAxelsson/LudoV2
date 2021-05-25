@@ -6,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace LudoGame.GameEngine.Configuration
 {
-    public class LudoProvider
+    public class LudoProvider : ILudoProvider
     {
         private IServiceProvider _provider;
         public LudoProvider()

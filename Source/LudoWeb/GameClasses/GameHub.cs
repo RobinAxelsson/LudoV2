@@ -13,6 +13,10 @@ namespace LudoWeb.GameClasses
             _networkManager = manager;
         }
 
+        public async Task SelectColor(string color)
+        {
+
+        }
         public async Task ConnectToGameRoom(string gameId)
         {
           // await _networkManager.AddClientToRoom(gameId, Context.ConnectionId);

@@ -6,7 +6,7 @@ namespace LudoGame.GameEngine.Interfaces
     {
         public int RoundCount { get; set; }
         List<IGamePlayer> ReadPlayers();
-        void Start(IGameInfo gameInfo);
+        void Start(List<IGamePlayer> players);
         GameEnum.GameStatus GameStatus { get; set; }
     }
 }

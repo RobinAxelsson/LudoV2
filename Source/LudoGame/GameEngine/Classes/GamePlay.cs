@@ -24,9 +24,10 @@ namespace LudoGame.GameEngine.Classes
         private readonly Func<IGamePlay, bool> _continuePlay;
         private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
         private readonly Func<int> _rollDice;
-        private void SetUpTeams(IGameInfo gameInfo)
+        private IGamePlay _gamePlayImplementation;
+
+        private void SetUpTeams(List<IGamePlayer> players)
         {
-            var players = gameInfo.Players;
             _orderedPlayers = new OrderedPlayerCollection(players, _getFirstPlayer);
             var pawns = _orderedPlayers.SelectMany(p => p.Pawns).ToList();
             _action.SetUpPawns(pawns);
@@ -37,9 +38,9 @@ namespace LudoGame.GameEngine.Classes
         {
             return _orderedPlayers.Select(p => p).ToList();
         }
-        public void Start(IGameInfo gameInfo)
+        public void Start(List<IGamePlayer> players)
         {
-            SetUpTeams(gameInfo);
+            SetUpTeams(players);
 
             _gameEvent.InvokeOnNewGameEvent();
             while (_continuePlay(this))
