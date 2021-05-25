@@ -1,4 +1,5 @@
 ﻿@page
+@using System.Reflection.Metadata
 @model LudoWeb.Pages.Register
 
 @{
@@ -9,49 +10,51 @@
 
 <html>
 <head>
-    <link rel="stylesheet" href="css/Register.css">
-    <title>
-      @Model.Dictionary.Register_PageHeaderTitle
-    </title>
+  <link rel="stylesheet" href="css/Register.css">
+  <title>
+    @Model.Dictionary.Register_PageHeaderTitle
+  </title>
 </head>
 <body>
 <div class="Logo">
   <img src="images/LudoBanner_NoShadow.png" alt="Yeet!">
 </div>
 <div class="page">
-        <h1>@Model.Dictionary.Register_BodyTitle</h1>
-        <label class="field field_v1">
-          <input class="field__input" placeholder="@Model.Dictionary.Register_AccountNamePlaceholderText">
-          <span class="field__label-wrap">
-            <span class="field__label">@Model.Dictionary.Register_AccountName</span>
-          </span>
-        </label>
-        <label class="field field_v2">
-          <input class="field__input" placeholder="@Model.Dictionary.Register_PasswordPlaceholderText" type="password">
-          <span class="field__label-wrap">
-            <span class="field__label">@Model.Dictionary.Register_Password</span>
-          </span>
-        </label>    
-        <label class="field field_v2">
-          <input class="field__input" placeholder="@Model.Dictionary.Register_RetypePasswordPlaceholderText" type="password">
-          <span class="field__label-wrap">
-            <span class="field__label">@Model.Dictionary.Register_RetypePassword</span>
-          </span>
-        </label>
-        <label class="field field_v3">
-            <input class="field__input" placeholder="@Model.Dictionary.Register_EmailPlaceholderText" type="email">
-            <span class="field__label-wrap">
-              <span class="field__label">@Model.Dictionary.Register_Email</span>
-            </span>
-          </label>
-          <br>
-        <select id="selectbox" data-selected="">
-  <option value="" selected="selected" disabled="disabled">@Model.Dictionary.Register_ChooseLanguage</option>
-  <option value="1">EN</option>
-  <option value="2">SE</option>
+  <h1>@Model.Dictionary.Register_BodyTitle</h1>
+  <label class="field field_v1">
+    <input class="field__input" id="txt_account" placeholder="@Model.Dictionary.Register_AccountNamePlaceholderText">
+    <span class="field__label-wrap">
+      <span class="field__label">@Model.Dictionary.Register_AccountName</span>
+    </span>
+  </label>
+  <label class="field field_v2">
+    <input class="field__input" id="txt_password" placeholder="@Model.Dictionary.Register_PasswordPlaceholderText" type="password">
+    <span class="field__label-wrap">
+      <span class="field__label">@Model.Dictionary.Register_Password</span>
+    </span>
+  </label>    
+  <label class="field field_v2">
+    <input class="field__input" id="txt_retypepassword" placeholder="@Model.Dictionary.Register_RetypePasswordPlaceholderText" type="password">
+    <span class="field__label-wrap">
+      <span class="field__label">@Model.Dictionary.Register_RetypePassword</span>
+    </span>
+  </label>
+  <label class="field field_v3">
+    <input class="field__input" id="txt_email" placeholder="@Model.Dictionary.Register_EmailPlaceholderText" type="email">
+    <span class="field__label-wrap">
+      <span class="field__label">@Model.Dictionary.Register_Email</span>
+    </span>
+  </label>
+  <br>
+  <select id="selectbox" data-selected="">
+    <option value="" selected="selected" disabled="disabled">@Model.Dictionary.Register_ChooseLanguage</option>
+    <option value="1">EN</option>
+    <option value="2">SE</option>
   </select>
-          <button type="button" class="btn">@Model.Dictionary.Register_RegisterButton</button>
-      </div>
+  <button type="button" class="btn" id="btn_register" onclick="register()">@Model.Dictionary.Register_RegisterButton</button>
+</div>
       
 </body>
 </html>
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/register.js"></script>

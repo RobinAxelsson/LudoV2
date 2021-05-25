@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using LudoDataAccess.Authentication;
 using LudoDataAccess.Database;
 using LudoDataAccess.Models.Account;
@@ -44,6 +45,50 @@ namespace LudoDataAccess
             var message = "The chosen language was not found. Please pick one of below:\n";
             languages.ForEach(l => message+= l + "\n");
             return (false, message);
+        }
+        public (bool success, string message) Login(string username, string password)
+        {
+            var usernameIsEmail = false;
+            //Set account where username is PlayerName
+            var account = _repository.Accounts.FirstOrDefault(x => x.PlayerName == username);
+            if (account == null)
+            {
+                //If it fails, set try set username as email
+                account = _repository.Accounts.FirstOrDefault(x => x.EmailAdress == username);
+                usernameIsEmail = true;
+            }
+            if (!usernameIsEmail)
+            {
+                if(account.Password == PasswordHashing.HashPassword(password) && account.PlayerName == username)
+                {
+                    var tokenId = Guid.NewGuid().ToString("N");
+                    var token = new AccountToken()
+                    {
+                    Token = tokenId,
+                    ExpiryDate = DateTime.UtcNow.AddHours(3)
+                    };
+                    _repository.Add(token);
+                    _repository.SaveChanges();
+                    return (true, tokenId);
+                }
+            }
+            else
+            {
+                if(account != null && account.Password == PasswordHashing.HashPassword(password) && account.EmailAdress == username)
+                {
+                    var tokenId = Guid.NewGuid().ToString("N");
+                    var token = new AccountToken()
+                    {
+                        Token = tokenId,
+                        ExpiryDate = DateTime.UtcNow.AddHours(3)
+                    };
+                    _repository.Add(token);
+                    _repository.SaveChanges();
+                    return (true, tokenId);
+                }
+            }
+            return
+                (false, "Incorrect username or password");
         }
     }
 }

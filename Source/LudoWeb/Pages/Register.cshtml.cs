@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using LudoDataAccess;
 using LudoTranslation;
@@ -10,16 +11,14 @@ namespace LudoWeb.Pages
     public class Register : PageModel
     {
         public Dict Dictionary { get; set; }
-        private readonly IDatabaseManagement _dbm;
-        public Register(IDatabaseManagement dbm)
-        {
-            _dbm = dbm;
-        }
+       
         public void OnGet()
         {
             var engine = new TranslationEngine();
             var languageIso2 = RegionInfo.CurrentRegion.TwoLetterISORegionName;
             Dictionary = engine.InitializeLanguage(TranslationEngine.Languages.Contains(languageIso2) ? languageIso2 : "EN");
         }
+
+
     }
 }
