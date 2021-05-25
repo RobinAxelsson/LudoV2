@@ -52,8 +52,10 @@ var sel = document.getElementById('selectbox');
         }
         if(!isEmptyOrSpaces(retype)) {
             if(password !== retype) {
+                document.getElementById("err_password_match").style.color = "rgb(255, 106, 106)";
                 document.getElementById("err_password_match").style.display = 'unset';
                 document.getElementById("err_password_match").innerHTML = "Passwords don't match";
+                
             }
             else {
                 document.getElementById("err_password_match").style.display = 'unset';
