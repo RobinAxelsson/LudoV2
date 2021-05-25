@@ -1,3 +1,5 @@
+using LudoDataAccess;
+using LudoDataAccess.Database;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Interfaces;
 using Microsoft.AspNetCore.Builder;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LudoWeb.ChatModels;
+using Microsoft.EntityFrameworkCore;
 
 namespace LudoWeb
 {
@@ -23,8 +26,12 @@ namespace LudoWeb
         {
             services.AddRazorPages();
             services.AddSignalR();
+            services.AddSingleton<LudoContext>();
+            services.AddSingleton<ILudoRepository, DbRepository>();
             services.AddSingleton<ChatHubData>();
             services.AddSingleton<IBoardOrm, BoardOrm>();
+            services.AddSingleton<IDatabaseManagement, DatabaseManagement>();
+       
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

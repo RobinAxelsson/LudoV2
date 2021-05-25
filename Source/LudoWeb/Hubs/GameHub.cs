@@ -1,5 +1,5 @@
 ﻿using System.Collections.Concurrent;
-using LudoAPI.Models;
+using LudoDataAccess.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb.Hubs

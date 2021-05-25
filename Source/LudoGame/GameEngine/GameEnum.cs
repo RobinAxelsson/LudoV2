@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace LudoGame.GameEngine
+﻿namespace LudoGame.GameEngine
 {
     public static class GameEnum
     {

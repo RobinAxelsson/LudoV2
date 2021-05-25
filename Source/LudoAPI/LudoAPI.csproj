@@ -26,10 +26,4 @@
       <ProjectReference Include="..\LudoTranslation\LudoTranslation.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <None Update="SMTP\Resources\emailbody_raw.html">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
 </Project>

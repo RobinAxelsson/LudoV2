@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LudoAPI.Controllers.Bodies;
-using LudoAPI.DataAccess;
-using LudoAPI.Models;
-using LudoAPI.Models.Account;
-using LudoAPI.SMTP;
 using LudoGame.GameEngine;
-using LudoGame.GameEngine.Classes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace LudoAPI.Controllers

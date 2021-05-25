@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using LudoDataAccess;
 using LudoTranslation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -8,6 +10,11 @@ namespace LudoWeb.Pages
     public class Register : PageModel
     {
         public Dict Dictionary { get; set; }
+        private readonly IDatabaseManagement _dbm;
+        public Register(IDatabaseManagement dbm)
+        {
+            _dbm = dbm;
+        }
         public void OnGet()
         {
             var engine = new TranslationEngine();

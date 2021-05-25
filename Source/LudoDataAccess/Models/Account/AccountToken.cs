@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace LudoAPI.Models.Account
+namespace LudoDataAccess.Models.Account
 {
     public record AccountToken
     {

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using LudoAPI.DataAccess;
+using LudoDataAccess.Database;
 
-namespace LudoAPI.Models
+namespace LudoDataAccess.Models
 {
     public record Game
     {

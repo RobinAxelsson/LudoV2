@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace LudoAPI.Authentication
+namespace LudoDataAccess.Authentication
 {
     public class LoginModel
     {

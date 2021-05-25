@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace LudoAPI.Authentication
+namespace LudoDataAccess.Authentication
 {
     public static class PasswordHashing
     {

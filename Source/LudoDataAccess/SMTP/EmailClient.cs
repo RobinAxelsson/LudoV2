@@ -3,23 +3,20 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Reflection;
-using LudoAPI.DataAccess;
-using LudoAPI.Models;
-using LudoAPI.Models.Account;
+using LudoDataAccess.Database;
+using LudoDataAccess.Models;
+using LudoDataAccess.Models.Account;
 using LudoTranslation;
-using Microsoft.Extensions.Configuration;
 
-namespace LudoAPI.SMTP
+namespace LudoDataAccess.SMTP
 {
     public class EmailClient
     {
-        private Dict dict;
+        private Dict _dict;
         private readonly ILudoRepository _repository;
-        private readonly IConfiguration _configuration;
-        public EmailClient(ILudoRepository repository, IConfiguration configuration)
+        public EmailClient(ILudoRepository repository)
         {
             _repository = repository;
-            _configuration = configuration;
         }
         public void SendInvite(string[] recipients, Game game, Account host)
         {
@@ -39,12 +36,12 @@ namespace LudoAPI.SMTP
                 if (recipients.Contains(account.EmailAdress))
                 {
                     var te = new TranslationEngine();
-                    dict = te.InitializeLanguage(account.Language);
+                    _dict = te.InitializeLanguage(account.Language);
                    
                     var message = new MailMessage
                     {
                         From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
-                        Subject = $"{host.PlayerName} " + dict.Email_Subject,
+                        Subject = $"{host.PlayerName} " + _dict.Email_Subject,
                         IsBodyHtml = true,
                         Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
              
@@ -62,8 +59,8 @@ namespace LudoAPI.SMTP
             doc = doc
                 .Replace("GAMEID", gameId)
                 .Replace("ACCOUNTID", accountId)
-                .Replace("INVITEDTITLE", dict.Email_Title)
-                .Replace("SUBTITLE", dict.Email_Subtitle)
+                .Replace("INVITEDTITLE", _dict.Email_Title)
+                .Replace("SUBTITLE", _dict.Email_Subtitle)
                 .Replace("JOINGAMEURI", gameUrl);
             //Above path will need to be updated.
             File.WriteAllText(@"C:\Users\Albin\Desktop\test.html", doc);

@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using LudoAPI.Models;
-using LudoAPI.Models.Account;
+using LudoDataAccess.Models;
+using LudoDataAccess.Models.Account;
 
-namespace LudoAPI.DataAccess
+namespace LudoDataAccess.Database
 {
     public class DbRepository : ILudoRepository
     {
