@@ -260,24 +260,6 @@ h1 {
     text-align: center;
 
 }
-/*
-select {
- 
-  font-family: "Pontano Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color:white;
-  background-color:rgb(26, 26, 26);
-  margin-bottom: 1em;
-  padding: 0.25em;
-  border: 0;
-  border-bottom: 2px solid currentcolor;
-  letter-spacing: 0.15em;
-  border-radius: 0;
-
-  -moz-appearance:none; 
-    -webkit-appearance:none;
-    appearance:none;
-}
-*/
 select {
   color:white;
   font-family: "Pontano Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -299,8 +281,15 @@ select:focus, select:active {
   outline: 0;
   border-bottom-color: #f8f41f;
 }
-
-
-
-
-
+.notifylbl {
+font-family: "Pontano Sans", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+font-size:small;
+/*
+red: rgb(255, 106, 106)
+green: rgb(124, 252, 107)
+*/ 
+  
+color: rgb(255, 106, 106);
+margin-top: -15px;
+display: none;
+}

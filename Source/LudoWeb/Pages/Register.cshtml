@@ -21,35 +21,40 @@
 <div class="page">
   <h1>@Model.Dictionary.Register_BodyTitle</h1>
   <label class="field field_v1">
-    <input class="field__input" id="txt_account" placeholder="@Model.Dictionary.Register_AccountNamePlaceholderText">
+    <input class="field__input" id="txt_account" oninput="checkAccount()" placeholder="@Model.Dictionary.Register_AccountNamePlaceholderText">
     <span class="field__label-wrap">
       <span class="field__label">@Model.Dictionary.Register_AccountName</span>
     </span>
   </label>
+  <p class="notifylbl" id="err_accountname" style="color:white">Don't use an @@ in your username</p>
   <label class="field field_v2">
-    <input class="field__input" id="txt_password" placeholder="@Model.Dictionary.Register_PasswordPlaceholderText" type="password">
+    <input class="field__input" id="txt_password" oninput="checkPasswords()" placeholder="@Model.Dictionary.Register_PasswordPlaceholderText" type="password">
     <span class="field__label-wrap">
       <span class="field__label">@Model.Dictionary.Register_Password</span>
     </span>
   </label>    
+  <p class="notifylbl" id="err_password_strength" style="color:white">Password must be stronger</p>
   <label class="field field_v2">
-    <input class="field__input" id="txt_retypepassword" placeholder="@Model.Dictionary.Register_RetypePasswordPlaceholderText" type="password">
+    <input class="field__input" id="txt_retypepassword" oninput="checkPasswords()" placeholder="@Model.Dictionary.Register_RetypePasswordPlaceholderText" type="password">
     <span class="field__label-wrap">
       <span class="field__label">@Model.Dictionary.Register_RetypePassword</span>
     </span>
   </label>
+     <p class="notifylbl" id="err_password_match" style="color:white">Passwords doesn't match!</p>
   <label class="field field_v3">
-    <input class="field__input" id="txt_email" placeholder="@Model.Dictionary.Register_EmailPlaceholderText" type="email">
+    <input class="field__input" id="txt_email" oninput="checkEmail()" placeholder="@Model.Dictionary.Register_EmailPlaceholderText" type="email">
     <span class="field__label-wrap">
       <span class="field__label">@Model.Dictionary.Register_Email</span>
     </span>
   </label>
+  <p class="notifylbl" id="err_invalid_email" style="color:white">Invalid email</p>
   <br>
-  <select id="selectbox" data-selected="">
+  <select id="selectbox" data-selected="" onchange="languageSelected()">
     <option value="" selected="selected" disabled="disabled">@Model.Dictionary.Register_ChooseLanguage</option>
     <option value="1">EN</option>
     <option value="2">SE</option>
   </select>
+  <p class="notifylbl" id="err_language_select" style="color:white">Please select a language</p>
   <button type="button" class="btn" id="btn_register" onclick="register()">@Model.Dictionary.Register_RegisterButton</button>
 </div>
       
