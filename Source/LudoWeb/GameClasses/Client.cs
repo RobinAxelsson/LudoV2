@@ -1,5 +1,5 @@
-﻿using LudoAPI.Models;
-using LudoAPI.Models.Account;
+﻿using LudoDataAccess.Models;
+using LudoDataAccess.Models.Account;
 
 namespace LudoWeb.GameClasses
 {

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using LudoAPI.Models;
+using LudoDataAccess.Models;
 
 namespace LudoWeb.GameClasses
 {
