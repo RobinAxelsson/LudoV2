@@ -1,5 +1,7 @@
 ﻿
 
+using System.Reflection;
+
 namespace LudoTranslation {
     public record Dict
     {
@@ -32,6 +34,9 @@ namespace LudoTranslation {
         public string Register_AccountNamePlaceholderText { get; private set; }
         public string Register_ChooseLanguage { get; private set; }
         #endregion
-        
+        public string GetPropertyValue(string input)
+        {
+            return GetType().GetProperty(input)?.GetValue(this, null)?.ToString();
+        }
     }
 }
