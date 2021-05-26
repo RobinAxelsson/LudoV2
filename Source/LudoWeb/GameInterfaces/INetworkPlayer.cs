@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Interfaces;
@@ -12,6 +13,6 @@ namespace LudoWeb.GameInterfaces
         bool NextToThrow { get; set; }
         bool Disconnected { get; set; }
         GameEnum.TeamColor Color { get; set; }
-        Pawn[] ChoosePlay(PlayerOption playerOption);
+        Task<Pawn[]> ChoosePlay(PlayerOption playerOption);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
@@ -35,14 +36,14 @@ namespace LudoGame.GameEngine.AI
 
        
 
-        public Pawn[] ChoosePlay(PlayerOption playerOption)
+        public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
             int diceRoll = playerOption.DiceRoll;
             LoggerMessage = $"\n\n[Method: ChoosePlay] New instance\n\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Rolled: {diceRoll}";
             LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Calculating play...";
             StephanThrowEvent?.Invoke(this, diceRoll);
             var result = CalculatePlay(playerOption);
-            Thread.Sleep(2000);
+            Task.Delay(2000);
             if (result.takeout)
             {
                 if (result.takeoutCount == 2)

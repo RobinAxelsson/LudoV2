@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LudoGame.GameEngine.Interfaces
 {
@@ -6,7 +7,7 @@ namespace LudoGame.GameEngine.Interfaces
     {
         public int RoundCount { get; set; }
         List<IGamePlayer> ReadPlayers();
-        void Start(List<IGamePlayer> players);
+        Task Start(List<IGamePlayer> players);
         GameEnum.GameStatus GameStatus { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.AI;
 using LudoGame.GameEngine.Classes;
@@ -30,12 +31,12 @@ namespace LudoWeb.GameClasses
         public bool Disconnected { get; set; }
         private int _timeoutSeconds { get; }
         public GameEnum.TeamColor Color { get; set; }
-        public Pawn[] ChoosePlay(PlayerOption playerOption)
+        public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
             Debug.WriteLine("Player ChoosePlay");
             if (Disconnected == true && _backupStephan != null)
             {
-                return _backupStephan.ChoosePlay(playerOption);
+                return await _backupStephan.ChoosePlay(playerOption);
             }
             _networkManager.AskPlayerOption(_client.ConnectionId, playerOption);
             int Count = 0;
@@ -45,7 +46,7 @@ namespace LudoWeb.GameClasses
                 if (_timeoutSeconds < Count)
                 {
                     Debug.WriteLine("Player was timedout");
-                    return _backupStephan.ChoosePlay(playerOption);
+                    return await _backupStephan.ChoosePlay(playerOption);
                 }
             } while (MovePawn.Count == 0);
 

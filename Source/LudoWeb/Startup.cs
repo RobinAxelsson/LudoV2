@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LudoWeb.ChatModels;
 using LudoWeb.GameClasses;
+using LudoWeb.GameInterfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb

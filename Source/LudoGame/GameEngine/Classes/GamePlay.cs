@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using LudoGame.GameEngine.Interfaces;
 
 namespace LudoGame.GameEngine.Classes
@@ -37,7 +38,7 @@ namespace LudoGame.GameEngine.Classes
         {
             return _orderedPlayers.Select(p => p).ToList();
         }
-        public void Start(List<IGamePlayer> players)
+        public async Task Start(List<IGamePlayer> players)
         {
             SetUpTeams(players);
 
@@ -48,12 +49,12 @@ namespace LudoGame.GameEngine.Classes
                 {
                     int diceRoll = _rollDice();
                     var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
-                    var pawns = player.ChoosePlay(playerOption);
+                    var pawns = await player.ChoosePlay(playerOption);
                     bool valid = _validator.ValidateResponse(playerOption, pawns);
                     if (valid) _action.Act(pawns, diceRoll);
                     else
                     {
-                        player.ChoosePlay(playerOption);
+                        await player.ChoosePlay(playerOption);
                         _gameEvent.InvokeOnInvalidResponseEvent(player);
                     }
                 }

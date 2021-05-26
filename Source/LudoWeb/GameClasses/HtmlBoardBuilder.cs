@@ -4,6 +4,7 @@ using System.Linq;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
+using LudoWeb.GameInterfaces;
 using LudoWeb.ViewModel;
 
 namespace LudoWeb.GameClasses

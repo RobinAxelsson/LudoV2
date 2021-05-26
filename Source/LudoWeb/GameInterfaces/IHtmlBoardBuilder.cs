@@ -1,6 +1,6 @@
 ﻿using LudoWeb.ViewModel;
 
-namespace LudoWeb.GameClasses
+namespace LudoWeb.GameInterfaces
 {
     public interface IHtmlBoardBuilder
     {
