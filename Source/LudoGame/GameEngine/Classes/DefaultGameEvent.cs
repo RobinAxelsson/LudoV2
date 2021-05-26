@@ -14,7 +14,7 @@ namespace LudoGame.GameEngine.Classes
         //Invoked in GameAction
         public event Action<Pawn[]> OnMoveEvent;
         public event Action<GameEnum.TeamColor> OnTakeOutTwoEvent;
-        //public event Action OnNewGameEvent;
+        public event Action OnNewGameEvent;
         public event Action OnRestartedGameEvent;
 
         public event Action<GameEnum.TeamColor> OnBounceEvent;
@@ -31,7 +31,7 @@ namespace LudoGame.GameEngine.Classes
             OnNewPlayerOptionEvent?.Invoke(player, option);
 
         public void InvokeOnRoundCompletedEvent() => OnRoundCompletedEvent?.Invoke();
-       // public void InvokeOnNewGameEvent() => OnNewGameEvent?.Invoke();
+        public void InvokeOnNewGameEvent() => OnNewGameEvent?.Invoke();
         public void InvokeOnInvalidResponseEvent(IGamePlayer player) => OnInvalidResponseEvent?.Invoke(player);
 
         public void InvokeOnAllTeamPawnsOutEvent(GameEnum.TeamColor pawnColor) => OnAllTeamPawnsOutEvent?.Invoke(pawnColor);

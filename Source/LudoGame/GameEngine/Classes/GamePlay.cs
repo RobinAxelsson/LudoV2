@@ -38,11 +38,11 @@ namespace LudoGame.GameEngine.Classes
         {
             return _orderedPlayers.Select(p => p).ToList();
         }
-        public async Task Start(List<IGamePlayer> players)
+        public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players)
         {
             SetUpTeams(players);
 
-            //_gameEvent.InvokeOnNewGameEvent();
+            _gameEvent.InvokeOnNewGameEvent();
             while (_continuePlay(this))
             {
                 foreach (var player in _orderedPlayers)
@@ -62,6 +62,8 @@ namespace LudoGame.GameEngine.Classes
                 RoundCount++;
                 _gameEvent.InvokeOnRoundCompletedEvent();
             }
+
+            return GameStatus;
         }
     }
 }

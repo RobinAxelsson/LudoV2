@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using LudoDataAccess.Database;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.Configuration;
@@ -43,14 +44,14 @@ namespace LudoWeb.GameClasses
         private List<(GameEnum.TeamColor Color, Client Client)> WaitingPlayers { get; set; }
         private List<GameEnum.TeamColor> Colors { get; set; }
         private Client GetClient(string connectionId) => Clients.SingleOrDefault(x => x.ConnectionId == connectionId);
-        public void Start()
+        public async Task Start()
         {
             var gamePlayers = CreateGamePlayers();
 
             Game = new Game(GameId);
             Game.GameStatus = ModelEnum.GameStatus.Created;
             Debug.WriteLine("Game created with id");
-            _gamePlay.Start(gamePlayers);
+            await _gamePlay.Start(gamePlayers);
         }
         private List<IGamePlayer> CreateGamePlayers()
         {

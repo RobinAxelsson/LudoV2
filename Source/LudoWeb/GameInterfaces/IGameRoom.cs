@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using LudoDataAccess.Models;
 using LudoWeb.GameClasses;
 
@@ -9,7 +10,7 @@ namespace LudoWeb.GameInterfaces
         string GameId { get; }
         Game Game { get; }
         List<Client> Clients { get; set; }
-        void Start();
+        Task Start();
         void AddAiPlayer();
         void ConnectNetworkPlayer(string connectionId);
     }
