@@ -12,7 +12,10 @@ namespace LudoWeb.GameClasses
         {
             _networkManager = manager;
         }
+        public async Task AddAi(string color)
+        {
 
+        }
         public async Task SelectColor(string color)
         {
 

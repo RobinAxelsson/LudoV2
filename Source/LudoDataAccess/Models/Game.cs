@@ -6,6 +6,12 @@ namespace LudoDataAccess.Models
 {
     public record Game
     {
+        public Game() { }
+
+        public Game(string id)
+        {
+            GameId = id;
+        }
         [Key]
         public string GameId { get; set; }
         public string Url { get; set; }

@@ -15,24 +15,27 @@ namespace LudoWeb.Pages
         public int XCount { get; }
         public int YCount { get; }
 
-        public Ludo(IHubContext<ChatHub> chatContext, IHtmlBoardBuilder boardBuilder)
+        public Ludo(GameNetworkManager manager, IHtmlBoardBuilder boardBuilder)
         {
             GetGameSquare = boardBuilder.GetGameSquare;
             XCount = boardBuilder.XCount;
             YCount = boardBuilder.YCount;
-            _chatContext = chatContext;
+            _gameNetworkManager = manager;
         }
-        public IHubContext<ChatHub> _chatContext { get; }
+        private GameNetworkManager _gameNetworkManager { get; }
 
-        public async Task OnGetAsync(string group, string message)
+        public void OnGet(string gameId)
         {
-            Debug.WriteLine(group + ": " + message);
-            if (!String.IsNullOrEmpty(group) || !String.IsNullOrEmpty(message))
+            Debug.WriteLine($"User entered Ludo page with/with empty parameter: {gameId}");
+            if (String.IsNullOrEmpty(gameId))
             {
-                await _chatContext.Clients.Group(group)
-                    .SendAsync("ReceiveGroupMessage", "Endpoint", group, message);
+                gameId = Guid.NewGuid().ToString("N");
+                _gameNetworkManager.AddGameRoom(gameId);
             }
-
+            else
+            {
+                
+            }
         }
     }
 }

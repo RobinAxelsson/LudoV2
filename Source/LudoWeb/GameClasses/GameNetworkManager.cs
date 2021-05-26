@@ -1,26 +1,38 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using LudoDataAccess.Database;
 using LudoGame.GameEngine.Classes;
+using LudoGame.GameEngine.Configuration;
+using LudoWeb.GameInterfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb.GameClasses
 {
-    public class GameNetworkManager
+    public class GameNetworkManager : IGameNetworkManager
     {
-        //private ILudoRepository _dbRepository;
+        private ILudoRepository _dbRepository;
         private IHubContext<GameHub> _gameContext { get; }
-        private List<GameRoom> Rooms { get; set; }
-        public GameNetworkManager(IHubContext<GameHub> gameContext)
+        private List<IGameRoom> Rooms;
+        private LudoNetworkFactory _networkFactory;
+        private AbstractFactory _gameServiceFactory;
+        public GameNetworkManager(IHubContext<GameHub> gameContext, AbstractFactory gameServiceFactory, LudoNetworkFactory networkFactory)
         {
+            _networkFactory = networkFactory;
             _gameContext = gameContext;
+            _gameServiceFactory = gameServiceFactory;
             Rooms = new();
         }
-
-        //From server to clients
-        public async Task SendGameMessage(string message, string gameId)
+        public void AddGameRoom(string gameId)
         {
-            await _gameContext.Clients.Group(gameId)
+            Rooms.Add(_networkFactory.GameRoom(_gameServiceFactory, this, gameId, _networkFactory));
+            Debug.WriteLine($"GameRoom was added with id: {gameId}!");
+        }
+        //From server to clients
+        public void SendGameMessage(string message, string gameId)
+        {
+            _gameContext.Clients.Group(gameId)
                 .SendAsync("GameMessage", message);
         }
         public async Task UpdatePawns(Pawn[] pawns, string gameId)
@@ -29,10 +41,14 @@ namespace LudoWeb.GameClasses
                 .SendAsync("UpdatePawns", pawns);
         }
 
+        public async Task AskPlayerOption(string connectionId, PlayerOption playerOption)
+        {
+            await GetClientProxy(connectionId).SendAsync("ReceiveOption", playerOption);
+        }
         //public async Task AddClientToRoom(string gameId, string clientId) //Invokes by client OnConnection
         //{
         //    //var game = _dbRepository.Games.SingleOrDefault(x => x.GameId == gameId);
-        //    if (game == null)
+        //    if (gameId == null)
         //    {
         //        Debug.WriteLine("A client try to join a non-existing game/room");
         //    }
@@ -42,7 +58,7 @@ namespace LudoWeb.GameClasses
         //        if (room == null)
         //        {
         //            var client = new Client(clientId);
-        //            var newRoom = new GameRoom(game);
+        //            var newRoom = new GameRoom(gameId);
         //            newRoom.Clients.Add(client);
         //            Rooms.Add(newRoom);
         //        }
@@ -63,17 +79,20 @@ namespace LudoWeb.GameClasses
         //}
 
         //From client to game-room
-
+        public IClientProxy GetClientProxy(string connectionId)
+        {
+            return _gameContext.Clients.Client(connectionId);
+        }
         public IClientProxy GetGroupProxy(string connectionId)
         {
-            var roomId = RoomId(connectionId);
+            var roomId = GameId(connectionId);
             if (roomId == null) return null;
             return _gameContext.Clients.Group(roomId);
         }
-        private string RoomId(string connectionId)
+        private string GameId(string connectionId)
         {
             var room = Rooms.SingleOrDefault(r => r.Clients.Select(c => c.ConnectionId).Contains(connectionId));
-            return room.Id();
+            return room.GameId;
         }
 
         //private bool IsNotGameOver(ModelEnum.GameStatus status)

@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LudoWeb.ChatModels;
 using LudoWeb.GameClasses;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb
 {
@@ -32,7 +33,9 @@ namespace LudoWeb
             services.AddSingleton<ChatHubData>();
             services.AddSingleton<IBoardOrm, BoardOrm>();
             services.AddSingleton<IDatabaseManagement, DatabaseManagement>();
-            services.AddSingleton<LudoFactory>();
+            services.AddSingleton<AbstractFactory, LudoFactory>();
+            services.AddSingleton<LudoNetworkFactory>();
+            services.AddSingleton<GameNetworkManager>();
             services.AddSingleton<IHtmlBoardBuilder, HtmlBoardBuilder>();
         }
 

@@ -19,8 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LudoAPI\LudoAPI.csproj" />
-    <ProjectReference Include="..\LudoDataAccess\LudoDataAccess.csproj" />
+	  <ProjectReference Include="..\LudoDataAccess\LudoDataAccess.csproj" />
   </ItemGroup>
 
   <ItemGroup>

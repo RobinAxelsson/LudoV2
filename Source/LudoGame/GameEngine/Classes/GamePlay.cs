@@ -24,7 +24,6 @@ namespace LudoGame.GameEngine.Classes
         private readonly Func<IGamePlay, bool> _continuePlay;
         private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
         private readonly Func<int> _rollDice;
-        private IGamePlay _gamePlayImplementation;
 
         private void SetUpTeams(List<IGamePlayer> players)
         {
@@ -42,7 +41,7 @@ namespace LudoGame.GameEngine.Classes
         {
             SetUpTeams(players);
 
-            _gameEvent.InvokeOnNewGameEvent();
+            //_gameEvent.InvokeOnNewGameEvent();
             while (_continuePlay(this))
             {
                 foreach (var player in _orderedPlayers)

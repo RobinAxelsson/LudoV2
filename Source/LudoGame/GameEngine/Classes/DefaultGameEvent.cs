@@ -7,26 +7,31 @@ namespace LudoGame.GameEngine.Classes
     {
 
         //Invoked in GamePlay
-        private event Action OnRoundCompletedEvent;
-        private event Action<IGamePlayer> OnInvalidResponseEvent;
+        public event Action<IGamePlayer, PlayerOption> OnNewPlayerOptionEvent;
+        public event Action OnRoundCompletedEvent;
+        public event Action<IGamePlayer> OnInvalidResponseEvent;
 
         //Invoked in GameAction
-        private event Action<Pawn[]> OnMoveEvent;
-        private event Action<GameEnum.TeamColor> OnTakeOutTwoEvent;
-        private event Action OnNewGameEvent;
-        private event Action OnRestartedGameEvent;
+        public event Action<Pawn[]> OnMoveEvent;
+        public event Action<GameEnum.TeamColor> OnTakeOutTwoEvent;
+        //public event Action OnNewGameEvent;
+        public event Action OnRestartedGameEvent;
 
-        private event Action<GameEnum.TeamColor> OnBounceEvent;
-        private event Action<GameEnum.TeamColor, int> OnGoalEvent;
-        private event Action<GameEnum.TeamColor> OnAllTeamPawnsOutEvent;
-        private event Action<GameEnum.TeamColor, GameEnum.TeamColor, int> OnEradicationEvent;
-        private event Action<GameEnum.TeamColor> GameLoserEvent;
-        private event Action OnGameOverEvent;
-        private event Action<GameEnum.TeamColor> OnSafeZoneEvent;
+        public event Action<GameEnum.TeamColor> OnBounceEvent;
+        public event Action<GameEnum.TeamColor, int> OnGoalEvent;
+        public event Action<GameEnum.TeamColor> OnAllTeamPawnsOutEvent;
+        public event Action<GameEnum.TeamColor, GameEnum.TeamColor, int> OnEradicationEvent;
+        public event Action<GameEnum.TeamColor> GameLoserEvent;
+        public event Action OnGameOverEvent;
+        public event Action<GameEnum.TeamColor> OnSafeZoneEvent;
 
         public void InvokeOnMoveEvent(Pawn[] pawns) => OnMoveEvent?.Invoke(pawns);
+
+        public void InvokeOnNewPlayerOptionEvent(IGamePlayer player, PlayerOption option) =>
+            OnNewPlayerOptionEvent?.Invoke(player, option);
+
         public void InvokeOnRoundCompletedEvent() => OnRoundCompletedEvent?.Invoke();
-        public void InvokeOnNewGameEvent() => OnNewGameEvent?.Invoke();
+       // public void InvokeOnNewGameEvent() => OnNewGameEvent?.Invoke();
         public void InvokeOnInvalidResponseEvent(IGamePlayer player) => OnInvalidResponseEvent?.Invoke(player);
 
         public void InvokeOnAllTeamPawnsOutEvent(GameEnum.TeamColor pawnColor) => OnAllTeamPawnsOutEvent?.Invoke(pawnColor);

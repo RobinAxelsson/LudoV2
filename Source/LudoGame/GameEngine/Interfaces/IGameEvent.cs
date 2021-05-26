@@ -1,24 +1,31 @@
-﻿using LudoGame.GameEngine.Classes;
+﻿using System;
+using LudoGame.GameEngine.Classes;
 
 namespace LudoGame.GameEngine.Interfaces
 {
     public interface IGameEvent
     {
-        //event Action OnRoundCompletedEvent;
-        //event Action<IGamePlayer> OnInvalidResponseEvent;
-        //event Action<Pawn[]> OnMoveEvent;
-        //event Action<GameEnum.TeamColor> OnTakeOutTwoEvent;
-        //event Action OnNewGameEvent;
-        //event Action OnRestartedGameEvent;
-        //event Action<GameEnum.TeamColor> OnBounceEvent;
-        //event Action<GameEnum.TeamColor, int> OnGoalEvent;
-        //event Action<GameEnum.TeamColor> OnAllTeamPawnsOutEvent;
-        //event Action<GameEnum.TeamColor, GameEnum.TeamColor, int> OnEradicationEvent;
-        //event Action<GameEnum.TeamColor> GameLoserEvent;
-        //event Action OnGameOverEvent;
-        //event Action<GameEnum.TeamColor> OnSafeZoneEvent;
+        //Invoked in GamePlay
+        public event Action<IGamePlayer, PlayerOption> OnNewPlayerOptionEvent;
+        public event Action OnRoundCompletedEvent;
+        public event Action<IGamePlayer> OnInvalidResponseEvent;
+
+        //Invoked in GameAction
+        public event Action<Pawn[]> OnMoveEvent;
+        public event Action<GameEnum.TeamColor> OnTakeOutTwoEvent;
+        //public event Action OnNewGameEvent;
+        public event Action OnRestartedGameEvent;
+
+        public event Action<GameEnum.TeamColor> OnBounceEvent;
+        public event Action<GameEnum.TeamColor, int> OnGoalEvent;
+        public event Action<GameEnum.TeamColor> OnAllTeamPawnsOutEvent;
+        public event Action<GameEnum.TeamColor, GameEnum.TeamColor, int> OnEradicationEvent;
+        public event Action<GameEnum.TeamColor> GameLoserEvent;
+        public event Action OnGameOverEvent;
+        public event Action<GameEnum.TeamColor> OnSafeZoneEvent;
+        public void InvokeOnNewPlayerOptionEvent(IGamePlayer player, PlayerOption option);
         public void InvokeOnRoundCompletedEvent();
-        public void InvokeOnNewGameEvent();
+        //public void InvokeOnNewGameEvent();
         public void InvokeOnInvalidResponseEvent(IGamePlayer player);
         public void InvokeOnAllTeamPawnsOutEvent(GameEnum.TeamColor pawnColor);
         public void InvokeOnGoalEvent(GameEnum.TeamColor color, int pawnsLeft);

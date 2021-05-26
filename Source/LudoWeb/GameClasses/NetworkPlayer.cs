@@ -1,29 +1,57 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 using LudoGame.GameEngine;
+using LudoGame.GameEngine.AI;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Interfaces;
+using LudoWeb.GameInterfaces;
 
 namespace LudoWeb.GameClasses
 {
-    public class NetworkPlayer : IGamePlayer
+    public class NetworkPlayer : INetworkPlayer
     {
         private Client _client;
-        private GameNetworkManager _networkManager;
-        public NetworkPlayer(GameNetworkManager manager, GameEnum.TeamColor color, Client client)
+        private IGameNetworkManager _networkManager;
+        private IGamePlayer _backupStephan;
+        public NetworkPlayer(IGameNetworkManager manager, GameEnum.TeamColor color, Client client, IGamePlayer stephan)
         {
             _networkManager = manager;
             Color = color;
             _client = client;
+            _timeoutSeconds = 30;
+            _backupStephan = stephan;
         }
         public ICollection<Pawn> Pawns { get; set; }
+        public List<Pawn> MovePawn;
         public int Result { get; set; }
         public bool NextToThrow { get; set; }
+        public bool Disconnected { get; set; }
+        private int _timeoutSeconds { get; }
         public GameEnum.TeamColor Color { get; set; }
         public Pawn[] ChoosePlay(PlayerOption playerOption)
         {
-            //Send to client
-            return null;
+            Debug.WriteLine("Player ChoosePlay");
+            if (Disconnected == true && _backupStephan != null)
+            {
+                return _backupStephan.ChoosePlay(playerOption);
+            }
+            _networkManager.AskPlayerOption(_client.ConnectionId, playerOption);
+            int Count = 0;
+            do
+            {
+                Thread.Sleep(1000);
+                if (_timeoutSeconds < Count)
+                {
+                    Debug.WriteLine("Player was timedout");
+                    return _backupStephan.ChoosePlay(playerOption);
+                }
+            } while (MovePawn.Count == 0);
+
+            var responsePawn = MovePawn.ToArray();
+            MovePawn.Clear();
+            return responsePawn;
         }
     }
 }

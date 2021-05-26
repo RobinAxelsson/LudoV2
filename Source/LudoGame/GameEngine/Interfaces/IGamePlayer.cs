@@ -5,10 +5,10 @@ namespace LudoGame.GameEngine.Interfaces
 {
     public interface IGamePlayer
     {
-        ICollection<Pawn> Pawns { get; set; }
-        int Result { get; set; }
-        bool NextToThrow { get; set; }
-        GameEnum.TeamColor Color { get; set; }
-        Pawn[] ChoosePlay(PlayerOption playerOption);
+        public ICollection<Pawn> Pawns { get; set; }
+        public int Result { get; set; }
+        public bool NextToThrow { get; set; }
+        public GameEnum.TeamColor Color { get; set; }
+        public Pawn[] ChoosePlay(PlayerOption playerOption);
     }
 }

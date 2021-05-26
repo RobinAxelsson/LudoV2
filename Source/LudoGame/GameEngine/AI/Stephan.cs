@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
@@ -41,6 +42,7 @@ namespace LudoGame.GameEngine.AI
             LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Calculating play...";
             StephanThrowEvent?.Invoke(this, diceRoll);
             var result = CalculatePlay(playerOption);
+            Thread.Sleep(2000);
             if (result.takeout)
             {
                 if (result.takeoutCount == 2)
