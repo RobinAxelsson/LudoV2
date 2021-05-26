@@ -30,3 +30,5 @@ Register_PasswordMatchLabel==Lösenorden matchar inte
 Register_PasswordMatchOkLabel==Perfekt!
 Register_AccountNameLengthLabel==Användarnamnet måste innehålla minst 4 tecken
 Register_AccountNameSpecialsLabel==Användarnamnet får inte innehålla några specialtecken
+Register_AccountNameIsTaken==Användarnamnet är upptaget
+Register_EmailAlreadyRegistered==E-postadressen är redan registrerad

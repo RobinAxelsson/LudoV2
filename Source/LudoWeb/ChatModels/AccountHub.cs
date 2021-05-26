@@ -21,7 +21,7 @@ namespace LudoWeb.ChatModels
         public async Task SendRegistrationData(string accountName, string email, string password, string preferredLanguage)
         {
             var result = _dbm.RegisterAccount(accountName, email, password, preferredLanguage);
-            await Clients.Caller.SendAsync("RegistrationResult", result.success, result.message);
+            await Clients.Caller.SendAsync("RegistrationResult", result.success, result.messages);
         }
         public async Task SendLoginData(string username, string password)
         {

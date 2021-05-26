@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LudoDataAccess.Authentication;
 using LudoDataAccess.Database;
@@ -11,41 +12,60 @@ namespace LudoDataAccess
     public class DatabaseManagement : IDatabaseManagement
     {
         private readonly ILudoRepository _repository;
-        public DatabaseManagement(ILudoRepository repository)
+        private readonly TranslationEngine _engine;
+        public DatabaseManagement(ILudoRepository repository, TranslationEngine engine)
         {
             _repository = repository;
+            _engine = engine;
         }
-        public (bool success, string message) RegisterAccount(string accountName, string email, string password, string preferredLanguage)
+        public (bool success, string[] messages) RegisterAccount(string accountName, string email, string password, string preferredLanguage)
         {
-            var te = new TranslationEngine();
+            var errorList = new List<string>();
+            var failed = false;
             if (_repository.Accounts.SingleOrDefault(a => a.PlayerName == accountName) != null)
-                return (false, "Account name already exists");
+            {
+                failed = true;
+                errorList.Add("accountnametaken");
+            }
             if (_repository.Accounts.SingleOrDefault(a => a.EmailAdress == email) != null)
-                return (false, "Email is already registered");
-            
-            
+                {
+                    failed = true;
+                    errorList.Add("emailtaken");
+                }
+
+        
             var account = new Account
             {
                 EmailAdress = email,
                 Password = PasswordHashing.HashPassword(password),
                 PlayerName = accountName,
             };
-            if (TranslationEngine.Languages.Contains(preferredLanguage))
+            if (TranslationEngine.Languages.Contains(preferredLanguage) && !failed)
             {
                 account.Language = preferredLanguage;
                 _repository.Add(account);
                 _repository.SaveChanges();
-                return (true, "Account has been registered");
+                return (true, null);
             }
-            /*
-            We cannot input the list as a parameter in the message below because-
-            it will be typed to a .ToString() which results in just "System.Collection.List"
-            So we format a string instead
-            */
-            var languages = TranslationEngine.Languages.GetLanguages();
-            var message = "The chosen language was not found. Please pick one of below:\n";
-            languages.ForEach(l => message+= l + "\n");
-            return (false, message);
+
+            if (failed)
+            {
+                /*
+           We cannot input the list as a parameter in the message below because-
+           it will be typed to a .ToString() which results in just "System.Collection.List"
+           So we format a string instead
+           */
+                if (!TranslationEngine.Languages.Contains(preferredLanguage))
+                {
+                    var languages = TranslationEngine.Languages.GetLanguages();
+                    var message = "The chosen language was not found. Please pick one of below:\n";
+                    languages.ForEach(l => message+= l + "\n");
+                    errorList.Add(message);
+                }
+                return (false, errorList.ToArray());
+            }
+
+            return (false, errorList.ToArray());
         }
         public (bool success, string message) Login(string username, string password)
         {

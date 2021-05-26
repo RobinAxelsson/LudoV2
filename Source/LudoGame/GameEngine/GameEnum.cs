@@ -1,4 +1,6 @@
-﻿namespace LudoGame.GameEngine
+﻿using System;
+
+namespace LudoGame.GameEngine
 {
     public static class GameEnum
     {
@@ -23,6 +25,16 @@
             Playing,
             Waiting,
             Ended
+        }
+        public static TeamColor ParseTeamColor(string inputColor)
+        {
+            var success = Enum.TryParse(inputColor, true, out TeamColor color);
+            return success ? color : TeamColor.Yellow;
+        }
+        public static bool TeamColorExists(string inputColor)
+        {
+            var success = Enum.TryParse(inputColor, true, out TeamColor color);
+            return success;
         }
     }
 }

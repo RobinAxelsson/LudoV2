@@ -5,22 +5,34 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/accountHub").build();
 connection.start();
 var mainLoopId = setInterval(function(){
-    console.log("incrementing");
  if(connection.connectionStarted) {
-     console.log("started!");
      cookieLoad();
      getTranslations(Translations);
      clearInterval(mainLoopId);
  }
 }, 40);
+//Send cookie request
     async function cookieLoad() {
         var loginCookie = document.cookie;
         await connection.invoke("SendCookie", loginCookie);
     }
+//Cookie result
+connection.on("CookieResult", function (result, message) {
+    if(result === true) {
+        redirect();
+    }
+    else {
+        document.getElementById("overlay").style.display = 'none';
+    }
+});
+    //Jump to game page
+function redirect() {
+    var host = window.location.host;
+    window.location.replace("https://" + host + "/GroupChat");
+}
 //Send translation request
 async function getTranslations(propertyNames) {
     var RegionCode = document.getElementById("RegionCode").innerHTML;
-    console.log(RegionCode);
     await connection.invoke("RequestTranslation", propertyNames, RegionCode);
 }
 
@@ -44,21 +56,8 @@ connection.on("TranslationDelivery", function (properties) {
         redirect();
     }
 });
-    connection.on("CookieResult", function (result, message) {
-      
-   if(result === true) {
-      redirect();
-   }
-   else {
-       document.getElementById("overlay").style.display = 'none';
-   }
+    
 
-});
-function redirect() {
-    var host = window.location.host;
-    console.log("https://" + host + "/GroupChat");
-    window.location.replace("https://" + host + "/GroupChat");
-}
 document.getElementById("txt_password").addEventListener("keyup", function(event) {
     if (event.key.toLowerCase() === "enter") {
         // Cancel the default action, if needed

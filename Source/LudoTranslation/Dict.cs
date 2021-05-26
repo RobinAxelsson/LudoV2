@@ -43,7 +43,8 @@ namespace LudoTranslation {
         public string Register_PasswordMatchOkLabel { get; private set; } //Referenced in JS
         public string Register_AccountNameLengthLabel { get; private set; } //Referenced in JS
         public string Register_AccountNameSpecialsLabel { get; private set; } //Referenced in JS
-        
+        public string Register_AccountNameIsTaken { get; private set; } //Referenced in JS 
+        public string Register_EmailAlreadyRegistered { get; private set; } //Referenced in JS 
         #endregion
         public string GetPropertyValue(string input)
         {

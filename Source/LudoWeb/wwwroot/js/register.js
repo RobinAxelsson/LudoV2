@@ -7,14 +7,16 @@
         "Register_PasswordMatchLabel",
         "Register_PasswordMatchOkLabel",
         "Register_AccountNameLengthLabel",
-        "Register_AccountNameSpecialsLabel"
+        "Register_AccountNameSpecialsLabel",
+        "Register_AccountNameIsTaken",
+        "Register_EmailAlreadyRegistered"
     ];
+
+
 var connection = new signalR.HubConnectionBuilder().withUrl("/accountHub").build();
 connection.start();
 var mainLoopId = setInterval(function(){
-    console.log("incrementing");
     if(connection.connectionStarted) {
-        console.log("started!");
         getTranslations(Translations);
         clearInterval(mainLoopId);
         //Begin translations
@@ -24,7 +26,6 @@ var mainLoopId = setInterval(function(){
 //Send translation request
  async function getTranslations(propertyNames) {
     var RegionCode = document.getElementById("RegionCode").innerHTML;
-    console.log(RegionCode);
      await connection.invoke("RequestTranslation", propertyNames, RegionCode);
 }
 
@@ -51,7 +52,6 @@ var sel = document.getElementById('selectbox');
         var accountName = document.getElementById("txt_account").value;
         var email = document.getElementById("txt_email").value;
         var preferredLanguage = sel.options[sel.selectedIndex].text;
-        console.log(preferredLanguage);
         checkAccount();
         checkPasswords();
         if(!email.includes("@") || !email.split("@")[1].includes(".") || email.endsWith(".")) {
@@ -67,7 +67,7 @@ var sel = document.getElementById('selectbox');
             connection.invoke("SendRegistrationData", accountName, email, password, preferredLanguage);
         }
     else {
-        console.log("something is faulty");
+        console.log("We ended up here... Something went really wrong...");
         }
     }
     function checkPasswords() {
@@ -143,6 +143,28 @@ function accountNameValid(str) {
 function isEmptyOrSpaces(str){
     return str === null || str.match(/^ *$/) !== null;
 }
-connection.on("RegistrationResult", function (result, message) {
-    console.log(result + " " + message);
+connection.on("RegistrationResult", function (result, messages) {
+    if(result === true) {
+        redirect();
+    }
+  else {
+      if(messages.includes("accountnametaken")) {
+          document.getElementById("err_accountname").style.display = 'unset';
+          document.getElementById("err_accountname").innerHTML = Translations[8];
+      }
+      if(messages.includes("emailtaken")) {
+          document.getElementById("err_invalid_email").style.display = 'unset';
+          document.getElementById("err_invalid_email").innerHTML = Translations[9];
+      }
+        for (i = 0; i <= messages.length -1; i++) {
+          console.log(messages[i]);
+        }
+        document.getElementById("txt_password").value = "";
+       document.getElementById("txt_retypepassword").value = "";
+        document.getElementById("err_password_match").style.display = 'none';
+    }
 });
+function redirect() {
+    var host = window.location.host;
+    window.location.replace("https://" + host + "/GroupChat");
+}

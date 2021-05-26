@@ -30,3 +30,5 @@ Register_PasswordMatchLabel==Passwords don't match
 Register_PasswordMatchOkLabel==Perfect!
 Register_AccountNameLengthLabel==Account name has to be at least 4 characters
 Register_AccountNameSpecialsLabel==Account name cannot contain any special characters
+Register_AccountNameIsTaken==Account name is taken
+Register_EmailAlreadyRegistered==Email is already registered
