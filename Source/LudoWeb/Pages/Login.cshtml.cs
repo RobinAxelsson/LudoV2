@@ -8,7 +8,8 @@ namespace LudoWeb.Pages
 {
     public class Login : PageModel
     {
-        public Dict Dictionary { get; set; }
+        public Dict Dictionary { get; private set; }
+        public readonly string RegionCode = RegionInfo.CurrentRegion.TwoLetterISORegionName;
         private readonly IDatabaseManagement _dbm;
         public Login(IDatabaseManagement dbm)
         {
@@ -17,8 +18,7 @@ namespace LudoWeb.Pages
         public void OnGet()
         {
             var engine = new TranslationEngine();
-            var languageIso2 = RegionInfo.CurrentRegion.TwoLetterISORegionName;
-            Dictionary = engine.InitializeLanguage(TranslationEngine.Languages.Contains(languageIso2) ? languageIso2 : "EN");
+            Dictionary = engine.InitializeLanguage(TranslationEngine.Languages.Contains(RegionCode) ? RegionCode : "EN");
         }
     }
 

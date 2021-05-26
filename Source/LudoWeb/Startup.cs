@@ -3,6 +3,7 @@ using LudoDataAccess.Database;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Configuration;
 using LudoGame.GameEngine.Interfaces;
+using LudoTranslation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -37,6 +38,7 @@ namespace LudoWeb
             services.AddSingleton<LudoNetworkFactory>();
             services.AddSingleton<GameNetworkManager>();
             services.AddSingleton<IHtmlBoardBuilder, HtmlBoardBuilder>();
+            services.AddSingleton<TranslationEngine>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

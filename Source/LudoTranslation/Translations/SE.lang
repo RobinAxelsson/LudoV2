@@ -7,8 +7,8 @@ Login_BodyTitle==Vänligen logga in för att spela
 Login_AccountName==Användarnamn
 Login_Password==Lösenord
 Login_LoginButton==Logga in
-Login_PageHeaderTitle==Logga in för att 
-
+Login_PageHeaderTitle==Logga in för att spela
+Login_IncorrectCredentialsLabel==Felaktigt användarnamn eller lösenord
 
 Register_BodyTitle==Vänligen registrera dig för att spela
 Register_AccountName==Användarnamn
@@ -22,3 +22,11 @@ Register_PasswordPlaceholderText==Ta något säkert för guds skull!
 Register_RetypePasswordPlaceholderText==Upprepa nu ditt lösenord. Försök att inte sudda tre gånger!
 Register_AccountNamePlaceholderText==t.ex. BigBlack1337
 Register_ChooseLanguage==Välj språk
+Register_EnterValidEmailLabel==Ange en giltig e-post
+Register_SelectLanguageLabel==Vänligen ange ett språk
+Register_PasswordStrengthLengthLabel==Lösenordet måste innehålla minst 8 tecken.
+Register_PasswordStrengthUppercaseLabel==Lösenordet måste innehålla minst en stor bokstav
+Register_PasswordMatchLabel==Lösenorden matchar inte
+Register_PasswordMatchOkLabel==Perfekt!
+Register_AccountNameLengthLabel==Användarnamnet måste innehålla minst 4 tecken
+Register_AccountNameSpecialsLabel==Användarnamnet får inte innehålla några specialtecken

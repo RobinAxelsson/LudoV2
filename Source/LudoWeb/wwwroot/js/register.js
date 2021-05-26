@@ -1,5 +1,39 @@
-﻿var connection = new signalR.HubConnectionBuilder().withUrl("/accountHub").build();
+﻿var Translations = 
+    [
+        "Register_EnterValidEmailLabel", 
+        "Register_SelectLanguageLabel", 
+        "Register_PasswordStrengthLengthLabel",
+        "Register_PasswordStrengthUppercaseLabel",
+        "Register_PasswordMatchLabel",
+        "Register_PasswordMatchOkLabel",
+        "Register_AccountNameLengthLabel",
+        "Register_AccountNameSpecialsLabel"
+    ];
+var connection = new signalR.HubConnectionBuilder().withUrl("/accountHub").build();
 connection.start();
+var mainLoopId = setInterval(function(){
+    console.log("incrementing");
+    if(connection.connectionStarted) {
+        console.log("started!");
+        getTranslations(Translations);
+        clearInterval(mainLoopId);
+        //Begin translations
+       
+    }
+}, 40);
+//Send translation request
+ async function getTranslations(propertyNames) {
+    var RegionCode = document.getElementById("RegionCode").innerHTML;
+    console.log(RegionCode);
+     await connection.invoke("RequestTranslation", propertyNames, RegionCode);
+}
+
+//Receive translations
+connection.on("TranslationDelivery", function (properties) {
+    Translations = properties;
+});
+
+
 document.addEventListener("DOMContentLoaded", function() {
     setColor("rgb(255, 106, 106)");
 });
@@ -22,11 +56,11 @@ var sel = document.getElementById('selectbox');
         checkPasswords();
         if(!email.includes("@") || !email.split("@")[1].includes(".") || email.endsWith(".")) {
             document.getElementById("err_invalid_email").style.display = 'unset';
-            document.getElementById("err_invalid_email").innerHTML = "Please enter a valid email address";
+            document.getElementById("err_invalid_email").innerHTML = Translations[0];
         }
         if(preferredLanguage.includes(" ")) {
             document.getElementById("err_language_select").style.display = 'unset';
-            document.getElementById("err_language_select").innerHTML = "Please select a language";
+            document.getElementById("err_language_select").innerHTML = Translations[1];
         }
         
         if(password === retype && password.length >= 8 && email.includes("@") && email.split("@")[1].includes(".") && !preferredLanguage.includes(" ") && accountNameValid(accountName) && !isEmptyOrSpaces(accountName)) {
@@ -41,11 +75,11 @@ var sel = document.getElementById('selectbox');
         var retype = document.getElementById("txt_retypepassword").value;
         if(password.length < 8) {
             document.getElementById("err_password_strength").style.display = 'unset';
-            document.getElementById("err_password_strength").innerHTML = "Password must greater than 8 characters";
+            document.getElementById("err_password_strength").innerHTML = Translations[2];
         }
         else if(!hasUppercase(password)) {
             document.getElementById("err_password_strength").style.display = 'unset';
-            document.getElementById("err_password_strength").innerHTML = "Password must contain an uppercase letter";
+            document.getElementById("err_password_strength").innerHTML = Translations[3];
         }
         else {
             document.getElementById("err_password_strength").style.display = 'none';
@@ -54,13 +88,13 @@ var sel = document.getElementById('selectbox');
             if(password !== retype) {
                 document.getElementById("err_password_match").style.color = "rgb(255, 106, 106)";
                 document.getElementById("err_password_match").style.display = 'unset';
-                document.getElementById("err_password_match").innerHTML = "Passwords don't match";
+                document.getElementById("err_password_match").innerHTML = Translations[4];
                 
             }
             else {
                 document.getElementById("err_password_match").style.display = 'unset';
                 document.getElementById("err_password_match").style.color = "rgb(124, 252, 107)";
-                document.getElementById("err_password_match").innerHTML = "Perfect!";
+                document.getElementById("err_password_match").innerHTML = Translations[5];
             }
         }
     }
@@ -68,11 +102,11 @@ var sel = document.getElementById('selectbox');
         var accountName = document.getElementById("txt_account").value;
         if(accountName.length <= 4) {
             document.getElementById("err_accountname").style.display = 'unset';
-            document.getElementById("err_accountname").innerHTML = "Account name has to be at least 4 characters";
+            document.getElementById("err_accountname").innerHTML = Translations[6];
         }
         else if(!accountNameValid(accountName)) {
             document.getElementById("err_accountname").style.display = 'unset';
-            document.getElementById("err_accountname").innerHTML = "Account name cannot contain any special characters";
+            document.getElementById("err_accountname").innerHTML = Translations[7];
         }
         else {
             document.getElementById("err_accountname").style.display = 'none';

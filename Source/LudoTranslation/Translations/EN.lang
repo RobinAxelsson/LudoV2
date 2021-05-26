@@ -8,7 +8,7 @@ Login_AccountName==Account name
 Login_Password==Password
 Login_LoginButton==Login
 Login_PageHeaderTitle==Login to play
-
+Login_IncorrectCredentialsLabel==Incorrect account name or password
 
 Register_BodyTitle==Please register to play
 Register_AccountName==Account name
@@ -22,3 +22,11 @@ Register_PasswordPlaceholderText==Please type something secure... do it for me!
 Register_RetypePasswordPlaceholderText==And now just repeat it!
 Register_AccountNamePlaceholderText==e.g. BigBlack1337
 Register_ChooseLanguage==Choose preferred language
+Register_EnterValidEmailLabel==Please enter a valid email address
+Register_SelectLanguageLabel==Please select a language
+Register_PasswordStrengthLengthLabel==Password must greater than 7 characters
+Register_PasswordStrengthUppercaseLabel==Password must contain an uppercase letter
+Register_PasswordMatchLabel==Passwords don't match
+Register_PasswordMatchOkLabel==Perfect!
+Register_AccountNameLengthLabel==Account name has to be at least 4 characters
+Register_AccountNameSpecialsLabel==Account name cannot contain any special characters
