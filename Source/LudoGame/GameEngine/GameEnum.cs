@@ -14,10 +14,10 @@ namespace LudoGame.GameEngine
 
         public enum TeamColor
         {
-            Blue,
-            Red,
-            Yellow,
-            Green
+            Blue = 0,
+            Red = 1,
+            Yellow = 2,
+            Green = 3
         }
 
         public enum GameStatus
