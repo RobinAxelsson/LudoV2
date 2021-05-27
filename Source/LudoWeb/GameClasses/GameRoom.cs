@@ -37,6 +37,7 @@ namespace LudoWeb.GameClasses
                 GameEnum.TeamColor.Red,
                 GameEnum.TeamColor.Yellow
             };
+            GameId = gameId;
         }
         public string GameId { get; }
         public Game Game { get; private set; }
@@ -90,7 +91,7 @@ namespace LudoWeb.GameClasses
         public void ConnectNetworkPlayer(string connectionId)
         {
             var client = GetClient(connectionId);
-            if (client.Account != null && WaitingPlayers.Count < 4)
+            if (client.Player != null && WaitingPlayers.Count < 4)
             {
                 WaitingPlayers.Add((Colors[0], client));
                 Colors.Remove(0);

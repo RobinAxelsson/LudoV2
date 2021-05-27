@@ -10,7 +10,7 @@ namespace LudoDataAccess.Models
         [Key]
         public int PlayerId { get; set; }
         public Game Game { get; set; }
-        public int AccountId { get; set; }
+        public Account.Account Account { get; set; }
         public bool NextToThrow { get; set; }
         public int Result { get; set; }
         public ICollection<Coordinates> PawnCoords { get; set; }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using LudoDataAccess.Authentication;
 using LudoDataAccess.Database;
+using LudoDataAccess.Models;
 using LudoDataAccess.Models.Account;
+using LudoGame.GameEngine;
 using LudoTranslation;
 using Microsoft.EntityFrameworkCore;
 
@@ -139,6 +141,26 @@ namespace LudoDataAccess
                 var account = _repository.AccountTokens.Include(at => at.Account).SingleOrDefault(a => a.Token == token)
                     ?.Account;
                 return account;
+            }
+            return null;
+        }
+
+        public Player GetPlayerFromToken(string token)
+        {
+            var result = ValidateToken(token);
+          
+            if (result.success)
+            {
+                var account = GetAccountFromToken(token);
+                if (account == null)
+                {
+                    return null;
+                }
+                var player = _repository.Players.Include(p => p.Account).FirstOrDefault(p => p.Account == account) ?? new Player()
+                {
+                    Account = account, Type = ModelEnum.PlayerType.Remote
+                };
+                return player;
             }
             return null;
         }

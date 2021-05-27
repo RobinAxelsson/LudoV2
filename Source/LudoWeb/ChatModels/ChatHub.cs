@@ -40,7 +40,7 @@ namespace LudoWeb.ChatModels
         {
             var user = _chatData.GetUser(Context.ConnectionId);
             var group = _chatData.GetGroup(user);
-            await Clients.Group(_chatData.GetGroup(user).Name).SendAsync("ReceiveGroupMessage", user.Name, group.Name, message);
+            await Clients.Group(group.Name).SendAsync("ReceiveGroupMessage", user.Name, group.Name, message);
         }
 
     }

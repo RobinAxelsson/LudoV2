@@ -23,6 +23,7 @@ namespace LudoWeb.GameClasses
             _gameContext = gameContext;
             _gameServiceFactory = gameServiceFactory;
             Rooms = new();
+            
         }
         public IGameRoom AddGameRoom(string gameId)
         {
@@ -32,10 +33,30 @@ namespace LudoWeb.GameClasses
             return room;
         }
         //From server to clients
-        public void SendGameMessage(string message, string gameId)
+        public async Task SendGameMessage(string method, string message, string gameId)
         {
-            _gameContext.Clients.Group(gameId)
-                .SendAsync("GameMessage", message);
+            
+            await _gameContext.Clients.Group(gameId)
+                .SendAsync(method, message);
+            /*
+            await GetGroupProxy(gameId)
+                .SendAsync("SendMessage", message);
+                */
+        }
+        public async Task SendJoinGameMessage(string message, int playerIndex, string gameId)
+        {
+            
+            await _gameContext.Clients.Group(gameId)
+                .SendAsync("JoinGameMessage", message, playerIndex);
+            /*
+            await GetGroupProxy(gameId)
+                .SendAsync("SendMessage", message);
+                */
+        }
+   
+        public async Task AddUserToGroup(string connectionId, string gameId)
+        {
+            await _gameContext.Groups.AddToGroupAsync(connectionId, gameId);
         }
         public async Task UpdatePawns(Pawn[] pawns, string gameId)
         {

@@ -67,17 +67,24 @@ namespace LudoWeb.GameClasses
         
         }
 
-        public async Task AddGameRoom(string gameId, string token)
+        public async Task AddGameRoom(string connectionId, string gameId, string playerName, string token)
         {
             try
             {
                 if (gameId == null)
                     gameId = Guid.NewGuid().ToString("N");
 
+                
+                var player = _dbm.GetPlayerFromToken(token);
+                if (player == null)
+                {
+                    throw new Exception("Dang it!");
+                }
                 var room = _networkManager.AddGameRoom(gameId);
-                var client = new Client(Context.ConnectionId);
+                var client = new Client(Context.ConnectionId) {Player = player, Name = playerName};
                 room.Clients.Add(client);
-                await Clients.Caller.SendAsync("GameRoomAdded");
+                await _networkManager.AddUserToGroup(connectionId, gameId);
+                await Clients.Caller.SendAsync("GameRoomAdded", gameId, playerName);
             }
             catch(Exception ex)
             {
@@ -102,7 +109,29 @@ namespace LudoWeb.GameClasses
             }
         }
 
-        public async Task JoinRoom(string gameId, string token)
+        public async Task JoinGameMessage(string playerName, string gameId)
+        {
+            var room = _networkManager.Rooms.SingleOrDefault(r => r.GameId == gameId);
+            var client = room?.Clients
+                .SingleOrDefault(c => c.Name == playerName);
+            var clientIndex = room.Clients.IndexOf(client);
+            await _networkManager.SendJoinGameMessage(playerName, clientIndex, gameId);
+        } 
+        public async Task RetrieveJoinNotifications(string playerName, string gameId)
+        {
+            var room = _networkManager.Rooms.SingleOrDefault(r => r.GameId == gameId);
+            var clients = room.Clients.Where(c => c.Name != playerName).ToArray();
+            var indexList = new List<int>();
+            var nameList = new List<string>();
+            foreach (var client in clients)
+            {
+                indexList.Add(room.Clients.IndexOf(client));
+                nameList.Add(client.Name);
+            }
+            await Clients.Caller.SendAsync("RetrieveJoinNotifications",nameList.ToArray(), indexList.ToArray(), gameId);
+        } 
+        //RetrieveJoinNotifications
+        public async Task JoinRoom(string connectionId, string gameId, string playerName, string token)
         {
             var account = _dbm.GetAccountFromToken(token);
             if (account != null)
@@ -112,8 +141,15 @@ namespace LudoWeb.GameClasses
                 {
                     try
                     {
-                        var client = new Client(Context.ConnectionId);
+                        
+                        var player = _dbm.GetPlayerFromToken(token);
+                        if (player == null)
+                        {
+                            throw new Exception("Dang it!");
+                        }
+                        var client = new Client(Context.ConnectionId) {Player = player, Name = playerName};
                         room.Clients.Add(client);
+                        await _networkManager.AddUserToGroup(connectionId, gameId);
                         await Clients.Caller.SendAsync("JoinedRoom",true, "success");
                     }
                     catch (Exception ex)
@@ -140,6 +176,16 @@ namespace LudoWeb.GameClasses
                 await Clients.Caller.SendAsync("RoomExists", false);
             else 
                 await Clients.Caller.SendAsync("RoomExists", true);
+        }
+
+        public async Task GetAllRooms()
+        {
+            await Clients.Caller.SendAsync("AllRooms", _networkManager.Rooms.ToArray());
+        }
+
+        public async Task SendRoomMessage(string input, string gameId)
+        {
+         await _networkManager.SendGameMessage("GameMessage",input, gameId);
         }
         private string ReturnPlayerName()
         {
@@ -173,7 +219,7 @@ namespace LudoWeb.GameClasses
             }
             return result.Split(new string[] {System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
         }
-
+        
         
     }
 }

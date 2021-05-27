@@ -44,7 +44,7 @@ namespace LudoWeb.GameClasses
 
         private void SendMessage(string message)
         {
-            _networkManager.SendGameMessage(message, _room.GameId);
+            _networkManager.SendGameMessage("GameMessage", message, _room.GameId);
         }
     }
 }

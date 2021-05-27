@@ -10,8 +10,7 @@ namespace LudoWeb.GameClasses
             ConnectionId = connectionId;
         }
         public string ConnectionId { get; set; }
-        public string ChatName { get; set; }
-        public Account Account { get; set; }
+        public string Name { get; set; }
         public Player Player { get; set; }
     }
 }

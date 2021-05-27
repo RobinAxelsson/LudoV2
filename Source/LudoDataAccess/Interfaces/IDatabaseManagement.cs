@@ -1,4 +1,5 @@
-﻿using LudoDataAccess.Models.Account;
+﻿using LudoDataAccess.Models;
+using LudoDataAccess.Models.Account;
 
 namespace LudoDataAccess
 {
@@ -10,5 +11,6 @@ namespace LudoDataAccess
         public (bool success, string message) Login(string username, string password);
         public (bool success, string message) ValidateToken(string token);
         public Account GetAccountFromToken(string token);
+        public Player GetPlayerFromToken(string token);
     }
 }
