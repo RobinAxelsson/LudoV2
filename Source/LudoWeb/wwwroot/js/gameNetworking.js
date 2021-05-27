@@ -95,7 +95,7 @@ connection.on("TokenValidated", function(result) {
  });
  function RedirectToLogin(gameId) {
      let lastUrl = "";
-     if(!window.location.href.includes("gameId")) {
+     if(window.location.href.includes("gameId")) {
          lastUrl = window.location.href;
      }
      else {
@@ -129,7 +129,7 @@ function InvitePlayer() {
         if(window.location.href.includes("gameId"))
             gameUrl = window.location.href;
         else
-            gameUrl = window.location.href + "?gameId=" + gameId;
+            gameUrl = "https://" + window.location.host + "/Ludo/?gameId=" + gameId;
         connection.invoke("InvitePlayer", person, gameId, gameUrl, getCookie("token"));
     }
     connection.on("PlayerInvited", function() {
