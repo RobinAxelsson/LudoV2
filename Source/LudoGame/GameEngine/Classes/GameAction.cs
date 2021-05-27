@@ -41,13 +41,15 @@ namespace LudoGame.GameEngine.Classes
             if (allPawns.Count == 0)
             {
                 var colors = Enum.GetValues<TeamColor>();
-
+                int pawnId = 0;
                 for (int t = 0; t < 4; t++)
                 {
                     var baseSquare = _boardCollection.BaseSquare(colors[t]);
+
                     for (int p = 0; p < 4; p++)
                     {
-                        var pawn = new Pawn(colors[t]);
+                        var pawn = new Pawn(colors[t], pawnId);
+                        pawnId++;
                         ChangeCoordinates(pawn, baseSquare);
                         allPawns.Add(pawn);
                     }
