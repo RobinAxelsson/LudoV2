@@ -129,5 +129,18 @@ namespace LudoDataAccess
             }
             return (false, "Invalid token");
         }
+
+        public Account GetAccountFromToken(string token)
+        {
+            var result = ValidateToken(token);
+          
+            if (result.success)
+            {
+                var account = _repository.AccountTokens.Include(at => at.Account).SingleOrDefault(a => a.Token == token)
+                    ?.Account;
+                return account;
+            }
+            return null;
+        }
     }
 }

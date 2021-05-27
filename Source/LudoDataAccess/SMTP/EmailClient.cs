@@ -18,7 +18,7 @@ namespace LudoDataAccess.SMTP
         {
             _repository = repository;
         }
-        public void SendInvite(string[] recipients, Game game, Account host)
+        public void SendInvite(string[] recipients, string gameId, string gameUrl, Account host)
         {
             //Standard SMTP server for gmail
             var smtpClient = new SmtpClient("smtp.gmail.com")
@@ -43,7 +43,7 @@ namespace LudoDataAccess.SMTP
                         From = new MailAddress("ludoinvites.pgbsnh20@gmail.com"),
                         Subject = $"{host.PlayerName} " + _dict.Email_Subject,
                         IsBodyHtml = true,
-                        Body = GenerateBody(game.GameId, host.PlayerName, game.Url)
+                        Body = GenerateBody(gameId, host.PlayerName, gameUrl)
              
                     };
                     message.To.Add(account.EmailAdress);
