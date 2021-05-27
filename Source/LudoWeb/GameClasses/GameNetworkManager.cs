@@ -33,15 +33,17 @@ namespace LudoWeb.GameClasses
             return room;
         }
         //From server to clients
-        public async Task SendGameMessage(string method, string message, string gameId)
+        public async Task SendGameMessage(string playerName, string message, string gameId)
         {
             
             await _gameContext.Clients.Group(gameId)
-                .SendAsync(method, message);
-            /*
-            await GetGroupProxy(gameId)
-                .SendAsync("SendMessage", message);
-                */
+                .SendAsync("ReceiveGameMessage",playerName, message);
+        }
+
+        public async Task StartGame(string gameId)
+        {
+            await _gameContext.Clients.Group(gameId)
+                .SendAsync("GameStarted");
         }
         public async Task SendJoinGameMessage(string message, int playerIndex, string gameId)
         {

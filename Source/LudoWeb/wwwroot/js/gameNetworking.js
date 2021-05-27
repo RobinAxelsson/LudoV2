@@ -22,7 +22,7 @@ function CheckUrl() {
 }
 
 
-connection.on("GameRoomAdded", function(returnGameId, playerName){
+connection.on("GameRoomAdded", function(returnGameId){
     gameId = returnGameId;
     console.log("GameRoomAdded: Game ID has been set to " + gameId);
     document.getElementById("welcomeContainer").style.display = 'none';
@@ -90,6 +90,9 @@ connection.on("TokenValidated", function(result) {
      document.getElementById("welcomeContainer").style.display = 'none';
      document.getElementById("controlBox").style.display = 'unset';
      document.getElementById("playingField").style.display = 'unset';
+     document.getElementById("btn_addai").disabled = true;
+     document.getElementById("btn_addplayer").disabled = true;
+     document.getElementById("btn_startGame").disabled = true;
      SendJoinNotification(true);
      
  });
@@ -132,10 +135,16 @@ function InvitePlayer() {
             gameUrl = "https://" + window.location.host + "/Ludo/?gameId=" + gameId;
         connection.invoke("InvitePlayer", person, gameId, gameUrl, getCookie("token"));
     }
-    connection.on("PlayerInvited", function() {
-       console.log("Player invited!"); 
-    });
 }
+connection.on("PlayerInvited", function() {
+    console.log("Player invited!");
+});
+function AddAi() {
+    connection.invoke("AddAi", gameId); 
+}
+connection.on("AiAdded", function() {
+    SendJoinNotification(true);
+});
 //Get notifications of members who are in the room
 function GetRoomMembers() {
      //string playerName, string gameId
@@ -150,12 +159,59 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
        document.getElementById("messagePlayer" + clientArray.toString()).innerHTML = playerName + " has joined";
         GetRoomMembers();
 });
- connection.on("RetrieveJoinNotifications", function(playerNames, playerIndex) {
-     for (let i = 0; i <playerIndex.length; i++) {
+ connection.on("RetrieveJoinNotifications", function(playerNames, playerIndex, totalLength) {
+     for (let i = 0; i < playerIndex.length; i++) {
          document.getElementById("messagePlayer" + playerIndex[i].toString()).innerHTML = playerNames[i] + " has joined";
      }
+     if(totalLength >= 4) {
+         document.getElementById("btn_addai").disabled = true;
+         document.getElementById("btn_addplayer").disabled = true;
+         document.getElementById("btn_startGame").disabled = false;
+     }
  });
- 
+ function StartGame() { 
+     SendMessage("Starting game! Woho!");
+     connection.invoke("StartGame", gameId);
+ }
+ connection.on("GameStarted", function() {
+     document.getElementById("btn_addai").style.display = 'none';
+     document.getElementById("btn_addplayer").style.display = 'none';
+     document.getElementById("btn_startGame").style.display = 'none';
+     document.getElementById("messageBox").style.display = 'none';
+ });
+ function SendMessage(str) {
+     if(str != null) {
+         connection.invoke("SendRoomMessage", GlobalPlayerName, str, gameId).catch(function (err) {
+             return console.error(err.toString());
+         });
+         document.getElementById("txt_message").value = "";
+     }
+    else {
+         var message = document.getElementById("txt_message").value;
+         connection.invoke("SendRoomMessage", GlobalPlayerName, message, gameId).catch(function (err) {
+             return console.error(err.toString());
+         });
+         document.getElementById("txt_message").value = "";
+      
+     }
+ }
+connection.on("ReceiveGameMessage", function (playerName, message) {
+    var li = document.createElement("li");
+    document.getElementById("messagesList").appendChild(li);
+    li.textContent = `${playerName}: ${message}`;
+});
+document.getElementById("txt_message").addEventListener("keyup", function(event) {
+    if (event.key.toLowerCase() === "enter" && !isEmptyOrSpaces(document.getElementById("txt_message").value)) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Trigger the button element with a click
+       
+        SendMessage();
+    }
+});
+function isEmptyOrSpaces(str){
+    return str === null || str.match(/^ *$/) !== null;
+}
 function debug_GetAllRooms() {
    connection.invoke("GetAllRooms");  
 }

@@ -27,10 +27,10 @@
 </div>
 
 <div id="controlBox" style="position: absolute; right: 20px; display: none">
-    <button onclick="InvitePlayer()" style="margin-bottom:4%; width: 48%">
+    <button id="btn_addplayer" onclick="InvitePlayer()" style="margin-bottom:3%; width: 48%">
         Invite player
     </button>
-    <button style="margin-bottom:4%; width: 48%">
+    <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
         Add AI
     </button>
     <div id="messageBox" style="border: 2px dotted black;">
@@ -39,9 +39,9 @@
         <p id="messagePlayer2" style="border: 1px solid black; margin: 10px"></p>
         <p id="messagePlayer3" style="border: 1px solid black; margin: 10px"></p>
     </div>
-    <button style="margin-top:10px; width: 100%">Start game</button>
+    <button onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">Start game</button>
     <div style="margin-top: 10%; border: 1px solid black" id="chatBox">
-        <br>
+        <ul id="messagesList"></ul>
          <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
     </div>
 </div>

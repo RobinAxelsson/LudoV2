@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using LudoDataAccess;
+using LudoDataAccess.Database;
+using LudoDataAccess.Models;
 using LudoDataAccess.SMTP;
 using LudoGame.GameEngine.Classes;
 using Microsoft.AspNetCore.SignalR;
@@ -23,10 +25,6 @@ namespace LudoWeb.GameClasses
             _networkManager = manager;
             _dbm = dbm;
             _emailClient = emailClient;
-        }
-        public async Task AddAi(string color)
-        {
-
         }
         public async Task SelectColor(string color)
         {
@@ -109,12 +107,25 @@ namespace LudoWeb.GameClasses
             }
         }
 
+        public async Task AddAi(string gameId)
+        {
+            var room = _networkManager.Rooms.SingleOrDefault(r => r.GameId == gameId);
+            var player = new Player()
+            {
+                Account = null,
+                Type = ModelEnum.PlayerType.Stephan
+            };
+            var client = new Client(null) {Player = player, Name = ReturnPlayerName() + "(AI)"};
+            room.Clients.Add(client);
+            await Clients.Caller.SendAsync("AiAdded");
+        }
         public async Task JoinGameMessage(string playerName, string gameId)
         {
             var room = _networkManager.Rooms.SingleOrDefault(r => r.GameId == gameId);
-            var client = room?.Clients
+            var client = room.Clients
                 .SingleOrDefault(c => c.Name == playerName);
             var clientIndex = room.Clients.IndexOf(client);
+         
             await _networkManager.SendJoinGameMessage(playerName, clientIndex, gameId);
         } 
         public async Task RetrieveJoinNotifications(string playerName, string gameId)
@@ -128,7 +139,7 @@ namespace LudoWeb.GameClasses
                 indexList.Add(room.Clients.IndexOf(client));
                 nameList.Add(client.Name);
             }
-            await Clients.Caller.SendAsync("RetrieveJoinNotifications",nameList.ToArray(), indexList.ToArray(), gameId);
+            await Clients.Caller.SendAsync("RetrieveJoinNotifications",nameList.ToArray(), indexList.ToArray(), room.Clients.Count);
         } 
         //RetrieveJoinNotifications
         public async Task JoinRoom(string connectionId, string gameId, string playerName, string token)
@@ -183,9 +194,9 @@ namespace LudoWeb.GameClasses
             await Clients.Caller.SendAsync("AllRooms", _networkManager.Rooms.ToArray());
         }
 
-        public async Task SendRoomMessage(string input, string gameId)
+        public async Task SendRoomMessage(string playerName, string input, string gameId)
         {
-         await _networkManager.SendGameMessage("GameMessage",input, gameId);
+         await _networkManager.SendGameMessage(playerName, input, gameId);
         }
         private string ReturnPlayerName()
         {
@@ -219,7 +230,11 @@ namespace LudoWeb.GameClasses
             }
             return result.Split(new string[] {System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
         }
-        
+
+        public async Task StartGame(string gameId)
+        {
+            await _networkManager.StartGame(gameId);
+        }
         
     }
 }
