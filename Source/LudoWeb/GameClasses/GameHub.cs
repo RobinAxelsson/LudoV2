@@ -60,7 +60,7 @@ namespace LudoWeb.GameClasses
         
         }
 
-        public async Task AddGameRoom(string gameId)
+        public async Task AddGameRoom(string gameId, string token)
         {
             try
             {
