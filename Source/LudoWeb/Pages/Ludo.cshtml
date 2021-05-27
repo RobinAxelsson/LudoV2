@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Play Ludo";
 }
-<br>
+
 <style>
 #welcomeContainer {
   height: 200px;
@@ -44,43 +44,31 @@
          <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
     </div>
 </div>
-<div id="playingField" style="width:100%;height:100%;color:white; display: none">
-    
+<div id="playingField" class="board-container" style="display: none">
+
     @for (int x = 0; x < Model.XCount; x++)
     {
-       
-        <div style="width:100%;height:100%;color:white;display:flex;">
+        <div class="square-row">
             @for (int y = 0; y < Model.YCount; y++)
             {
                 var square = Model.GetGameSquare(x, y);
                 if (square != null)
                 {
-                    <div class="GameSquare"
+                    <div class="square game-square"
                          id="@square.Id"
-                         style="background-color:@square.Color;
-                            height:50px;
-                            width:50px;
-                            display:flex;
-                            align-items: center;
-                            justify-content: center;
-                            border:solid;
-                            border-width:1px;
-                            border-color:black">
-                        <img src="~/images/Pawns/red_64.png" style="max-height:100%; max-width:100%; padding:15%">
+                         style="background-color: @square.Color;">
                     </div>
                 }
                 else
                 {
-                    <div class="NoSquare" style="background-color:transparent;height:50px;width:50px;"></div>
+                    <div class="square"></div>
                 }
             }
         </div>
     }
 </div>
-
-
-
+<img class="pawn-image" src="~/images/Pawn.svg" style="display: none">
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
-<script src="~/js/game.js"></script>
+<script src="~/js/gameplay.js"></script>
 <script src="~/js/gameNetworking.js"></script>

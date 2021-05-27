@@ -24,30 +24,22 @@ namespace LudoWeb.GameClasses
             }
         }
         private GameSquare GetBase(GameEnum.TeamColor color) => _gameSquares.Find(s => s.GetType() == typeof(BaseSquare) && s.Color == color);
+
         private GameSquare CopyTo(GameSquare square, int x, int y)
         {
             var type = square.GetType();
-            var newSquare = (GameSquare)Activator.CreateInstance(type);
+            var newSquare = (GameSquare) Activator.CreateInstance(type);
             newSquare.BoardX = x;
             newSquare.BoardY = y;
             newSquare.Color = square.Color;
             return newSquare;
         }
-        private void PasteFourSquares(GameSquare original, int upperLeftX, int upperLeftY)
+        private void CopyPaste(GameSquare original, int X, int Y)
         {
-            var coords = new List<(int X, int Y)>
-            {
-                (upperLeftX, upperLeftY),
-                (upperLeftX + 1, upperLeftY),
-                (upperLeftX, upperLeftY + 1),
-                (upperLeftX + 1, upperLeftY + 1)
-            };
-            foreach (var coord in coords)
-            {
-                _gameSquares.Add(CopyTo(original, coord.X, coord.Y));
-            }
+            _gameSquares.Add(CopyTo(original, X, Y));
             _gameSquares.Remove(original);
         }
+
         public HtmlBoardBuilder(IBoardOrm boardOrm)
         {
             _gameSquares = boardOrm.Map();
@@ -56,13 +48,13 @@ namespace LudoWeb.GameClasses
             var win = _gameSquares.Find(s => s.GetType() == typeof(WinnerSquare));
             _gameSquares.Remove(win);
             var blueBase = GetBase(GameEnum.TeamColor.Blue);
-            PasteFourSquares(blueBase, 0, 0);
+            CopyPaste(blueBase, 0, 0);
             var redBase = GetBase(GameEnum.TeamColor.Red);
-            PasteFourSquares(redBase, 0, YCount - 2);
+            CopyPaste(redBase, 0, YCount - 1);
             var greenBase = GetBase(GameEnum.TeamColor.Green);
-            PasteFourSquares(greenBase, XCount - 2, YCount - 2);
+            CopyPaste(greenBase, XCount - 1, YCount - 1);
             var yellowBase = GetBase(GameEnum.TeamColor.Yellow);
-            PasteFourSquares(yellowBase, XCount - 2, 0);
+            CopyPaste(yellowBase, XCount - 1, 0);
         }
     }
 }

@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoGameTest", "LudoGameTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoWeb", "LudoWeb\LudoWeb.csproj", "{E9C5A14D-3CBA-4FEE-9569-76BF21620E41}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoDataAccess", "LudoDataAccess\LudoDataAccess.csproj", "{413DDA97-0076-4B31-B6E3-B7E58FC46391}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LudoDataAccess", "LudoDataAccess\LudoDataAccess.csproj", "{413DDA97-0076-4B31-B6E3-B7E58FC46391}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LudoWebTests", "LudoWebTests\LudoWebTests.csproj", "{97204ADC-EF52-46BE-B327-44EA8E3A56BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{413DDA97-0076-4B31-B6E3-B7E58FC46391}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{413DDA97-0076-4B31-B6E3-B7E58FC46391}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{413DDA97-0076-4B31-B6E3-B7E58FC46391}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97204ADC-EF52-46BE-B327-44EA8E3A56BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97204ADC-EF52-46BE-B327-44EA8E3A56BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97204ADC-EF52-46BE-B327-44EA8E3A56BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97204ADC-EF52-46BE-B327-44EA8E3A56BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
