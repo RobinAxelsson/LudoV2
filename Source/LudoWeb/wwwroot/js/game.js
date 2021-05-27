@@ -20,9 +20,14 @@ function CheckUrl() {
 
 
 connection.on("GameRoomAdded", function(){
-    console.log("Added game room!");
+    connection.invoke("GetPlayerName");
 });
-
+connection.on("PlayerNameReceived", function(playerName) {
+    document.getElementById("welcomeContainer").style.display = 'none';
+    document.getElementById("controlBox").style.display = 'unset';
+    document.getElementById("playingField").style.display = 'unset';
+    document.getElementById("messagePlayer1").innerHTML = playerName + " has joined the game";
+});
 
 //Press button
  function NewGame() {
@@ -59,4 +64,21 @@ function getCookie(name) {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+}
+function InvitePlayer() {
+    var person = prompt("Enter the email of whom you wish to invite", "Harry Potter");
+    if (person != null) {
+        //string recipient, string gameId, string gameUrl, string token
+        let gameUrl = "";
+        if(window.location.href.includes("gameId"))
+            gameUrl = window.location.href;
+        else
+            gameUrl = window.location.href + "?gameId=" + gameId;
+        connection.invoke("InvitePlayer", person, gameId, gameUrl, getCookie("token"));
+    }
+    connection.on("PlayerInvited", function() {
+       console.log("Player invited!"); 
+    });
+    
+     
 }

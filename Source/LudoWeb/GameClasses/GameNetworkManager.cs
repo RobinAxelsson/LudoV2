@@ -14,7 +14,7 @@ namespace LudoWeb.GameClasses
     {
         private ILudoRepository _dbRepository;
         private IHubContext<GameHub> _gameContext { get; }
-        private List<IGameRoom> Rooms;
+        public List<IGameRoom> Rooms;
         private LudoNetworkFactory _networkFactory;
         private AbstractFactory _gameServiceFactory;
         public GameNetworkManager(IHubContext<GameHub> gameContext, AbstractFactory gameServiceFactory, LudoNetworkFactory networkFactory)

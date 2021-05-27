@@ -42,4 +42,11 @@
     </Compile>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\adjectives.txt" />
+    <EmbeddedResource Include="Resources\adjectives.txt" />
+    <None Remove="Resources\nouns.txt" />
+    <EmbeddedResource Include="Resources\nouns.txt" />
+  </ItemGroup>
+
 </Project>
