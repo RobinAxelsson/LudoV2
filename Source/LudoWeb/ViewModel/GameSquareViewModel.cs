@@ -13,7 +13,7 @@ namespace LudoWeb.ViewModel
             Color = gameSquare.Color.ToString().ToLower();
             X = gameSquare.BoardX;
             Y = gameSquare.BoardY;
-            Id = X + "," + Y;
+            Id = $"X{X}Y{Y}";
         }
     }
 }

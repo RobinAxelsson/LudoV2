@@ -6,14 +6,14 @@ connection.start();
 var diceRoll = 0;
 var receivedPawns = [];
 
-    function rollDice() {
-        //Html-element = diceRoll;
+function rollDice() {
+    //Html-element = diceRoll;
 
-        if (receivedPawns.length === 0) {
-            let pawns = [];
-            //send pawns
-        }
+    if (receivedPawns.length === 0) {
+        let pawns = [];
+        //send pawns
     }
+}
 
 function receiveOption(playerOption) {
 
@@ -57,6 +57,7 @@ function takeOutTwoEvent() {
     noPlayMode();
 }
 
+
 function selectPawnEvent(gameSquare) {
 
     let colorInt = getColorEnum(gameSquare);
@@ -90,37 +91,61 @@ function getColorEnum(gameSquare) {
         return 3;
     }
 }
-const boardPawns = [];
+function parseId(pawn) {
+    return '#X' + pawn.X + 'Y' + pawn.Y;
+}
+
+var boardPawns = [];
 //Incoming correct pawns from server
 function RefreshPawns(inPawns) {
     let current = boardPawns;
+    console.log(inPawns);
 
     //Removes pawns that moved
     for (var i = 0; i < current.length; i++) {
 
-        if (inPawns.includes(current[i]) === false) {
-            let id = '#' + current[i].X + ',' + current[i].Y;
+        let oldPawn = current[i];
+        let isIncluded = isIncludedInArray(inPawns, oldPawn);
+        if (isIncluded === false) {
+            let id = parseId(oldPawn);
             let gameSquare = select(id);
-            gameSquare.innerHtml = '';
-            boardPawns.splice(i, 1);
+            gameSquare.innerHTML = "";
         }
     }
-
     //Add pawns that moved
-    for (var j = 0; j < inPawns; j++) {
+    
+    for (var i = 0; i < inPawns.length; i++) {
 
-        if (current.includes(inPawns[j]) === false) {
-            let id = '#' + pawn.X + ',' + pawn.Y;
+        let pawn = inPawns[i];
+        let isIncluded = isIncludedInArray(current, pawn);
+        if (isIncluded === false) {
+            let id = parseId(pawn);
             let gameSquare = select(id);
-            gameSquare.appendChild(createPawnImg(inPawns.Color));
+            let color = inPawns[i].Color;
+            let pImg = createPawnImg(color);
+            gameSquare.appendChild(pImg);
         }
     }
+
     boardPawns = inPawns;
 }
+function isIncludedInArray(pawnArray, pawnCompare) {
 
+    for (var i = 0; i < pawnArray.length; i++) {
+        let pawnJson = JSON.stringify(pawnArray[i]);
+        let pawnCompareJson = JSON.stringify(pawnCompare);
+        let isEqual = pawnJson == pawnCompareJson;
+        if (isEqual) {
+            return true;
+        }
+    }
+    return false;
+}
 function createPawnImg(color) {
-    let pawnImage = document.createElement(pawnImage);
+
+    let pawnImage = document.createElement("img");
     pawnImage.classList.add("pawn-image");
+    console.log(getColorClass(color));
     pawnImage.classList.add(getColorClass(color));
     pawnImage.src = getSvgPath(color);
     return pawnImage;
@@ -146,20 +171,22 @@ function getColorClass(color) {
 }
 
 function getSvgPath(color) {
+    console.log(color);
     //Blue
     if (color === 0) {
-        return //path
+        return "images/Pawn.svg";
     }
     //Red
-    if (color === 1) {return //path
+    if (color === 1) {
+        return "images/Pawn.svg";
     }
     //Yellow
     if (color === 2) {
-        return //path
+        return "images/Pawn.svg";
     }
     //Green
     if (color === 3) {
-        return //path
+        return "images/Pawn.svg";
     }
 }
 
@@ -186,7 +213,18 @@ function select(element) {
     }
 ]
 
- 
+  [
+    {
+        Color: 0,
+        X: 4,
+        Y: 0
+    },
+    {
+        Color: 0,
+        X: 6,
+        Y: 0
+    }
+]
 {
     "PawnsToMove": [
             {
