@@ -13,8 +13,13 @@ var mainLoopId = setInterval(function(){
 }, 40);
 //Send cookie request
     async function cookieLoad() {
-        var loginCookie = document.cookie;
-        await connection.invoke("SendCookie", loginCookie);
+        if(getCookie("token") != null) {
+            var loginCookie = getCookie("token");
+            await connection.invoke("SendCookie", loginCookie);
+        }
+        else {
+            document.getElementById("overlay").style.display = 'none';
+        }
     }
 //Cookie result
 connection.on("CookieResult", function (result, message) {
@@ -27,8 +32,14 @@ connection.on("CookieResult", function (result, message) {
 });
     //Jump to game page
 function redirect() {
-    var host = window.location.host;
-    window.location.replace("https://" + host + "/GroupChat");
+    if(getCookie("lastUrl") != null) {
+        window.location.replace(getCookie("lastUrl"));
+    }
+    else {
+        var host = window.location.host;
+        window.location.replace("https://" + host + "/GroupChat");
+    }
+
 }
 //Send translation request
 async function getTranslations(propertyNames) {
@@ -74,3 +85,8 @@ document.getElementById("txt_account").addEventListener("keyup", function(event)
         document.getElementById("btn_login").click();
     }
 });
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}

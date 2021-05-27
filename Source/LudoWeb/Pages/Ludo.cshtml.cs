@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using LudoDataAccess;
 using LudoWeb.ChatModels;
 using LudoWeb.GameClasses;
 using LudoWeb.GameInterfaces;
@@ -13,21 +15,30 @@ namespace LudoWeb.Pages
     public class Ludo : PageModel
     {
         public Func<int, int, GameSquareViewModel> GetGameSquare { get; }
+        private readonly IDatabaseManagement _dbm;
+        
         public int XCount { get; }
         public int YCount { get; }
 
-        public Ludo(GameNetworkManager manager, IHtmlBoardBuilder boardBuilder)
+        public Ludo(GameNetworkManager manager, IHtmlBoardBuilder boardBuilder, IDatabaseManagement dbm)
         {
             GetGameSquare = boardBuilder.GetGameSquare;
             XCount = boardBuilder.XCount;
             YCount = boardBuilder.YCount;
             _gameNetworkManager = manager;
+            _dbm = dbm;
         }
         private GameNetworkManager _gameNetworkManager { get; }
 
-        public void OnGet(string gameId)
+        public void OnGet(string protocol, string gameId)
         {
+            /*
             Debug.WriteLine($"User entered Ludo page with/with empty parameter: {gameId}");
+            if (protocol == "addRoom" && !string.IsNullOrWhiteSpace(gameId))
+            {
+
+           
+            }
             if (String.IsNullOrEmpty(gameId))
             {
                 gameId = Guid.NewGuid().ToString("N");
@@ -37,6 +48,12 @@ namespace LudoWeb.Pages
             {
                 
             }
+            */
+        }
+
+        public void OnPost(string gameId)
+        {
+            
         }
     }
 }

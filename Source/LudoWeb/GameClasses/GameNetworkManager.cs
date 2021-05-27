@@ -24,10 +24,12 @@ namespace LudoWeb.GameClasses
             _gameServiceFactory = gameServiceFactory;
             Rooms = new();
         }
-        public void AddGameRoom(string gameId)
+        public IGameRoom AddGameRoom(string gameId)
         {
-            Rooms.Add(_networkFactory.GameRoom(_gameServiceFactory, this, gameId, _networkFactory));
+            var room = _networkFactory.GameRoom(_gameServiceFactory, this, gameId, _networkFactory);
+            Rooms.Add(room);
             Debug.WriteLine($"GameRoom was added with id: {gameId}!");
+            return room;
         }
         //From server to clients
         public void SendGameMessage(string message, string gameId)
