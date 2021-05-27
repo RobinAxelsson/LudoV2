@@ -16,6 +16,9 @@ function CheckUrl() {
         console.log("Game ID: " + gameId);
         ValidateToken();
     }
+    else if(window.location.href.includes("newGame")) {
+        NewGame();
+    }
 }
 
 
@@ -42,6 +45,9 @@ connection.on("PlayerNameReceived", function(playerName) {
 
 //Press button
  function NewGame() {
+     if(window.location.href.includes("gameId")) {
+         window.location.replace("https://" + window.location.host + "/Ludo?newGame");
+     }
     ValidateToken();
 }
 //Validate token
@@ -49,7 +55,7 @@ connection.on("PlayerNameReceived", function(playerName) {
         connection.invoke("ValidateToken", getCookie("token"));
 }
 //Token validation result
-connection.on("TokenValidated", function(result, returnGameId) {
+connection.on("TokenValidated", function(result) {
     console.log("Token result: " + result);
     if(result) {
         console.log("Result was true. Gameid: " + gameId)
@@ -74,6 +80,7 @@ connection.on("TokenValidated", function(result, returnGameId) {
          connection.invoke("JoinRoom", connection.connectionId, gameId, GlobalPlayerName, getCookie("token"));
      }
      else {
+         document.getElementById("h1Title").innerHTML = "404 - Could not find the requested game :("
          console.log("Room was not found")
      }
  });
@@ -87,7 +94,13 @@ connection.on("TokenValidated", function(result, returnGameId) {
      
  });
  function RedirectToLogin(gameId) {
-     let lastUrl = window.location.href + "?gameId=" + gameId;
+     let lastUrl = "";
+     if(!window.location.href.includes("gameId")) {
+         lastUrl = window.location.href;
+     }
+     else {
+         lastUrl = window.location.href + "?gameId=" + gameId;
+     }
      let now = new Date();
      let time = now.getTime();
      let expireTime = time + 1000*10800; //3 hours
@@ -142,6 +155,7 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
          document.getElementById("messagePlayer" + playerIndex[i].toString()).innerHTML = playerNames[i] + " has joined";
      }
  });
+ 
 function debug_GetAllRooms() {
    connection.invoke("GetAllRooms");  
 }
