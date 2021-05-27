@@ -57,13 +57,14 @@ connection.on("TranslationDelivery", function (properties) {
         await connection.invoke("SendLoginData", accountName, password);
     }
     
- connection.on("LoginResult", function (result, message) {
+ connection.on("LoginResult", function (result, message, message2) {
     if(result === false) {
         document.getElementById("err_input").style.display = 'unset';
         document.getElementById("err_input").innerHTML = Translations[0];
     }
     else {
         document.cookie = message;
+        document.cookie = message2;
         redirect();
     }
 });

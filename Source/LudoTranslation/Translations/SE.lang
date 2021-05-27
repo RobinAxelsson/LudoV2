@@ -32,3 +32,14 @@ Register_AccountNameLengthLabel==Användarnamnet måste innehålla minst 4 tecke
 Register_AccountNameSpecialsLabel==Användarnamnet får inte innehålla några specialtecken
 Register_AccountNameIsTaken==Användarnamnet är upptaget
 Register_EmailAlreadyRegistered==E-postadressen är redan registrerad
+
+
+
+Game_H1Title==Välkommen till Ludo!
+Game_CreateGameButton==Ny match
+Game_AddPlayerButton==Bjud in spelare
+Game_AddAiButton==Lägg till AI
+Game_StartGameButton==Starta spel
+Game_CouldNotFindTitle==404 - Kunde inte hitta den begärda matchen :(
+Game_InviteEnterEmail==Mata in e-postadressen på personen du vill bjuda in.
+Game_PlayerJoinedSuffix== har gått med

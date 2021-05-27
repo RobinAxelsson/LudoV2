@@ -46,6 +46,17 @@ namespace LudoTranslation {
         public string Register_AccountNameIsTaken { get; private set; } //Referenced in JS 
         public string Register_EmailAlreadyRegistered { get; private set; } //Referenced in JS 
         #endregion
+        
+        #region Game
+        public string Game_H1Title { get; private set; }
+        public string Game_CreateGameButton { get; private set; }
+        public string Game_AddPlayerButton { get; private set; }
+        public string Game_AddAiButton { get; private set; }
+        public string Game_StartGameButton { get; private set; }
+        public string Game_CouldNotFindTitle { get; private set; }
+        public string Game_InviteEnterEmail { get; private set; }
+        public string Game_PlayerJoinedSuffix { get; private set; }
+        #endregion
         public string GetPropertyValue(string input)
         {
             return GetType().GetProperty(input)?.GetValue(this, null)?.ToString();

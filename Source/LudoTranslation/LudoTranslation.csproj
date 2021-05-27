@@ -5,12 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="Translations\EN.lang">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Update="Translations\SE.lang">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    <None Remove="Translations\EN.lang" />
+    <EmbeddedResource Include="Translations\EN.lang" />
+    <None Remove="Translations\SE.lang" />
+    <EmbeddedResource Include="Translations\SE.lang" />
   </ItemGroup>
 
 </Project>

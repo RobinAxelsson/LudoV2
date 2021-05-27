@@ -19,17 +19,25 @@ namespace LudoTranslation
         {
             var dict = new Dict();
             var line = "";
-            var reader = new StreamReader(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) + "/Translations/" + lang + ".lang");
-            while ((line = reader.ReadLine()) != null)
+            var assembly = Assembly.GetExecutingAssembly();
+            // var resourceName = "MyCompany.MyProduct.MyFile.txt";
+            using (var stream = assembly.GetManifestResourceStream("LudoTranslation.Translations." + lang + ".lang"))
+            using (var reader = new StreamReader(stream))
             {
-                //Don't do anything if line is just blank or doesn't contain double equals
-                if (string.IsNullOrWhiteSpace(line) || !line.Contains("==")) continue; 
-                var lineSplit = line.Split("==");
-                Dictionary.Add(lineSplit[0], lineSplit[1]);
-                foreach (var prop in dict.GetType().GetProperties())
-                    prop.SetValue(dict, Dictionary.SingleOrDefault(k => k.Key == prop.Name).Value);
+               
+                while ((line = reader.ReadLine()) != null)
+                {
+                    //Don't do anything if line is just blank or doesn't contain double equals
+                    if (string.IsNullOrWhiteSpace(line) || !line.Contains("==")) continue; 
+                    var lineSplit = line.Split("==");
+                    Dictionary.Add(lineSplit[0], lineSplit[1]);
+                    foreach (var prop in dict.GetType().GetProperties())
+                        prop.SetValue(dict, Dictionary.SingleOrDefault(k => k.Key == prop.Name).Value);
+                }
             }
+
             return dict;
+
         }
         public static class Languages
         {

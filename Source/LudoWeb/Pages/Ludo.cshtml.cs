@@ -1,8 +1,10 @@
 using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using LudoDataAccess;
+using LudoTranslation;
 using LudoWeb.ChatModels;
 using LudoWeb.GameClasses;
 using LudoWeb.GameInterfaces;
@@ -16,7 +18,7 @@ namespace LudoWeb.Pages
     {
         public Func<int, int, GameSquareViewModel> GetGameSquare { get; }
         private readonly IDatabaseManagement _dbm;
-        
+        public readonly string DefaultRegionCode = RegionInfo.CurrentRegion.TwoLetterISORegionName;
         public int XCount { get; }
         public int YCount { get; }
 

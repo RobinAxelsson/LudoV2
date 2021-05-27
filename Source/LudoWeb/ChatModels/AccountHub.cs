@@ -26,7 +26,7 @@ namespace LudoWeb.ChatModels
         public async Task SendLoginData(string username, string password)
         {
             var result = _dbm.Login(username, password);
-            await Clients.Caller.SendAsync("LoginResult", result.success, result.message);
+            await Clients.Caller.SendAsync("LoginResult", result.success, result.message, result.message2);
         }
         public async Task SendCookie(string cookie)
         {
