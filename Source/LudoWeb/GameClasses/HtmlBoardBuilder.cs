@@ -50,11 +50,11 @@ namespace LudoWeb.GameClasses
             var blueBase = GetBase(GameEnum.TeamColor.Blue);
             CopyPaste(blueBase, 0, 0);
             var redBase = GetBase(GameEnum.TeamColor.Red);
-            CopyPaste(redBase, 0, YCount - 1);
+            CopyPaste(redBase, XCount - 1, 0);
             var greenBase = GetBase(GameEnum.TeamColor.Green);
             CopyPaste(greenBase, XCount - 1, YCount - 1);
             var yellowBase = GetBase(GameEnum.TeamColor.Yellow);
-            CopyPaste(yellowBase, XCount - 1, 0);
+            CopyPaste(yellowBase, 0,YCount-1);
         }
     }
 }

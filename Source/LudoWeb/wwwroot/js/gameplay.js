@@ -100,7 +100,7 @@ var boardPawns = [];
 function RefreshPawns(inPawns) {
     let currentPawns = boardPawns;
     console.log(inPawns);
-
+    //TODO translate base coordinates.
     //Removes pawns that moved
     for (var i = 0; i < currentPawns.length; i++) {
         let oldPawn = currentPawns[i];
@@ -167,7 +167,7 @@ function createPawnImg(color) {
     pawnImage.classList.add("pawn-image");
     console.log(getColorClass(color));
     pawnImage.classList.add(getColorClass(color));
-    pawnImage.src = getSvgPath(color);
+    pawnImage.src = getPawnImagePath(color);
     return pawnImage;
 }
 
@@ -190,7 +190,7 @@ function getColorClass(color) {
     }
 }
 
-function getSvgPath(color) {
+function getPawnImagePath(color) {
     console.log(color);
     //Blue
     if (color === 0) {

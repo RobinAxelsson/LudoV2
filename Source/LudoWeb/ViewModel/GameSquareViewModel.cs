@@ -11,8 +11,8 @@ namespace LudoWeb.ViewModel
         public GameSquareViewModel(GameSquare gameSquare)
         {
             Color = gameSquare.Color.ToString().ToLower();
-            X = gameSquare.BoardX;
             Y = gameSquare.BoardY;
+            X = gameSquare.BoardX;
             Id = $"X{X}Y{Y}";
         }
     }

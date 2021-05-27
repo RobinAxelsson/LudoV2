@@ -47,10 +47,10 @@
 </div>
 <div id="playingField" class="board-container" style="display: none">
 
-    @for (int x = 0; x < Model.XCount; x++)
+    @for (int y = 0; y < Model.YCount; y++)
     {
         <div class="square-row">
-            @for (int y = 0; y < Model.YCount; y++)
+            @for (int x = 0; x < Model.XCount; x++)
             {
                 var square = Model.GetGameSquare(x, y);
                 if (square != null)
