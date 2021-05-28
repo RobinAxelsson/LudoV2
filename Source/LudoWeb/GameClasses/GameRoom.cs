@@ -54,9 +54,10 @@ namespace LudoWeb.GameClasses
         {
             var gamePlayers = CreateGamePlayers();
             Debug.WriteLine(("gameroom with game id " + GameId + " created gameplayer: " + JsonConvert.SerializeObject(gamePlayers)));
+            
             Game = new Game(GameId);
             Game.GameStatus = ModelEnum.GameStatus.Created;
-            Debug.WriteLine("Game created with id");
+            Debug.WriteLine("GamePlay is about to start");
             _gamePlay.Start(gamePlayers);
         }
         private List<IGamePlayer> CreateGamePlayers()
@@ -95,9 +96,9 @@ namespace LudoWeb.GameClasses
                 Colors.Remove(0);
             }
         }
-        public void ConnectNetworkPlayer(string connectionId)
+        public void ConnectNetworkPlayer(Client client)
         {
-            var client = GetClient(connectionId);
+           // var client = GetClient(connectionId);
             if (client.Player != null && _waitingPlayers.Count < 4)
             {
                 _waitingPlayers.Add((Colors[0], client));

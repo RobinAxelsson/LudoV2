@@ -43,34 +43,44 @@ namespace LudoGame.GameEngine.Classes
         }
         public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players)
         {
-            SetUpTeams(players);
-            Debug.WriteLine("Set up Teams");
-            _gameEvent.InvokeOnNewGameEvent();
-            var orderedPlayers = players;
-            while (_continuePlay(this))
+            try
             {
-                foreach (var player in _orderedPlayers)
+                SetUpTeams(players);
+                Debug.WriteLine("Set up Teams");
+                _gameEvent.InvokeOnNewGameEvent();
+                var orderedPlayers = players;
+                while (_continuePlay(this))
                 {
-                    int diceRoll = _rollDice();
-                    var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
-                    Debug.WriteLine("player option: " + JsonConvert.SerializeObject(playerOption));
-                    var pawns = await player.ChoosePlay(playerOption);
-                    bool valid = _validator.ValidateResponse(playerOption, pawns);
-
-                    if (valid) _action.Act(pawns, diceRoll);
-                    
-                    else
+                    foreach (var player in _orderedPlayers)
                     {
-                        await player.ChoosePlay(playerOption);
-                        _gameEvent.InvokeOnInvalidResponseEvent(player);
+                        int diceRoll = _rollDice();
+
+                        var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
+                        Debug.WriteLine("player option: " + JsonConvert.SerializeObject(playerOption));
+                        var pawns = await player.ChoosePlay(playerOption);
+                        bool valid = _validator.ValidateResponse(playerOption, pawns);
+
+                        if (valid) _action.Act(pawns, diceRoll);
+
+                        else
+                        {
+                            await player.ChoosePlay(playerOption);
+                            _gameEvent.InvokeOnInvalidResponseEvent(player);
+                        }
+                        Debug.WriteLine(player.Color + "has finnished round!");
                     }
-                    Debug.WriteLine(player.Color + "has finnished round!");
+
+                    RoundCount++;
+                    _gameEvent.InvokeOnRoundCompletedEvent();
                 }
 
-                RoundCount++;
-                _gameEvent.InvokeOnRoundCompletedEvent();
+                return GameStatus;
             }
 
+            catch (Exception ex)
+            {
+                Debug.Write(ex.ToString());
+             }
             return GameStatus;
         }
     }

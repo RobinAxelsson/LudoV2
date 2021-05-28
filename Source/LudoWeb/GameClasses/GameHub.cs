@@ -84,6 +84,7 @@ namespace LudoWeb.GameClasses
                 var room = _networkManager.AddGameRoom(gameId);
                 var client = new Client(Context.ConnectionId) {Player = player, Name = playerName};
                 room.Clients.Add(client);
+                room.ConnectNetworkPlayer(client);
                 await _networkManager.AddUserToGroup(connectionId, gameId);
                 await Clients.Caller.SendAsync("GameRoomAdded", gameId, playerName);
             }
