@@ -8,7 +8,8 @@ namespace LudoGame.GameEngine.Classes
 
         //Invoked in GamePlay
         public event Action<IGamePlayer, PlayerOption> OnNewPlayerOptionEvent;
-        public event Action OnRoundCompletedEvent;
+        public event Action<Pawn[]> OnPlayerHasMovedEvent;
+        public event Action OnFullRoundCompletedEvent;
         public event Action<IGamePlayer> OnInvalidResponseEvent;
 
         //Invoked in GameAction
@@ -30,7 +31,8 @@ namespace LudoGame.GameEngine.Classes
         public void InvokeOnNewPlayerOptionEvent(IGamePlayer player, PlayerOption option) =>
             OnNewPlayerOptionEvent?.Invoke(player, option);
 
-        public void InvokeOnRoundCompletedEvent() => OnRoundCompletedEvent?.Invoke();
+        public void InvokeOnPlayerHasMoved(Pawn[] pawns) => OnPlayerHasMovedEvent?.Invoke(pawns);
+        public void InvokeOnFullRoundCompletedEvent() => OnFullRoundCompletedEvent?.Invoke();
         public void InvokeOnNewGameEvent() => OnNewGameEvent?.Invoke();
         public void InvokeOnInvalidResponseEvent(IGamePlayer player) => OnInvalidResponseEvent?.Invoke(player);
 

@@ -37,27 +37,15 @@ namespace LudoWeb.GameClasses
         }
         public async Task ReceivePawns(Pawn[] pawns)
         {
-            
-            if(pawns != null && pawns.Length != 0)
+            if (pawns != null)
             {
-                var player = Context.ConnectionId;
-                var pawn = pawns[0];
-                Debug.WriteLine(JsonConvert.SerializeObject(pawns[0]));
-                if (pawns.Length == 2)
-                {
-                    //Dostuff
-                }
-                else if(pawns.Length == 1)
-                {
-                    //Do other stuff
-                }
-                else
-                {
-                    //Cheater!!!! (or my game is broken idk)
-                }
-
-              
-
+                Debug.WriteLine(JsonConvert.SerializeObject(pawns));
+                var connectionId = Context.ConnectionId;
+                _networkManager.RedirectPickedPawnFromGameHub(pawns, connectionId);
+            }
+            else
+            {
+                throw new Exception("Picked pawns from client is null");
             }
          
         }

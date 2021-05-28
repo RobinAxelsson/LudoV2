@@ -27,15 +27,15 @@ var selectedSquare = null;
 var selectedPawn = null;
 setUpPawns();
 
-//SignalR input
+//SignalR input to client
 connection.on("ReceiveOption", function (playerOption) {
     console.log("Received from networkmanager:")
     console.log(playerOption);
     optionPawns = playerOption.PawnsToMove;
     diceRoll = playerOption.DiceRoll;
     canTakeOutTwo = playerOption.canTakeOutTwo;
-});
-
+}); //TODO
+connection.on()
 function receiveOption(playerOption) {
 
 } 

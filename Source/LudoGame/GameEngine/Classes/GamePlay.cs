@@ -63,16 +63,18 @@ namespace LudoGame.GameEngine.Classes
 
                         if (valid) _action.Act(pawns, diceRoll);
 
-                        else
-                        {
-                            await player.ChoosePlay(playerOption);
-                            _gameEvent.InvokeOnInvalidResponseEvent(player);
-                        }
+                        //else
+                        //{
+                        //    await player.ChoosePlay(playerOption);
+                        //    _gameEvent.InvokeOnInvalidResponseEvent(player);
+                        //}
+
+                        _gameEvent.InvokeOnPlayerHasMoved(pawns);
                         Debug.WriteLine(player.Color + "has finnished round!");
                     }
 
                     RoundCount++;
-                    _gameEvent.InvokeOnRoundCompletedEvent();
+                    _gameEvent.InvokeOnFullRoundCompletedEvent();
                 }
 
                 return GameStatus;

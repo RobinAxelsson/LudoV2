@@ -7,8 +7,10 @@ namespace LudoGame.GameEngine.Interfaces
     {
         //Invoked in GamePlay
         public event Action<IGamePlayer, PlayerOption> OnNewPlayerOptionEvent;
-        public event Action OnRoundCompletedEvent;
+        public event Action OnFullRoundCompletedEvent;
         public event Action<IGamePlayer> OnInvalidResponseEvent;
+        public event Action<Pawn[]> OnPlayerHasMovedEvent;
+       
 
         //Invoked in GameAction
         public event Action<Pawn[]> OnMoveEvent;
@@ -24,7 +26,8 @@ namespace LudoGame.GameEngine.Interfaces
         public event Action OnGameOverEvent;
         public event Action<GameEnum.TeamColor> OnSafeZoneEvent;
         public void InvokeOnNewPlayerOptionEvent(IGamePlayer player, PlayerOption option);
-        public void InvokeOnRoundCompletedEvent();
+        public void InvokeOnPlayerHasMoved(Pawn[] pawns);
+        public void InvokeOnFullRoundCompletedEvent();
         public void InvokeOnNewGameEvent();
         public void InvokeOnInvalidResponseEvent(IGamePlayer player);
         public void InvokeOnAllTeamPawnsOutEvent(GameEnum.TeamColor pawnColor);

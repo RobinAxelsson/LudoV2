@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Interfaces;
+using LudoWeb.GameClasses;
 
 namespace LudoWeb.GameInterfaces
 {
@@ -13,7 +14,8 @@ namespace LudoWeb.GameInterfaces
         int Result { get; set; }
         bool NextToThrow { get; set; }
         bool Disconnected { get; set; }
-        public bool PlayerClientHasConnectionId(string connectionId);
+        Client Client { get; set; }
+        
         GameEnum.TeamColor Color { get; set; }
         Task<Pawn[]> ChoosePlay(PlayerOption playerOption);
     }
