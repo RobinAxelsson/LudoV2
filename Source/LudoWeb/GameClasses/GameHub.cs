@@ -30,27 +30,26 @@ namespace LudoWeb.GameClasses
             _emailClient = emailClient;
             _engine = engine;
         }
+
+        public async Task StartGame(string gameId)
+        {
+            await _networkManager.StartGame(gameId);
+        }
         public async Task ReceivePawns(Pawn[] pawns)
         {
-            Debug.WriteLine(JsonConvert.SerializeObject(pawns));
+            var player = Context.ConnectionId;
+            var pawn = pawns[0];
+            Debug.WriteLine(JsonConvert.SerializeObject(pawns[0]));
         }
         public async Task ConnectToGameRoom(string gameId)
         {
           // await _networkManager.AddClientToRoom(gameId, Context.ConnectionId);
         }
-        public async Task MovePawn(Pawn[] pawns)
-        {
-            //To gamelogic
-            //Return error if invalid pawn
-        }
+
         public async Task SendChatMessage(string message)
         {
             var proxy = _networkManager.GetGroupProxy(Context.ConnectionId);
             await proxy.SendAsync("NewChat", message);
-        }
-        public async Task OnLostConnection()
-        {
-
         }
 
         public async Task ValidateToken(string token)
@@ -121,6 +120,7 @@ namespace LudoWeb.GameClasses
             };
             var client = new Client(null) {Player = player, Name = ReturnPlayerName() + "(AI)"};
             room.Clients.Add(client);
+            room.AddAiPlayer();
             await Clients.Caller.SendAsync("AiAdded");
         }
         public async Task JoinGameMessage(string playerName, string gameId)
@@ -129,7 +129,7 @@ namespace LudoWeb.GameClasses
             var client = room.Clients
                 .SingleOrDefault(c => c.Name == playerName);
             var clientIndex = room.Clients.IndexOf(client);
-         
+            
             await _networkManager.SendJoinGameMessage(playerName, clientIndex, gameId);
         } 
         public async Task RetrieveJoinNotifications(string playerName, string gameId)
@@ -244,10 +244,5 @@ namespace LudoWeb.GameClasses
             return result.Split(new string[] {System.Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public async Task StartGame(string gameId)
-        {
-            await _networkManager.StartGame(gameId);
-        }
-        
     }
 }

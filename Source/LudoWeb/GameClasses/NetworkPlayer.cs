@@ -23,9 +23,14 @@ namespace LudoWeb.GameClasses
             _client = client;
             _timeoutSeconds = 30;
             _backupStephan = stephan;
+            PawnsToMove = new();
         }
         public ICollection<Pawn> Pawns { get; set; }
-        public List<Pawn> MovePawn;
+        public List<Pawn> PawnsToMove { get; set; }
+        public bool PlayerClientHasConnectionId(string connectionId)
+        {
+            return _client.ConnectionId == connectionId;
+        }
         public int Result { get; set; }
         public bool NextToThrow { get; set; }
         public bool Disconnected { get; set; }
@@ -38,20 +43,20 @@ namespace LudoWeb.GameClasses
             {
                 return await _backupStephan.ChoosePlay(playerOption);
             }
-            _networkManager.AskPlayerOption(_client.ConnectionId, playerOption);
+            await _networkManager.AskPlayerOption(_client.ConnectionId, playerOption);
             int Count = 0;
             do
             {
-                Thread.Sleep(1000);
+                await Task.Delay(1000);
                 if (_timeoutSeconds < Count)
                 {
                     Debug.WriteLine("Player was timedout");
                     return await _backupStephan.ChoosePlay(playerOption);
                 }
-            } while (MovePawn.Count == 0);
+            } while (PawnsToMove.Count == 0);
 
-            var responsePawn = MovePawn.ToArray();
-            MovePawn.Clear();
+            var responsePawn = PawnsToMove.ToArray();
+            PawnsToMove.Clear();
             return responsePawn;
         }
     }

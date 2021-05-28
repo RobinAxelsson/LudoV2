@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,8 @@ namespace LudoWeb.GameClasses
         {
             await _gameContext.Clients.Group(gameId)
                 .SendAsync("GameStarted");
+            var room = Rooms.Find(r => r.GameId == gameId);
+            room.StartGame(); //should not be awaited
         }
         public async Task SendJoinGameMessage(string message, int playerIndex, string gameId)
         {
@@ -70,6 +73,31 @@ namespace LudoWeb.GameClasses
         {
             await GetClientProxy(connectionId).SendAsync("ReceiveOption", playerOption);
         }
+
+        public void AddPlayerChoosePlay(Pawn[] pawns, string connectionId)
+        {
+            var player = Rooms.SelectMany(r => r.NetworkPlayers)
+                .SingleOrDefault(p => p.PlayerClientHasConnectionId(connectionId));
+            if (player == null) throw new Exception("ConnectionId is not in any room");
+            player.PawnsToMove = pawns.ToList();
+        }
+        public IClientProxy GetClientProxy(string connectionId)
+        {
+            return _gameContext.Clients.Client(connectionId);
+        }
+        public IClientProxy GetGroupProxy(string connectionId)
+        {
+            var roomId = GameId(connectionId);
+            if (roomId == null) return null;
+            return _gameContext.Clients.Group(roomId);
+        }
+        private string GameId(string connectionId)
+        {
+            var room = Rooms.SingleOrDefault(r => r.Clients.Select(c => c.ConnectionId).Contains(connectionId));
+            return room.GameId;
+        }
+
+
         //public async Task AddClientToRoom(string gameId, string clientId) //Invokes by client OnConnection
         //{
         //    //var game = _dbRepository.Games.SingleOrDefault(x => x.GameId == gameId);
@@ -104,29 +132,5 @@ namespace LudoWeb.GameClasses
         //}
 
         //From client to game-room
-        public IClientProxy GetClientProxy(string connectionId)
-        {
-            return _gameContext.Clients.Client(connectionId);
-        }
-        public IClientProxy GetGroupProxy(string connectionId)
-        {
-            var roomId = GameId(connectionId);
-            if (roomId == null) return null;
-            return _gameContext.Clients.Group(roomId);
-        }
-        private string GameId(string connectionId)
-        {
-            var room = Rooms.SingleOrDefault(r => r.Clients.Select(c => c.ConnectionId).Contains(connectionId));
-            return room.GameId;
-        }
-
-        //private bool IsNotGameOver(ModelEnum.GameStatus status)
-        //{
-        //    return
-        //        status == ModelEnum.GameStatus.Paused ||
-        //        status == ModelEnum.GameStatus.Playing ||
-        //        status == ModelEnum.GameStatus.Created ||
-        //        status == ModelEnum.GameStatus.WaitingForAllPlayers;
-        //}
     }
 }

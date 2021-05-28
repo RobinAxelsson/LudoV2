@@ -30,6 +30,8 @@ namespace LudoWeb.GameClasses
             Clients = new();
             _factory = factory;
             _messager = factory.GameMessager(_gameEvent, manager, this);
+            _waitingPlayers = new ();
+            NetworkPlayers = new();
             Colors = new List<GameEnum.TeamColor>
             {
                 GameEnum.TeamColor.Blue,
@@ -39,13 +41,15 @@ namespace LudoWeb.GameClasses
             };
             GameId = gameId;
         }
+        
         public string GameId { get; }
         public Game Game { get; private set; }
         public List<Client> Clients { get; set; }
-        private List<(GameEnum.TeamColor Color, Client Client)> WaitingPlayers { get; set; }
+        public List<INetworkPlayer> NetworkPlayers { get; private set; }
+        private List<(GameEnum.TeamColor Color, Client Client)> _waitingPlayers { get; set; }
         private List<GameEnum.TeamColor> Colors { get; set; }
         private Client GetClient(string connectionId) => Clients.SingleOrDefault(x => x.ConnectionId == connectionId);
-        public async Task Start()
+        public async Task StartGame()
         {
             var gamePlayers = CreateGamePlayers();
 
@@ -57,14 +61,14 @@ namespace LudoWeb.GameClasses
         private List<IGamePlayer> CreateGamePlayers()
         {
             var gamePlayers = new List<IGamePlayer>();
-            if (WaitingPlayers.Count < 4)
+            if (_waitingPlayers.Count < 4)
             {
-                while (WaitingPlayers.Count < 4)
+                while (_waitingPlayers.Count < 4)
                 {
                     AddAiPlayer();
                 }
             }
-            foreach (var wp in WaitingPlayers)
+            foreach (var wp in _waitingPlayers)
             {
                 if (wp.Client == null)
                 {
@@ -72,9 +76,11 @@ namespace LudoWeb.GameClasses
                 }
                 else
                 {
-                    gamePlayers.Add(_factory.NetworkPlayer(
-                        _networkManager, wp.Color, wp.Client, 
-                        _factory.AIPlayer(wp.Color, _boardCollection)));
+                    var networkPlayer = _factory.NetworkPlayer(
+                        _networkManager, wp.Color, wp.Client,
+                        _factory.AIPlayer(wp.Color, _boardCollection));
+                    NetworkPlayers.Add(networkPlayer);
+                    gamePlayers.Add(networkPlayer);
                 }
             }
 
@@ -82,18 +88,18 @@ namespace LudoWeb.GameClasses
         }
         public void AddAiPlayer()
         {
-            if (WaitingPlayers.Count < 4)
+            if (_waitingPlayers.Count < 4)
             {
-                WaitingPlayers.Add((Colors[0], null));
+                _waitingPlayers.Add((Colors[0], null));
                 Colors.Remove(0);
             }
         }
         public void ConnectNetworkPlayer(string connectionId)
         {
             var client = GetClient(connectionId);
-            if (client.Player != null && WaitingPlayers.Count < 4)
+            if (client.Player != null && _waitingPlayers.Count < 4)
             {
-                WaitingPlayers.Add((Colors[0], client));
+                _waitingPlayers.Add((Colors[0], client));
                 Colors.Remove(0);
             }
         }

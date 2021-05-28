@@ -60,7 +60,7 @@ function refreshPawns(inPawns) {
             let pImg = createPawnImg(color);
             pImg.id = "pawn" + newPawn.Id;
             pImg.onclick = function () { selectedPawn = newPawn; }
-            pImg.onclick = function () { gameSquare }
+            //pImg.onclick = function () { gameSquare }
             gameSquare.appendChild(pImg);
         }
     }
@@ -76,19 +76,17 @@ function rollDice() {
         console.log("You will pass.");
         resetOnSend();
         let sendPawns = [];
-        var message = document.getElementById("messageInput").value;
-        connection.invoke("ReceivePawns", sendPawns).catch(function (err) {
-            return console.error(err.toString());
-        });
-        }
+        sendPawnArray(sendPawns);
+    }
     
 }
 function sendPawnSelection() {
     console.log("You pressed send pawn button.");
+    let localParam = selectedPawn;
     if (selectedPawn !== null) {
         let sendPawns = [];
         sendPawns[0] = selectedPawn;
-        //send pawns
+        sendPawnArray(sendPawns);
         resetOnSend();
     }
 }
@@ -113,7 +111,13 @@ function sendTakeOutTwoSelection() {
     }
     canTakeOutTwo = null;
 }
-
+//Send SignalR
+function sendPawnArray(pawns) {
+    console.log("about to invoke ReceivePawns")
+    connection.invoke("ReceivePawns", pawns).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
 //onclick squares
 function selectSquareAndPawn(square) {
     
@@ -131,28 +135,42 @@ function selectSquareAndPawn(square) {
     if (square.hasChildNodes() === false) {
         return;
     }
-    let choosePawn = pawnsToChoose(square);
-    if (choosePawn !== null) {
+    let optionPawn = validatePawnFromSquare(square);
+    if (optionPawn !== null) {
         selectedSquare = square;
-        selectedPawn = choosePawn;
+        selectedPawn = optionPawn;
+        console.log("you selected: " + selectedPawn);
         selectedSquare.style.borderColor = "cyan";
         selectedSquare.style.borderWidth = "4px";
         selectedSquare = square;
     }
 }
-function pawnsToChoose(square) {
-    let imgId = square.firstElementChild.id;
-    let pawnId = imgId.split("n")[1];
-    for (var i = 0; i < optionPawns.length; i++) {
-        let choosePawn = optionPawns[i];
-        let choosePawnId = choosePawn.Id.toString();
-        if (pawnId === choosePawnId) {
-            return choosePawn;
-        }
+function validatePawnFromSquare(square) {
+    let clickedPawn = getClickedPawn(square);
+    if (pawnIsOption(clickedPawn)) {
+        return clickedPawn;
     }
     return null;
 }
-
+function pawnIsOption(pawn) {
+    let pawnId = pawn.Id;
+    for (var i = 0; i < optionPawns.length; i++) {
+        let oPawn = optionPawns[i];
+        let oPawnId = oPawn.Id;
+        if (pawnId === oPawnId) {
+            return true;
+        }
+    }
+}
+function getClickedPawn(square) {
+    let imgId = square.firstElementChild.id;
+    let pawnId = imgId.split("n")[1];
+    for (var i = 0; i < boardPawns.length; i++) {
+        if (boardPawns[i].Id.toString() === pawnId) {
+            return boardPawns[i];
+        }
+    }
+}
 //if statements
 function hasPawnMoved(inPawns, oldPawn) {
     for (var i = 0; i < inPawns; i++) {
