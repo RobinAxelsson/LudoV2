@@ -1,13 +1,31 @@
 "use strict";
 
 
-
+setUpPawns();
 //set up
 function setUpPawns() {
     fetch('data/set-up-pawns.json')
         .then(response => response.json())
-        .then(jsonResponse => refreshPawns(jsonResponse));
+        .then(jsonResponse => AddInitialPawns(jsonResponse));
 }
+function AddInitialPawns(inPawns) {
+    for (var i = 0; i < inPawns.length; i++) {
+
+        let newPawn = inPawns[i];
+
+            let gameSquareId = parseGameSquareId(newPawn);
+            let gameSquare = select(gameSquareId);
+            let color = inPawns[i].Color;
+            let pImg = createPawnImg(color);
+            pImg.id = "pawn" + newPawn.Id;
+            pImg.onclick = function () { selectedPawn = newPawn; }
+            //pImg.onclick = function () { gameSquare }
+            gameSquare.appendChild(pImg);
+    }
+    boardPawns = inPawns;
+    
+}
+
 function resetOnSend() {
     canTakeOutTwo = null;
     if (selectedSquare !== null) {
@@ -16,6 +34,7 @@ function resetOnSend() {
     }
     selectedSquare = null;
     selectedPawn = null;
+    console.log("Resetting optionPawns!!");
     optionPawns = [];
     diceRoll = null;
 }
@@ -28,53 +47,50 @@ var selectedPawn = null;
 setUpPawns();
 
 //SignalR input to client
-connection.on("ReceiveOption", function (playerOption) {
+connection.on("ReceiveOption", function (returnPawnsToMove, returnCanTakeOutTwo, returnDiceRoll) {
     console.log("Received from networkmanager:")
-    console.log(playerOption);
-    optionPawns = playerOption.PawnsToMove;
-    diceRoll = playerOption.DiceRoll;
-    canTakeOutTwo = playerOption.canTakeOutTwo;
+    console.log("ReceiveOptionValues: " + returnCanTakeOutTwo + returnPawnsToMove);
+    optionPawns = returnPawnsToMove;
+    console.log("optionPawns was set to: " + optionPawns);
+    diceRoll = returnDiceRoll;
+    canTakeOutTwo = returnCanTakeOutTwo;
 });
 connection.on("UpdatePawns",
-    function(inPawns) {
-        refreshPawns(inPawns);
+    function (inPawns) {
+        let currentPawns = boardPawns;
+        console.log("InPawns: " + inPawns);
+
+        //Removes pawns that moved
+        for (var i = 0; i < currentPawns.length; i++) {
+            let oldPawn = currentPawns[i];
+            if (isPawnEradicated(inPawns, oldPawn) || hasPawnMoved(inPawns, oldPawn)) {
+                let pImg = select("#pawn" + oldPawn.Id);
+                pImg.parentNode.removeChild(pImg);
+            }
+        }
+
+        //Add new pawns
+        for (var i = 0; i < inPawns.length; i++) {
+
+            let newPawn = inPawns[i];
+
+            if (hasPawnMoved(currentPawns, newPawn) === true) {
+                let gameSquareId = parseGameSquareId(newPawn);
+                let gameSquare = select(gameSquareId);
+                let color = inPawns[i].Color;
+                let pImg = createPawnImg(color);
+                pImg.id = "pawn" + newPawn.Id;
+                pImg.onclick = function () { selectedPawn = newPawn; }
+                //pImg.onclick = function () { gameSquare }
+                gameSquare.appendChild(pImg);
+            }
+        }
+        boardPawns = inPawns;
     });
-
-function refreshPawns(inPawns) {
-    let currentPawns = boardPawns;
-    console.log(inPawns);
-
-    //Removes pawns that moved
-    for (var i = 0; i < currentPawns.length; i++) {
-        let oldPawn = currentPawns[i];
-        if (isPawnEradicated(inPawns, oldPawn) || hasPawnMoved(inPawns, oldPawn)) {
-            let pImg = select("#pawn" + oldPawn.Id);
-            pImg.parentNode.removeChild(pImg);
-        }
-    }
-
-    //Add new pawns
-    for (var i = 0; i < inPawns.length; i++) {
-
-        let newPawn = inPawns[i];
-
-        if (hasPawnMoved(currentPawns, newPawn) === true) {
-            let gameSquareId = parseGameSquareId(newPawn);
-            let gameSquare = select(gameSquareId);
-            let color = inPawns[i].Color;
-            let pImg = createPawnImg(color);
-            pImg.id = "pawn" + newPawn.Id;
-            pImg.onclick = function () { selectedPawn = newPawn; }
-            //pImg.onclick = function () { gameSquare }
-            gameSquare.appendChild(pImg);
-        }
-    }
-    boardPawns = inPawns;
-}
 //Button events (SignalR output)
 function rollDice() {
     console.log("You pressed roll dice button.");
-    if (diceRoll !== null) {
+    if (diceRoll != null) {
         console.log(diceRoll);
     }
     if (optionPawns == null || optionPawns.length === 0) {

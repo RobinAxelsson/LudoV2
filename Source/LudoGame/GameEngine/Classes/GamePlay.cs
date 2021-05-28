@@ -45,6 +45,7 @@ namespace LudoGame.GameEngine.Classes
         }
         public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players, Func<Pawn[], Task> refreshPawns)
         {
+            _action.refreshPawns = refreshPawns;
             try
             {
                 SetUpTeams(players);
@@ -70,7 +71,7 @@ namespace LudoGame.GameEngine.Classes
                         //    _gameEvent.InvokeOnInvalidResponseEvent(player);
                         //}
 
-                        await refreshPawns(pawns);
+                       
 
                         //_gameEvent.InvokeOnPlayerHasMoved(pawns);
                         Debug.WriteLine(player.Color + "has finnished round!");

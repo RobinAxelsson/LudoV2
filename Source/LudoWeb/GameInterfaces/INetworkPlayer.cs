@@ -18,5 +18,6 @@ namespace LudoWeb.GameInterfaces
         
         GameEnum.TeamColor Color { get; set; }
         Task<Pawn[]> ChoosePlay(PlayerOption playerOption);
+        bool HasReceived { get; set; }
     }
 }

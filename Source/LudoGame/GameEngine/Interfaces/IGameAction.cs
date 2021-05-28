@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using LudoGame.GameEngine.Classes;
 
 namespace LudoGame.GameEngine.Interfaces
@@ -7,5 +9,6 @@ namespace LudoGame.GameEngine.Interfaces
     {
         void Act(Pawn[] pawns, int diceRoll);
         void SetUpPawns(List<Pawn> allPawns);
+        Func<Pawn[], Task> refreshPawns { get; set; }
     }
 }

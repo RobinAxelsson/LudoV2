@@ -77,7 +77,7 @@ namespace LudoWeb.GameClasses
 
         public async Task AskPlayerOption(string connectionId, PlayerOption playerOption)
         {
-            await GetClientProxy(connectionId).SendAsync("ReceiveOption", playerOption);
+            await GetClientProxy(connectionId).SendAsync("ReceiveOption", playerOption.PawnsToMove, playerOption.CanTakeOutTwo, playerOption.DiceRoll);
         }
 
         public void RedirectPickedPawnFromGameHub(Pawn[] pawns, string connectionId)
@@ -86,24 +86,25 @@ namespace LudoWeb.GameClasses
                 .SingleOrDefault(p => p.Client.ConnectionId == connectionId);
             if (player == null) throw new Exception("ConnectionId is not in any room");
             player.PawnsToMove = pawns.ToList();
+            player.HasReceived = true;
         }
         public IClientProxy GetClientProxy(string connectionId)
         {
         
             return _gameContext.Clients.Client(connectionId);
         }
-        public IClientProxy GetGroupProxy(string connectionId)
+        public IClientProxy GetGroupProxy(string gameId)
         {
-            var roomId = GameId(connectionId);
-            if (roomId == null) return null;
-            return _gameContext.Clients.Group(roomId);
+            if (gameId == null) return null;
+            return _gameContext.Clients.Group(gameId);
         }
+        /*
         private string GameId(string connectionId)
         {
             var room = Rooms.SingleOrDefault(r => r.Clients.Select(c => c.ConnectionId).Contains(connectionId));
             return room.GameId;
         }
-
+        */
 
         //public async Task AddClientToRoom(string gameId, string clientId) //Invokes by client OnConnection
         //{

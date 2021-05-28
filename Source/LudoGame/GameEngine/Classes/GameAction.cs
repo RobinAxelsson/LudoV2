@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
 using static LudoGame.GameEngine.GameEnum;
@@ -10,12 +11,13 @@ namespace LudoGame.GameEngine.Classes
     {
         private readonly IBoardCollection _boardCollection;
         private readonly IGameEvent _gameEvent;
+        public Func<Pawn[], Task> refreshPawns { get; set; }
         public GameAction(IBoardCollection collection, IGameEvent gameEvent)
         {
             _boardCollection = collection;
             _gameEvent = gameEvent;
         }
-        public void Act(Pawn[] pawns, int diceRoll)
+        public async void Act(Pawn[] pawns, int diceRoll)
         {
             if (pawns.Length == 0) return;
             if (pawns.Length == 2)
@@ -35,7 +37,10 @@ namespace LudoGame.GameEngine.Classes
             {
                 throw new Exception("Invalid pawn count");
             }
+            
+            await refreshPawns(_boardCollection.GetAllPawns().ToArray());
         }
+        
         public void SetUpPawns(List<Pawn> allPawns)
         {
             if (allPawns.Count == 0)

@@ -32,6 +32,7 @@ namespace LudoWeb.GameClasses
         public Client Client { get; set; }
         private int _timeoutSeconds { get; }
         public GameEnum.TeamColor Color { get; set; }
+        public bool HasReceived { get; set; } = false;
         public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
             Debug.WriteLine("Player ChoosePlay");
@@ -43,19 +44,23 @@ namespace LudoWeb.GameClasses
        
             Debug.WriteLine("About to ask player for option");
             await _networkManager.AskPlayerOption(Client.ConnectionId, playerOption);
-        
-           int Count = 0;
-           do
-           {
-               Count++;
-               await Task.Delay(1000);
-               if (Count >= _timeoutSeconds) 
-               {
-                   Debug.WriteLine("Player was timedout");
-                   return await _backupStephan.ChoosePlay(playerOption);
-               }
-           } while (PawnsToMove.Count == 0);
-         
+            Debug.WriteLine("Before loop; HasReceived value: " + HasReceived);
+            int Count = 0;
+            do
+            {
+
+                Count++;
+                await Task.Delay(1000);
+                /*
+              if (Count >= _timeoutSeconds) 
+              {
+                  Debug.WriteLine("Player was timedout");
+                return await _backupStephan.ChoosePlay(playerOption);
+              }
+                */
+
+            } while (!HasReceived);
+            HasReceived = false;
             var responsePawn = PawnsToMove.ToArray();
             PawnsToMove.Clear();
             return responsePawn;

@@ -65,6 +65,10 @@ namespace LudoGame.GameEngine.Classes
         {
             return _allPawn.FindAll(p => p.X == targetSquare.BoardX && p.Y == targetSquare.BoardY && p.Color != color);
         }
+        public List<Pawn> GetAllPawns()
+        {
+            return _allPawn;
+        }
         public GameSquare CurrentSquare(Pawn pawn)
         {
             return _boardSquares.Find(x => x.BoardX == pawn.X && x.BoardY == pawn.Y);

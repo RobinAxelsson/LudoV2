@@ -7,6 +7,7 @@ namespace LudoGame.GameEngine.Interfaces
     public interface IBoardCollection
     {
         List<GameEnum.TeamColor> TeamsLeft();
+        List<Pawn> GetAllPawns();
         List<Pawn> EnemiesOnSquare(GameSquare targetSquare, GameEnum.TeamColor color);
         bool IsOccupiedByTeam(GameEnum.TeamColor color, GameSquare square);
         List<Pawn> PawnsInBase(GameEnum.TeamColor color);
