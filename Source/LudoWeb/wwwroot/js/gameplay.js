@@ -11,8 +11,8 @@ function setUpPawns() {
 function AddInitialPawns(inPawns) {
     for (var i = 0; i < inPawns.length; i++) {
 
-        let newPawn = inPawns[i];
-
+            let newPawn = inPawns[i];
+       
             let gameSquareId = parseGameSquareId(newPawn);
             let gameSquare = select(gameSquareId);
             let color = inPawns[i].Color;
@@ -58,12 +58,15 @@ connection.on("ReceiveOption", function (returnPawnsToMove, returnCanTakeOutTwo,
 connection.on("UpdatePawns",
     function (inPawns) {
         let currentPawns = boardPawns;
-        console.log("InPawns: " + inPawns);
+        console.log("inPawns:");
+        console.log(inPawns);
 
         //Removes pawns that moved
         for (var i = 0; i < currentPawns.length; i++) {
             let oldPawn = currentPawns[i];
             if (isPawnEradicated(inPawns, oldPawn) || hasPawnMoved(inPawns, oldPawn)) {
+                console.log("EradicatedOrHasMovedOldPawn:");
+                console.log(oldPawn);
                 let pImg = select("#pawn" + oldPawn.Id);
                 pImg.parentNode.removeChild(pImg);
             }
@@ -72,14 +75,18 @@ connection.on("UpdatePawns",
         //Add new pawns
         for (var i = 0; i < inPawns.length; i++) {
 
-            let newPawn = inPawns[i];
 
+            let newPawn = inPawns[i];
+            console.log("newPawnAddNewPawns:");
+            console.log(newPawn);
+            console.log("hasPawnMoved(currentPawns, newPawn)");
+            console.log(hasPawnMoved(currentPawns, newPawn));
             if (hasPawnMoved(currentPawns, newPawn) === true) {
                 let gameSquareId = parseGameSquareId(newPawn);
                 let gameSquare = select(gameSquareId);
-                let color = inPawns[i].Color;
+                let color = inPawns[i].color;
                 let pImg = createPawnImg(color);
-                pImg.id = "pawn" + newPawn.Id;
+                pImg.id = "pawn" + newPawn.id;
                 pImg.onclick = function () { selectedPawn = newPawn; }
                 //pImg.onclick = function () { gameSquare }
                 gameSquare.appendChild(pImg);
@@ -145,7 +152,7 @@ function selectSquareAndPawn(square) {
     
     if (selectedSquare !== null) {
         selectedSquare.style.borderColor = "black";
-        selectedSquare.style.borderWidth = "1px";
+        selectedSquare.style.borderWidth = "1px"; 
         selectedSquare = null;
     }
     if (selectedPawn !== null) {
@@ -195,7 +202,11 @@ function getClickedPawn(square) {
 }
 //if statements
 function hasPawnMoved(inPawns, oldPawn) {
-    for (var i = 0; i < inPawns; i++) {
+    console.log("OldPawnHasMoved");
+    console.log(oldPawn);
+    for (var i = 0; i < inPawns.length; i++) {
+        console.log("InPawnHasMoved");
+        console.log(inPawns[i]);
         let inPawn = inPawns[i];
         if (inPawn.Id === oldPawn.Id && inPawn.X === oldPawn.X && inPawn.Y === oldPawn.Y) {
             return false;
@@ -204,8 +215,13 @@ function hasPawnMoved(inPawns, oldPawn) {
     return true;
 }
 function isPawnEradicated(inPawns, oldPawn) {
-
-    for (var i = 0; i < inPawns; i++) {
+    console.log("OldPawnisPawnEradicated");
+    console.log(oldPawn);
+    console.log("inPawnsEradicated:");
+    console.log(inPawns);
+    for (var i = 0; i < inPawns.length; i++) {
+        console.log("InPawnisPawnEradicated");
+        console.log(inPawns[i]);
         let inPawn = inPawns[i];
         if (inPawn.Id === oldPawn.Id) {
             return false;
@@ -276,7 +292,17 @@ function getColorEnum(gameSquare) {
     }
 }
 function parseGameSquareId(pawn) {
-    return '#X' + pawn.X + 'Y' + pawn.Y;
+
+    //This is a SignalR bug? Where if we parse value from model as json we get uppercase
+    //Whereas from SignalR we get lowercase.
+    let pawnX = pawn.X;
+    let pawnY = pawn.Y;
+    if (pawnX == null)
+        pawnX = pawn.x;
+    if (pawnY == null)
+        pawnY = pawn.y;
+
+    return '#X' + pawnX + 'Y' + pawnY;
 }
 function select(element) {
     if (document.querySelector(element) !== null) {
