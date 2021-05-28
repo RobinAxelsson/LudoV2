@@ -49,3 +49,6 @@ Game_MoveSelected==Flytta markerad
 Game_JoinGameTitle==Match hittad! Vill du gå med? :D
 Game_JoinGameButton==Släng in mig!
 Game_RolledText==slog
+Game_PlayLink==Spela
+Game_LoginLink==Logga in
+Game_RegisterLink==Registrera

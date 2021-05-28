@@ -62,6 +62,9 @@ namespace LudoTranslation {
         public string Game_JoinGameTitle { get; set; }
         public string Game_JoinGameButton { get; set; }
         public string Game_RolledText { get; set; }
+        public string Game_PlayLink { get; set; }
+        public string Game_LoginLink { get; set; }
+        public string Game_RegisterLink { get; set; }
         #endregion
         public string GetPropertyValue(string input)
         {
