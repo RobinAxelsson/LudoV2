@@ -16,6 +16,7 @@ All the game logic happens on the server.
 ![image](https://user-images.githubusercontent.com/63591629/120044458-2fdcb280-c00e-11eb-907d-2468e1eb94c2.png)
 
 # Key Classes
+- [NetworkPlayer.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameNetworkManager.cs)
 
 # Architecture depencency diagrams
 ## We have spent a lot of time discussing the project architecture and made a big shift last 5 days when removing the API-project and replacing all API-calls with SignalR.
