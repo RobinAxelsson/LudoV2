@@ -14,7 +14,7 @@ namespace LudoGame.GameEngine.Classes
             ContinuePlay = continuePlay;
         }
         private readonly Random _rand = new();
-        private int rollDice() => 6;//_rand.Next(100, 699) / 100;
+        private int rollDice() => _rand.Next(100, 699) / 100;
         private IGamePlayer getFirstPlayer(List<IGamePlayer> players)
         {
             var firsts = players.Where(p => p.NextToThrow == true).ToList();

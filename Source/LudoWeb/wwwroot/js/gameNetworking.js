@@ -13,7 +13,8 @@ var Translations =
         "Game_RollDice",
         "Game_MoveSelected",
         "Game_JoinGameTitle",
-        "Game_JoinGameButton"
+        "Game_JoinGameButton",
+        "Game_RolledText"
         //"Enter the email of whom you wish to invite"
     ];
 console.log(document.cookie);

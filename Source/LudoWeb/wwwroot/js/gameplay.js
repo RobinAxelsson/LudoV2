@@ -84,7 +84,7 @@ function rollDice() {
     select("#btn_moveSelected").disabled = false;
 }
 function SendRolledMessage() {
-    connection.invoke("SendRolledMessage", GlobalPlayerName, " rolled ", diceRoll, gameId).catch(function (err) {
+    connection.invoke("SendRolledMessage", GlobalPlayerName, " " + Translations[13] + " ", diceRoll, gameId).catch(function (err) {
         return console.error(err.toString());
     });
 }
