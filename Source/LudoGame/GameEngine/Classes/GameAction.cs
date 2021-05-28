@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
+using Newtonsoft.Json;
 using static LudoGame.GameEngine.GameEnum;
 
 namespace LudoGame.GameEngine.Classes
@@ -19,13 +21,17 @@ namespace LudoGame.GameEngine.Classes
         }
         public async void Act(Pawn[] pawns, int diceRoll)
         {
+            var teamColor = pawns[0].color;
+            Debug.WriteLine($@"Acting for {teamColor}, moving {pawns.Length}, diceroll: {diceRoll}");
             if (pawns.Length == 0) return;
             if (pawns.Length == 2)
             {
                 if (diceRoll != 6) throw new Exception("Pawns can not be two if dice is not 6.");
-                foreach (var p in pawns)
+                
+                var basePawns = _boardCollection.PawnsInBase(teamColor);
+                for (int i = 0; i < 2; i++)
                 {
-                    Move(p, 1);
+                    Move(basePawns[i], 1);
                 }
                 return;
             }
@@ -41,7 +47,7 @@ namespace LudoGame.GameEngine.Classes
             await refreshPawns(_boardCollection.GetAllPawns().ToArray());
         }
         
-        public void SetUpPawns(List<Pawn> allPawns)
+        public async void SetUpPawns(List<Pawn> allPawns)
         {
             if (allPawns.Count == 0)
             {
@@ -55,18 +61,19 @@ namespace LudoGame.GameEngine.Classes
                     {
                         var pawn = new Pawn(colors[t], pawnId);
                         pawnId++;
-                        ChangeCoordinates(pawn, baseSquare);
+                        MoveInitialPawns(pawn, baseSquare);
                         allPawns.Add(pawn);
                     }
                 }
                 _boardCollection.SetPawns(allPawns);
+                await refreshPawns(allPawns.ToArray());
                 return;
             }
 
-            if (allPawns.TrueForAll(p => p.X == 0 && p.Y == 0))
+            if (allPawns.TrueForAll(p => p.x == 0 && p.y == 0))
             {
                 allPawns.ForEach(p => ChangeCoordinates(
-                    p, _boardCollection.BaseSquare(p.Color))
+                    p, _boardCollection.BaseSquare(p.color))
                 );
                 return;
             }
@@ -86,24 +93,24 @@ namespace LudoGame.GameEngine.Classes
 
                 if (tempSquare is GoalSquare || bounced == true)
                 {
-                    tempSquare = _boardCollection.PastSquare(tempSquare, pawn.Color);
+                    tempSquare = _boardCollection.PastSquare(tempSquare, pawn.color);
                     bounced = true;
                 }
                 else
                 {
-                    tempSquare = _boardCollection.GetNext(tempSquare, pawn.Color);
+                    tempSquare = _boardCollection.GetNext(tempSquare, pawn.color);
                 }
                 if (lastIteration == true && tempSquare is GoalSquare)
                 {
                     ChangeCoordinates(pawn, _boardCollection.GoalSquare());
 
-                    if (_boardCollection.GetTeamPawns(pawn.Color).Count == 0)
+                    if (_boardCollection.GetTeamPawns(pawn.color).Count == 0)
                     {
-                        _gameEvent.InvokeOnAllTeamPawnsOutEvent(pawn.Color);
+                        _gameEvent.InvokeOnAllTeamPawnsOutEvent(pawn.color);
                     }
                     else
                     {
-                        _gameEvent.InvokeOnGoalEvent(pawn.Color, _boardCollection.GetTeamPawns(pawn.Color).Count);
+                        _gameEvent.InvokeOnGoalEvent(pawn.color, _boardCollection.GetTeamPawns(pawn.color).Count);
                     }
 
                     bool onlyOneTeamLeft = _boardCollection.TeamsLeft().Count == 1;
@@ -119,20 +126,20 @@ namespace LudoGame.GameEngine.Classes
 
             TeamColor? enemyColor = null;
             int pawnsToEradicate = 0;
-            var enemies = _boardCollection.EnemiesOnSquare(tempSquare, pawn.Color);
+            var enemies = _boardCollection.EnemiesOnSquare(tempSquare, pawn.color);
             if (enemies.Count > 0)
             {
-                enemyColor = enemies[0].Color;
+                enemyColor = enemies[0].color;
                 pawnsToEradicate = enemies.Count;
                 var eradicateBase = _boardCollection.BaseSquare((TeamColor)enemyColor);
                 ChangeCoordinates(enemies, eradicateBase);
             }
 
-            if (pawnsToEradicate != 0) _gameEvent.InvokeOnEradicationEvent(pawn.Color, (TeamColor)enemyColor, pawnsToEradicate);
+            if (pawnsToEradicate != 0) _gameEvent.InvokeOnEradicationEvent(pawn.color, (TeamColor)enemyColor, pawnsToEradicate);
             ChangeCoordinates(pawn, tempSquare);
 
-            if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.Color);
-            if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.Color);
+            if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.color);
+            if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.color);
             enemies.Add(pawn);
             _gameEvent.InvokeOnMoveEvent(enemies.ToArray()); //enemies plus own.
         }
@@ -143,16 +150,36 @@ namespace LudoGame.GameEngine.Classes
                 ChangeCoordinates(p, targetSquare);
             }
         }
+        private void MoveInitialPawns(Pawn pawn, GameSquare targetSquare)
+        {
+            if (pawn != null)
+            {
+                if (targetSquare is GoalSquare)
+                {
+                    pawn.x = 0;
+                    pawn.y = 0;
+                    return;
+                }
+                pawn.x = targetSquare.BoardX;
+                pawn.y = targetSquare.BoardY;
+            }
+
+        }
         private void ChangeCoordinates(Pawn pawn, GameSquare targetSquare)
         {
-            if (targetSquare is GoalSquare)
+            pawn = _boardCollection.GetTruePawn(pawn);
+            if (pawn != null)
             {
-                pawn.X = 0;
-                pawn.Y = 0;
-                return;
+                if (targetSquare is GoalSquare)
+                {
+                    pawn.x = 0;
+                    pawn.y = 0;
+                    return;
+                }
+                pawn.x = targetSquare.BoardX;
+                pawn.y = targetSquare.BoardY;
             }
-            pawn.X = targetSquare.BoardX;
-            pawn.Y = targetSquare.BoardY;
+           
         }
     }
 }

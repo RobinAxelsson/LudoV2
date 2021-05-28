@@ -1,33 +1,19 @@
 "use strict";
 
 
-setUpPawns();
-//set up
-function setUpPawns() {
-    fetch('data/set-up-pawns.json')
-        .then(response => response.json())
-        .then(jsonResponse => AddInitialPawns(jsonResponse));
-}
-function AddInitialPawns(inPawns) {
-    for (var i = 0; i < inPawns.length; i++) {
+var optionPawns = [];
+var diceRoll = null;
+var boardPawns = [];
+var canTakeOutTwo = false;
+var selectedSquare = null;
+var selectedPawn = null;
 
-            let newPawn = inPawns[i];
-       
-            let gameSquareId = parseGameSquareId(newPawn);
-            let gameSquare = select(gameSquareId);
-            let color = inPawns[i].Color;
-            let pImg = createPawnImg(color);
-            pImg.id = "pawn" + newPawn.Id;
-            pImg.onclick = function () { selectedPawn = newPawn; }
-            //pImg.onclick = function () { gameSquare }
-            gameSquare.appendChild(pImg);
-    }
-    boardPawns = inPawns;
-    
-}
+select("#btn_rollDice").disabled = true;
+select("#btn_takeOutTwo").disabled = true;
+select("#btn_moveSelected").disabled = true;
 
 function resetOnSend() {
-    canTakeOutTwo = null;
+    canTakeOutTwo = false;
     if (selectedSquare !== null) {
         selectedSquare.style.borderColor = "black";
         selectedSquare.style.borderWidth = "1px";
@@ -37,80 +23,71 @@ function resetOnSend() {
     console.log("Resetting optionPawns!!");
     optionPawns = [];
     diceRoll = null;
+    select("#btn_rollDice").disabled = true;
+    select("#btn_takeOutTwo").disabled = true;
+    select("#btn_moveSelected").disabled = true;
 }
-var optionPawns = [];
-var diceRoll = null;
-var boardPawns = [];
-var canTakeOutTwo = null;
-var selectedSquare = null;
-var selectedPawn = null;
-setUpPawns();
+
 
 //SignalR input to client
 connection.on("ReceiveOption", function (returnPawnsToMove, returnCanTakeOutTwo, returnDiceRoll) {
     console.log("Received from networkmanager:")
-    console.log("ReceiveOptionValues: " + returnCanTakeOutTwo + returnPawnsToMove);
+    console.log("ReceiveOptionValues: " + returnCanTakeOutTwo.toString() + returnPawnsToMove.toString());
     optionPawns = returnPawnsToMove;
     console.log("optionPawns was set to: " + optionPawns);
     diceRoll = returnDiceRoll;
     canTakeOutTwo = returnCanTakeOutTwo;
+    select("#btn_rollDice").disabled = false;
 });
+//SignalR update pawns
 connection.on("UpdatePawns",
     function (inPawns) {
-        let currentPawns = boardPawns;
-        console.log("inPawns:");
-        console.log(inPawns);
 
-        //Removes pawns that moved
-        for (var i = 0; i < currentPawns.length; i++) {
-            let oldPawn = currentPawns[i];
-            if (isPawnEradicated(inPawns, oldPawn) || hasPawnMoved(inPawns, oldPawn)) {
-                console.log("EradicatedOrHasMovedOldPawn:");
-                console.log(oldPawn);
-                let pImg = select("#pawn" + oldPawn.Id);
-                pImg.parentNode.removeChild(pImg);
-            }
+        //remove all
+        for (var i = 0; i < boardPawns.length; i++) {
+            let pImg = select("#pawn" + boardPawns[i].id);
+            pImg.parentNode.removeChild(pImg);
         }
 
-        //Add new pawns
+        //add all
         for (var i = 0; i < inPawns.length; i++) {
 
-
-            let newPawn = inPawns[i];
-            console.log("newPawnAddNewPawns:");
-            console.log(newPawn);
-            console.log("hasPawnMoved(currentPawns, newPawn)");
-            console.log(hasPawnMoved(currentPawns, newPawn));
-            if (hasPawnMoved(currentPawns, newPawn) === true) {
-                let gameSquareId = parseGameSquareId(newPawn);
-                let gameSquare = select(gameSquareId);
-                let color = inPawns[i].color;
-                let pImg = createPawnImg(color);
-                pImg.id = "pawn" + newPawn.id;
-                pImg.onclick = function () { selectedPawn = newPawn; }
-                //pImg.onclick = function () { gameSquare }
-                gameSquare.appendChild(pImg);
-            }
+            let gameSquareId = parseGameSquareId(inPawns[i]);
+            let gameSquare = select(gameSquareId);
+            let color = inPawns[i].color;
+            let pImg = createPawnImg(color);
+            pImg.id = "pawn" + inPawns[i].id;
+            let imgPawn = inPawns[i];
+            pImg.onclick = function () { selectedPawn = imgPawn; }
+            gameSquare.appendChild(pImg);
         }
         boardPawns = inPawns;
     });
 //Button events (SignalR output)
 function rollDice() {
+    select("#btn_rollDice").disabled = true;
     console.log("You pressed roll dice button.");
     if (diceRoll != null) {
         console.log(diceRoll);
+        var li = document.createElement("li");
+        document.getElementById("messagesList").appendChild(li);
+        li.textContent = GlobalPlayerName + " rolled: " + diceRoll;
     }
     if (optionPawns == null || optionPawns.length === 0) {
         console.log("You will pass.");
         resetOnSend();
         let sendPawns = [];
         sendPawnArray(sendPawns);
+        return;
     }
-    
+    if (canTakeOutTwo === true) {
+        select("#btn_takeOutTwo").disabled = false;
+    }
+    select("#btn_moveSelected").disabled = false;
 }
 function sendPawnSelection() {
     console.log("You pressed send pawn button.");
-    let localParam = selectedPawn;
+    console.log("About to send: " + selectedPawn);
     if (selectedPawn !== null) {
         let sendPawns = [];
         sendPawns[0] = selectedPawn;
@@ -118,41 +95,49 @@ function sendPawnSelection() {
         resetOnSend();
     }
 }
+function parseGameSquareId(pawn) {
+    return '#x' + pawn.x + 'y' + pawn.y;
+}
 function sendTakeOutTwoSelection() {
     console.log("You pressed take out two button.");
     if (canTakeOutTwo === true) {
         let pawns = [];
         let pawn1 = {
-            "Color": 0,
-            "X": 0,
-            "Y": 0
+            "id": 999,
+            "color": 0,
+            "x": 0,
+            "y": 0
         }
         let pawn2 = {
-            "Color": 0,
-            "X": 0,
-            "Y": 0
+            "id": 998,
+            "color": 0,
+            "x": 0,
+            "y": 0
         }
         pawns[0] = pawn1;
         pawns[1] = pawn2;
-        //Send
+        let sendPawns = [];
+        sendPawns[0] = pawn1;
+        sendPawns[1] = pawn2;
+        sendPawnArray(sendPawns);
         resetOnSend();
     }
-    canTakeOutTwo = null;
+    canTakeOutTwo = false;
 }
 //Send SignalR
 function sendPawnArray(pawns) {
-    console.log("about to invoke ReceivePawns")
-    console.log(pawns);
+    console.log("about to invoke ReceivePawns from javascript")
+    console.log("this is the pawns" + pawns);
     connection.invoke("ReceivePawns", pawns).catch(function (err) {
         return console.error(err.toString());
     });
 }
 //onclick squares
 function selectSquareAndPawn(square) {
-    
+
     if (selectedSquare !== null) {
         selectedSquare.style.borderColor = "black";
-        selectedSquare.style.borderWidth = "1px"; 
+        selectedSquare.style.borderWidth = "1px";
         selectedSquare = null;
     }
     if (selectedPawn !== null) {
@@ -182,11 +167,9 @@ function validatePawnFromSquare(square) {
     return null;
 }
 function pawnIsOption(pawn) {
-    let pawnId = pawn.Id;
+
     for (var i = 0; i < optionPawns.length; i++) {
-        let oPawn = optionPawns[i];
-        let oPawnId = oPawn.Id;
-        if (pawnId === oPawnId) {
+        if (pawn.id === optionPawns[i].id) {
             return true;
         }
     }
@@ -195,40 +178,12 @@ function getClickedPawn(square) {
     let imgId = square.firstElementChild.id;
     let pawnId = imgId.split("n")[1];
     for (var i = 0; i < boardPawns.length; i++) {
-        if (boardPawns[i].Id.toString() === pawnId) {
+        if (boardPawns[i].id.toString() === pawnId) {
             return boardPawns[i];
         }
     }
 }
 //if statements
-function hasPawnMoved(inPawns, oldPawn) {
-    console.log("OldPawnHasMoved");
-    console.log(oldPawn);
-    for (var i = 0; i < inPawns.length; i++) {
-        console.log("InPawnHasMoved");
-        console.log(inPawns[i]);
-        let inPawn = inPawns[i];
-        if (inPawn.Id === oldPawn.Id && inPawn.X === oldPawn.X && inPawn.Y === oldPawn.Y) {
-            return false;
-        }
-    }
-    return true;
-}
-function isPawnEradicated(inPawns, oldPawn) {
-    console.log("OldPawnisPawnEradicated");
-    console.log(oldPawn);
-    console.log("inPawnsEradicated:");
-    console.log(inPawns);
-    for (var i = 0; i < inPawns.length; i++) {
-        console.log("InPawnisPawnEradicated");
-        console.log(inPawns[i]);
-        let inPawn = inPawns[i];
-        if (inPawn.Id === oldPawn.Id) {
-            return false;
-        }
-    }
-    return true;
-}
 //Helper functions
 function createPawnImg(color) {
 
@@ -257,7 +212,7 @@ function getColorClass(color) {
     }
 }
 function getPawnImagePath(color) {
-   
+
     //Blue
     if (color === 0) {
         return "images/Pawns/blue_64.png";
@@ -291,19 +246,7 @@ function getColorEnum(gameSquare) {
         return 3;
     }
 }
-function parseGameSquareId(pawn) {
 
-    //This is a SignalR bug? Where if we parse value from model as json we get uppercase
-    //Whereas from SignalR we get lowercase.
-    let pawnX = pawn.X;
-    let pawnY = pawn.Y;
-    if (pawnX == null)
-        pawnX = pawn.x;
-    if (pawnY == null)
-        pawnY = pawn.y;
-
-    return '#X' + pawnX + 'Y' + pawnY;
-}
 function select(element) {
     if (document.querySelector(element) !== null) {
         return document.querySelector(element);
@@ -312,19 +255,3 @@ function select(element) {
         return null;
     }
 }
-/*
-    "PawnsToMove": [
-            {
-                "Color": 0,
-                "X": 4,
-                "Y": 0
-            },
-            {
-                "Color": 0,
-                "X": 5,
-                "Y": 0
-            }
-        ],
-        "CanTakeOutTwo": true,
-        "DiceRoll": 4
-}*/

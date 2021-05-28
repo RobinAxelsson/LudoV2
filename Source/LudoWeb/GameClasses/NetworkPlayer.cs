@@ -20,7 +20,7 @@ namespace LudoWeb.GameClasses
             _networkManager = manager;
             Color = color;
             Client = client;
-            _timeoutSeconds = 12;
+
             _backupStephan = stephan;
             PawnsToMove = new();
         }
@@ -30,36 +30,29 @@ namespace LudoWeb.GameClasses
         public bool NextToThrow { get; set; }
         public bool Disconnected { get; set; }
         public Client Client { get; set; }
-        private int _timeoutSeconds { get; }
         public GameEnum.TeamColor Color { get; set; }
         public bool HasReceived { get; set; } = false;
         public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
             Debug.WriteLine("Player ChoosePlay");
-       
-            //if (Disconnected == true && _backupStephan != null)
-            //{
-            //    return await _backupStephan.ChoosePlay(playerOption);
-            //}
-       
+
             Debug.WriteLine("About to ask player for option");
-            await _networkManager.AskPlayerOption(Client.ConnectionId, playerOption);
+            //await kills next
+            _networkManager.AskPlayerOption(Client.ConnectionId, playerOption);
             Debug.WriteLine("Before loop; HasReceived value: " + HasReceived);
-            int Count = 0;
+            bool first = true;
             do
             {
+                if (first)
+                {
+                    Debug.WriteLine("Networkplayer is waiting");
+                    first = false;
+                }
 
-                Count++;
                 await Task.Delay(1000);
-                /*
-              if (Count >= _timeoutSeconds) 
-              {
-                  Debug.WriteLine("Player was timedout");
-                return await _backupStephan.ChoosePlay(playerOption);
-              }
-                */
-
             } while (!HasReceived);
+            //TODO thread never gets here? Yes but without await!
+            Debug.WriteLine("Networkplayer has received");
             HasReceived = false;
             var responsePawn = PawnsToMove.ToArray();
             PawnsToMove.Clear();

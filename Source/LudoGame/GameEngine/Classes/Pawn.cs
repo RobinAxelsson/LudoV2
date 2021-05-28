@@ -2,15 +2,15 @@
 {
     public class Pawn
     {
-        public int Id { get; set; }
-        public GameEnum.TeamColor Color { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
+        public int id { get; set; }
+        public GameEnum.TeamColor color { get; set; }
+        public int x { get; set; }
+        public int y { get; set; }
 
         public Pawn(GameEnum.TeamColor color, int id)
         {
-            Color = color;
-            Id = id;
+            this.color = color;
+            this.id = id;
         }
     }
 }

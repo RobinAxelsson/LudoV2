@@ -87,8 +87,8 @@ namespace LudoGameTest
             var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
             var pawn = new Pawn(GameEnum.TeamColor.Blue)
             {
-                X = blueStart.BoardX,
-                Y = blueStart.BoardY
+                x = blueStart.BoardX,
+                y = blueStart.BoardY
             };
             //Act
             gameAction.SetUpPawns(new List<Pawn>()
@@ -109,8 +109,8 @@ namespace LudoGameTest
             var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
             var pawn = new Pawn(GameEnum.TeamColor.Blue)
             {
-                X = blueStart.BoardX,
-                Y = blueStart.BoardY
+                x = blueStart.BoardX,
+                y = blueStart.BoardY
             };
             gameAction.SetUpPawns(new List<Pawn>()
             {
@@ -134,13 +134,13 @@ namespace LudoGameTest
             var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
             var pawn1 = new Pawn(GameEnum.TeamColor.Blue)
             {
-                X = blueStart.BoardX,
-                Y = blueStart.BoardY
+                x = blueStart.BoardX,
+                y = blueStart.BoardY
             };
             var pawn2 = new Pawn(GameEnum.TeamColor.Blue)
             {
-                X = blueStart.BoardX,
-                Y = blueStart.BoardY
+                x = blueStart.BoardX,
+                y = blueStart.BoardY
             };
             gameAction.SetUpPawns(new List<Pawn>()
             {
@@ -201,10 +201,10 @@ namespace LudoGameTest
             var validator = _provider.GetGameService<IOptionsValidator>();
             var playerOption = validator.GetPlayerOption(GameEnum.TeamColor.Blue, 6);
             var pawn = playerOption.PawnsToMove[0];
-            var incomingPawn = new Pawn(pawn.Color)
+            var incomingPawn = new Pawn(pawn.color)
             {
-                X = pawn.X,
-                Y = pawn.Y
+                x = pawn.x,
+                y = pawn.y
             };
             //Act - Returns all four pawns
             var actualIsValid = validator.ValidateResponse(playerOption, new []{incomingPawn});

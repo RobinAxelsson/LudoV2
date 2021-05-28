@@ -6,6 +6,7 @@ namespace LudoGame.GameEngine.Interfaces
 {
     public interface IBoardCollection
     {
+        public Pawn GetTruePawn(Pawn pawn);
         List<GameEnum.TeamColor> TeamsLeft();
         List<Pawn> GetAllPawns();
         List<Pawn> EnemiesOnSquare(GameSquare targetSquare, GameEnum.TeamColor color);

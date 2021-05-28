@@ -51,12 +51,12 @@ namespace LudoWebTests
         {
             if (targetSquare is GoalSquare)
             {
-                pawn.X = 0;
-                pawn.Y = 0;
+                pawn.x = 0;
+                pawn.y = 0;
                 return;
             }
-            pawn.X = targetSquare.BoardX;
-            pawn.Y = targetSquare.BoardY;
+            pawn.x = targetSquare.BoardX;
+            pawn.y = targetSquare.BoardY;
         }
     }
 }

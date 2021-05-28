@@ -87,6 +87,7 @@ namespace LudoWeb.GameClasses
             if (player == null) throw new Exception("ConnectionId is not in any room");
             player.PawnsToMove = pawns.ToList();
             player.HasReceived = true;
+            Debug.WriteLine("Networkplayer state changed: has received == true");
         }
         public IClientProxy GetClientProxy(string connectionId)
         {

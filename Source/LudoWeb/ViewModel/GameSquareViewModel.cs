@@ -16,31 +16,31 @@ namespace LudoWeb.ViewModel
             //{
             //    int baseX = 0;
             //    int baseY = 0;
-            //    if (gameSquare.Color == GameEnum.TeamColor.Blue)
+            //    if (gameSquare.color == GameEnum.TeamColor.Blue)
             //    {
             //        baseX = 0;
             //        baseY = 0;
             //    }
 
-            //    if (gameSquare.Color == GameEnum.TeamColor.Red)
+            //    if (gameSquare.color == GameEnum.TeamColor.Red)
             //    {
             //        baseX = xCount - 1;
             //        baseY = 0;
             //    }
 
-            //    if (gameSquare.Color == GameEnum.TeamColor.Yellow)
+            //    if (gameSquare.color == GameEnum.TeamColor.Yellow)
             //    {
             //        baseX = 0;
             //        baseY = yCount - 1;
             //    }
 
-            //    if (gameSquare.Color == GameEnum.TeamColor.Green)
+            //    if (gameSquare.color == GameEnum.TeamColor.Green)
             //    {
             //        baseX = xCount - 1;
             //        baseY = yCount - 1;
             //    }
-            //    Y = baseY;
-            //    X = baseX;
+            //    y = baseY;
+            //    x = baseX;
             //}
             //else
             //{
@@ -48,7 +48,7 @@ namespace LudoWeb.ViewModel
                 X = gameSquare.BoardX;
             //}
             
-            Id = $"X{gameSquare.BoardX}Y{gameSquare.BoardY}";
+            Id = $"x{gameSquare.BoardX}y{gameSquare.BoardY}";
         }
     }
 }

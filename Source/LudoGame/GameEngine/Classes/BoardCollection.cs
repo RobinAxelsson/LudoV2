@@ -20,15 +20,20 @@ namespace LudoGame.GameEngine.Classes
             var result = _allPawn.Exists(p => p.Equals(pawn));
             if (result == true)
             {
-                pawn.X = 0;
-                pawn.Y = 0;
+                pawn.x = 0;
+                pawn.y = 0;
                 _allPawn.Remove(pawn);
             }
             return result;
         }
 
-        public List<GameEnum.TeamColor> TeamsLeft() => _allPawn.Select(p => p.Color).ToList();
-        public List<Pawn> GetTeamPawns(GameEnum.TeamColor color) => _allPawn.FindAll(p => p.Color == color);
+        public Pawn GetTruePawn(Pawn pawn)
+        {
+            var pawns = _allPawn;
+            return _allPawn.SingleOrDefault(p => p.id == pawn.id);
+        }
+        public List<GameEnum.TeamColor> TeamsLeft() => _allPawn.Select(p => p.color).ToList();
+        public List<Pawn> GetTeamPawns(GameEnum.TeamColor color) => _allPawn.FindAll(p => p.color == color);
         public Pawn FurthestPawn(GameEnum.TeamColor color)
         {
             var path = TeamPath(color);
@@ -45,7 +50,7 @@ namespace LudoGame.GameEngine.Classes
         {
             var pawns = PawnsOnSquare(square);
             if (pawns.Count == 0) return false;
-            if (pawns[0].Color == color) return true;
+            if (pawns[0].color == color) return true;
             return false;
         }
 
@@ -63,7 +68,7 @@ namespace LudoGame.GameEngine.Classes
         }
         public List<Pawn> EnemiesOnSquare(GameSquare targetSquare, GameEnum.TeamColor color)
         {
-            return _allPawn.FindAll(p => p.X == targetSquare.BoardX && p.Y == targetSquare.BoardY && p.Color != color);
+            return _allPawn.FindAll(p => p.x == targetSquare.BoardX && p.y == targetSquare.BoardY && p.color != color);
         }
         public List<Pawn> GetAllPawns()
         {
@@ -71,11 +76,11 @@ namespace LudoGame.GameEngine.Classes
         }
         public GameSquare CurrentSquare(Pawn pawn)
         {
-            return _boardSquares.Find(x => x.BoardX == pawn.X && x.BoardY == pawn.Y);
+            return _boardSquares.Find(x => x.BoardX == pawn.x && x.BoardY == pawn.y);
         }
         public List<GameSquare> EnemySquares(GameEnum.TeamColor color)
         {
-            var enemyPawns = _allPawn.FindAll(s => s.Color != color);
+            var enemyPawns = _allPawn.FindAll(s => s.color != color);
             var enemySquares = new List<GameSquare>();
             foreach (var p in enemyPawns)
             {

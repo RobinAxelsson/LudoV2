@@ -19,7 +19,7 @@ namespace LudoDataAccess.Database
                 .HasKey(o => new { o.Game, o.AccountId }); //Composite key => only same Account once in every game.
 
             modelBuilder.Entity<Player>()
-                .HasAlternateKey(o => new { o.Color, o.Game }); //Unique constraint color and game => no duplicate colors.
+                .HasAlternateKey(o => new { o.color, o.Game }); //Unique constraint color and game => no duplicate colors.
 
             modelBuilder.Entity<Account>()
                 .HasAlternateKey(o => new { o.EmailAdress }); //Same e-mail is only allowed once.

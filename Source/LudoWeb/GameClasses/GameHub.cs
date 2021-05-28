@@ -39,7 +39,7 @@ namespace LudoWeb.GameClasses
         {
             if (pawns != null)
             {
-                Debug.WriteLine(JsonConvert.SerializeObject(pawns));
+                Debug.WriteLine("ReceivePawns-pawns: " +JsonConvert.SerializeObject(pawns));
                 var connectionId = Context.ConnectionId;
                 
                 _networkManager.RedirectPickedPawnFromGameHub(pawns, connectionId);

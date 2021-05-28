@@ -31,7 +31,7 @@ namespace LudoGame.GameEngine.AI
             else
                 WriteLogging = x => x = "";
 
-            LoggerMessage = $"{DateTime.Now.ToShortTimeString()}: Initializing Stephan. Color: {Color}";
+            LoggerMessage = $"{DateTime.Now.ToShortTimeString()}: Initializing Stephan. color: {Color}";
             WriteLogging(LoggerMessage);
             LoggerMessage = "";
         }
@@ -46,7 +46,11 @@ namespace LudoGame.GameEngine.AI
             LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Calculating play...";
             StephanThrowEvent?.Invoke(this, diceRoll);
             var result = CalculatePlay(playerOption);
-            Task.Delay(2000);
+            if (playerOption.PawnsToMove.Length > 0)
+            {
+                Thread.Sleep(3000);
+            }
+            
             if (result.takeout)
             {
                 if (result.takeoutCount == 2)

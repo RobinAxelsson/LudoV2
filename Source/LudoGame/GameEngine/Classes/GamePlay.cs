@@ -57,23 +57,14 @@ namespace LudoGame.GameEngine.Classes
                     foreach (var player in _orderedPlayers)
                     {
                         int diceRoll = _rollDice();
-
+                        var playerType = player.GetType().Name;
                         var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
-                        Debug.WriteLine("player option: " + JsonConvert.SerializeObject(playerOption));
+                        Debug.WriteLine(playerType + " got option: " + JsonConvert.SerializeObject(playerOption));
                         var pawns = await player.ChoosePlay(playerOption);
+                        Debug.WriteLine(playerType + " made choice");
                         bool valid = _validator.ValidateResponse(playerOption, pawns);
-
+                        Debug.WriteLine(playerType + " pawns is validated: " + valid);
                         if (valid) _action.Act(pawns, diceRoll);
-
-                        //else
-                        //{
-                        //    await player.ChoosePlay(playerOption);
-                        //    _gameEvent.InvokeOnInvalidResponseEvent(player);
-                        //}
-
-                       
-
-                        //_gameEvent.InvokeOnPlayerHasMoved(pawns);
                         Debug.WriteLine(player.Color + "has finnished round!");
                     }
 
