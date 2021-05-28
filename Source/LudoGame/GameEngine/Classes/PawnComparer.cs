@@ -10,13 +10,13 @@ namespace LudoGame.GameEngine.Classes
         {
             if
                 (
-                a.X == b.X &&
-                a.Y == b.Y &&
-                a.Color == b.Color
+                a.x == b.x &&
+                a.y == b.y &&
+                a.color == b.color
                 ) return true;
             return false;
         }
 
-        public int GetHashCode([DisallowNull] Pawn obj) => HashCode.Combine(obj.Color, obj.X, obj.Y);
+        public int GetHashCode([DisallowNull] Pawn obj) => HashCode.Combine(obj.color, obj.x, obj.y);
     }
 }
