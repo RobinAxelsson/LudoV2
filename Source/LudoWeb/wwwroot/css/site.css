@@ -51,7 +51,7 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 a.text-dark:focus, a.text-dark:hover {
-    color: grey !important;
+    color: cyan !important;
 }
 a {
     color: white !important;
