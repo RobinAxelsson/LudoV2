@@ -1,5 +1,5 @@
 # Project: LudoTranslation
-* Alters strings using reflection and source files
+Alters strings using reflection and source files
 ## Flow:
 <br>
 
