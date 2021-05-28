@@ -21,34 +21,34 @@
     </div>
 
     <div id="controlBox" style="position: absolute; right: 20px; display: none">
-        <button id="btn_addplayer" onclick="InvitePlayer()" style="margin-bottom:3%; width: 48%">
+        <button class="ButtonStyle" id="btn_addplayer" onclick="InvitePlayer()" style="margin-bottom:3%; width: 48%">
             Invite player
         </button>
-        <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
+        <button class="ButtonStyle" id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
             Add AI
         </button>
-        <button id="btn_moveSelected" onclick="sendPawnSelection()" style="margin-bottom:3%; width: 48%">
+        <button class="ButtonStyle" id="btn_moveSelected" onclick="sendPawnSelection()" style="margin-bottom:3%; width: 48%">
             Move selected
         </button>
-        <button id="btn_takeOutTwo" onclick="sendTakeOutTwoSelection()" style="margin-bottom:3%; width: 48%">
+        <button class="ButtonStyle" id="btn_takeOutTwo" onclick="sendTakeOutTwoSelection()" style="margin-bottom:3%; width: 48%">
             Take out two!
         </button>
-        <button id="btn_rollDice" onclick="rollDice()" style="margin-bottom:3%; width: 48%">
+        <button class="ButtonStyle" id="btn_rollDice" onclick="rollDice()" style="margin-bottom:3%; width: 48%">
             Roll dice!
         </button>
-        <div id="messageBox" style="border: 2px dotted black;">
-            <p id="messagePlayer0" style="        border: 1px solid darkgray;
+        <div id="messageBox" style="border: 4px dotted cyan;">
+            <p id="messagePlayer0" style="        border: 1px solid white;
         margin: 10px"></p>
-            <p id="messagePlayer1" style="        border: 1px solid darkgray;
+            <p id="messagePlayer1" style="        border: 1px solid white;
         margin: 10px"></p>
-            <p id="messagePlayer2" style="        border: 1px solid darkgray;
+            <p id="messagePlayer2" style="        border: 1px solid white;
         margin: 10px"></p>
-            <p id="messagePlayer3" style="        border: 1px solid darkgray;
+            <p id="messagePlayer3" style="        border: 1px solid white;
         margin: 10px"></p>
         </div>
-        <button onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">StartGame game</button>
+        <button class="ButtonStyle" onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">StartGame game</button>
         <div style="        margin-top: 10%;
-        border: 1px solid darkgray
+        border: 1px solid white
 " id="chatBox">
             <ul id="messagesList"></ul>
             <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
@@ -91,6 +91,15 @@
     <img class="green-pawn" src="~/images/Pawns/green_64.png" style="display: none">
 </body>
 <style>
+    .ButtonStyle {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+    }
     .centerImg {
         display: block;
         margin-left: auto;
@@ -101,7 +110,23 @@
   height: 200px;
   position: relative;
 }
+    .center button {
+        background-color: #4CAF50;
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
+    }
 .center {
+     background-color: #4CAF50;
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        cursor: pointer;
   margin: 0;
   position: absolute;
   top: 90%;
