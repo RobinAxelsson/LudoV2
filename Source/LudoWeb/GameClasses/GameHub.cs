@@ -60,7 +60,7 @@ namespace LudoWeb.GameClasses
             var proxy = _networkManager.GetGroupProxy(Context.ConnectionId);
             await proxy.SendAsync("NewChat", message);
         }
-
+     
         public async Task ValidateToken(string token)
         {
             //If token is null we will just skip ahead and return the gameId
@@ -212,6 +212,11 @@ namespace LudoWeb.GameClasses
         public async Task SendRoomMessage(string playerName, string input, string gameId)
         {
          await _networkManager.SendGameMessage(playerName, input, gameId);
+        }
+        public async Task SendRolledMessage(string playerName, string rollMessage, int diceRoll, string gameId)
+        {
+            await _networkManager.SendRolledMessage(playerName, rollMessage, diceRoll, gameId);
+            //"SendRolledMessage", GlobalPlayerName, " rolled ", diceRoll, gameId
         }
         public async Task RequestTranslation(string[] properties, string language)
         {

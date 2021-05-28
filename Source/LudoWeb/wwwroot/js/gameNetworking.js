@@ -234,7 +234,8 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
 
      }
  });
- function StartGame() { 
+function StartGame() { 
+     document.getElementById("btn_startGame").disabled = true;
      SendMessage("Starting game! Woho!");
      connection.invoke("StartGame", gameId);
 }
@@ -249,6 +250,7 @@ connection.on("GameStarted", function () {
      document.getElementById("btn_addplayer").style.display = 'none';
      document.getElementById("btn_startGame").style.display = 'none';
      document.getElementById("messageBox").style.display = 'none';
+   
 });
 
  function SendMessage(str) {
@@ -266,7 +268,8 @@ connection.on("GameStarted", function () {
          document.getElementById("txt_message").value = "";
       
      }
- }
+}
+
 connection.on("ReceiveGameMessage", function (playerName, message) {
     var li = document.createElement("li");
     document.getElementById("messagesList").appendChild(li);

@@ -69,9 +69,7 @@ function rollDice() {
     console.log("You pressed roll dice button.");
     if (diceRoll != null) {
         console.log(diceRoll);
-        var li = document.createElement("li");
-        document.getElementById("messagesList").appendChild(li);
-        li.textContent = GlobalPlayerName + " rolled: " + diceRoll;
+        SendRolledMessage();
     }
     if (optionPawns == null || optionPawns.length === 0) {
         console.log("You will pass.");
@@ -85,6 +83,16 @@ function rollDice() {
     }
     select("#btn_moveSelected").disabled = false;
 }
+function SendRolledMessage() {
+    connection.invoke("SendRolledMessage", GlobalPlayerName, " rolled ", diceRoll, gameId).catch(function (err) {
+        return console.error(err.toString());
+    });
+}
+connection.on("ReceiveRolledMessage", function (playerName, rollMessage, diceRoll) {
+    let listitem = document.createElement("li");
+    listitem.textContent = playerName + rollMessage + diceRoll;
+    document.getElementById("messagesList").appendChild(listitem);
+});
 function sendPawnSelection() {
     console.log("You pressed send pawn button.");
     console.log("About to send: " + selectedPawn);

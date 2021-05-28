@@ -9,6 +9,7 @@ namespace LudoWeb.GameInterfaces
     {
         IGameRoom AddGameRoom(string gameId);
         Task SendGameMessage(string playerName, string message, string gameId);
+        Task SendRolledMessage(string playerName, string rollMessage, int diceRoll, string gameId);
         Task UpdatePawns(Pawn[] pawns, string gameId);
         Task AskPlayerOption(string connectionId, PlayerOption playerOption);
         IClientProxy GetClientProxy(string connectionId);

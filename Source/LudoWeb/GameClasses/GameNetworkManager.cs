@@ -40,6 +40,12 @@ namespace LudoWeb.GameClasses
             await _gameContext.Clients.Group(gameId)
                 .SendAsync("ReceiveGameMessage",playerName, message);
         }
+        public async Task SendRolledMessage(string playerName, string rollMessage, int diceRoll, string gameId)
+        {
+
+            await _gameContext.Clients.Group(gameId)
+                .SendAsync("ReceiveRolledMessage", playerName, rollMessage, diceRoll);
+        }
 
         public async Task StartGame(string gameId)
         {
