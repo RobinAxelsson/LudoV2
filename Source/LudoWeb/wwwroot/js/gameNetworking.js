@@ -1,3 +1,4 @@
+var isHost = false;
 var Translations =
     [
         "Game_H1Title",
@@ -10,8 +11,9 @@ var Translations =
         "Game_PlayerJoinedSuffix",
         "Game_TakeOutTwo",
         "Game_RollDice",
-        "Game_MoveSelected"
-        
+        "Game_MoveSelected",
+        "Game_JoinGameTitle",
+        "Game_JoinGameButton"
         //"Enter the email of whom you wish to invite"
     ];
 console.log(document.cookie);
@@ -80,7 +82,9 @@ connection.on("GameRoomAdded", function(returnGameId){
     document.getElementById("welcomeContainer").style.display = 'none';
     document.getElementById("controlBox").style.display = 'unset';
     document.getElementById("playingField").style.display = 'unset';
+    isHost = true;
     SendJoinNotification(false);
+
 });
 connection.on("PlayerNameReceived", function(playerName) {
     if(gameId == null) {
@@ -127,27 +131,32 @@ connection.on("TokenValidated", function(result) {
 });
  connection.on("RoomExists", function(result) {
      if(result) {
-         console.log("Invoking JoinRoom")
-         //(string connectionId, string gameId, string playerName, string token)
-         connection.invoke("JoinRoom", connection.connectionId, gameId, GlobalPlayerName, getCookie("token"));
+         document.getElementById("h1Title").innerHTML = Translations[11];
+         document.getElementById("btn_createGame").innerHTML = Translations[12];
+         document.getElementById("btn_createGame").onclick = JoinGameButtonClick;
      }
      else {
          document.getElementById("h1Title").innerHTML = Translations[5];
          console.log("Room was not found")
      }
  });
- connection.on("JoinedRoom", function(result, message) {
+connection.on("JoinedRoom", function (result, message) {
     console.log("Result: " + result);
     console.log("Message: " + message);
-     document.getElementById("welcomeContainer").style.display = 'none';
-     document.getElementById("controlBox").style.display = 'unset';
-     document.getElementById("playingField").style.display = 'unset';
-     document.getElementById("btn_addai").disabled = true;
-     document.getElementById("btn_addplayer").disabled = true;
-     document.getElementById("btn_startGame").disabled = true;
-     SendJoinNotification(true);
-     
+    document.getElementById("welcomeContainer").style.display = 'none';
+    document.getElementById("controlBox").style.display = 'unset';
+    document.getElementById("playingField").style.display = 'unset';
+    document.getElementById("btn_addai").disabled = true;
+    document.getElementById("btn_addplayer").disabled = true;
+    document.getElementById("btn_startGame").disabled = true;
+    SendJoinNotification(true);
+ 
  });
+function JoinGameButtonClick(){
+    console.log("Invoking JoinRoom")
+    //(string connectionId, string gameId, string playerName, string token)
+    connection.invoke("JoinRoom", connection.connectionId, gameId, GlobalPlayerName, getCookie("token"));
+}
  function RedirectToLogin(gameId) {
      let lastUrl = "";
      if(window.location.href.includes("gameId")) {
@@ -218,23 +227,30 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
      if(totalLength >= 4) {
          document.getElementById("btn_addai").disabled = true;
          document.getElementById("btn_addplayer").disabled = true;
-         document.getElementById("btn_startGame").disabled = false;
+         if (isHost) {
+             document.getElementById("btn_startGame").disabled = false;
+         }
+
+
      }
  });
  function StartGame() { 
      SendMessage("Starting game! Woho!");
      connection.invoke("StartGame", gameId);
- }
- connection.on("GameStarted", function() {
-     var audio = new Audio('audio/sound.mp3');
-     audio.loop = true;
+}
+
+connection.on("GameStarted", function () {
+    var audio = new Audio('audio/sound.mp3');
+    audio.loop = true;
      audio.play();
-     audio.volume = 0.3;
+    audio.volume = 0.3;
+    PlaySound();
      document.getElementById("btn_addai").style.display = 'none';
      document.getElementById("btn_addplayer").style.display = 'none';
      document.getElementById("btn_startGame").style.display = 'none';
      document.getElementById("messageBox").style.display = 'none';
- });
+});
+
  function SendMessage(str) {
      if(str != null) {
          connection.invoke("SendRoomMessage", GlobalPlayerName, str, gameId).catch(function (err) {

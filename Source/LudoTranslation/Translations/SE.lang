@@ -46,3 +46,5 @@ Game_PlayerJoinedSuffix== har gått med
 Game_TakeOutTwo==Ta ut två
 Game_RollDice==Slå tärning
 Game_MoveSelected==Flytta markerad
+Game_JoinGameTitle==Match hittad! Vill du gå med? :D
+Game_JoinGameButton==Släng in mig!

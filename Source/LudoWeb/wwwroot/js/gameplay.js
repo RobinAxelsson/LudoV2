@@ -119,6 +119,7 @@ function sendTakeOutTwoSelection() {
         let sendPawns = [];
         sendPawns[0] = pawn1;
         sendPawns[1] = pawn2;
+        console.log("Sending pawn array");
         sendPawnArray(sendPawns);
         resetOnSend();
     }

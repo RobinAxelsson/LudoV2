@@ -175,6 +175,7 @@ namespace LudoWeb.GameClasses
                         var client = new Client(Context.ConnectionId) {Player = player, Name = playerName};
                         room.Clients.Add(client);
                         await _networkManager.AddUserToGroup(connectionId, gameId);
+                        room.ConnectNetworkPlayer(client);
                         await Clients.Caller.SendAsync("JoinedRoom",true, "success");
                     }
                     catch (Exception ex)

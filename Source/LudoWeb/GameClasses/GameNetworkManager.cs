@@ -68,7 +68,9 @@ namespace LudoWeb.GameClasses
         public async Task AddUserToGroup(string connectionId, string gameId)
         {
             await _gameContext.Groups.AddToGroupAsync(connectionId, gameId);
+            
         }
+       
         public async Task UpdatePawns(Pawn[] pawns, string gameId)
         {
             await GetGroupProxy(gameId)

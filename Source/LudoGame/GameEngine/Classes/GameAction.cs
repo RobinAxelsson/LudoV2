@@ -29,9 +29,11 @@ namespace LudoGame.GameEngine.Classes
                 if (diceRoll != 6) throw new Exception("Pawns can not be two if dice is not 6.");
                 
                 var basePawns = _boardCollection.PawnsInBase(teamColor);
+                Debug.WriteLine("BasePawn count: " + basePawns.Count);
                 for (int i = 0; i < 2; i++)
                 {
-                    Move(basePawns[i], 1);
+                    
+                    Move(basePawns[0], 1);
                 }
                 return;
             }

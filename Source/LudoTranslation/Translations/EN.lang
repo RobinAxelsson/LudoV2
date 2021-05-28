@@ -46,3 +46,5 @@ Game_PlayerJoinedSuffix== has joined
 Game_TakeOutTwo==Take out two
 Game_RollDice==Roll dice
 Game_MoveSelected==Move selected
+Game_JoinGameTitle==Game found! Wanna join? :D
+Game_JoinGameButton==Join me!
