@@ -69,7 +69,7 @@ namespace LudoDataAccess
 
             return (false, errorList.ToArray());
         }
-        public (bool success, string message) Login(string username, string password)
+        public (bool success, string message, string message2) Login(string username, string password)
         {
             var usernameIsEmail = false;
             //Set account where username is PlayerName
@@ -95,7 +95,7 @@ namespace LudoDataAccess
                     _repository.SaveChanges();
                  //   var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
                  var expiry = token.ExpiryDate.ToString("R");
-                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/");
+                 return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/",  $"lang={account.Language};expiry={expiry};sameSite=Lax;path=/");
                 }
             }
             else
@@ -112,11 +112,11 @@ namespace LudoDataAccess
                     _repository.Add(token);
                     _repository.SaveChanges();
                     var expiry = token.ExpiryDate.ToString("R").Replace("GMT", "UTC");
-                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/");
+                    return (true, $"token={tokenId};expiry={expiry};sameSite=Lax;path=/",  $"lang={account.Language};expiry={expiry};sameSite=Lax;path=/");
                 }
             }
             return
-                (false, "Incorrect username or password");
+                (false, "Incorrect username or password", null);
         }
 
         public (bool success, string message) ValidateToken(string token)

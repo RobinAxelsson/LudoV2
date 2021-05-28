@@ -32,3 +32,14 @@ Register_AccountNameLengthLabel==Account name has to be at least 4 characters
 Register_AccountNameSpecialsLabel==Account name cannot contain any special characters
 Register_AccountNameIsTaken==Account name is taken
 Register_EmailAlreadyRegistered==Email is already registered
+
+
+
+Game_H1Title==Welcome to Ludo!
+Game_CreateGameButton==Create Game
+Game_AddPlayerButton==Invite Player
+Game_AddAiButton==Add AI
+Game_StartGameButton==Start Game
+Game_CouldNotFindTitle==404 - Could not find the requested game :(
+Game_InviteEnterEmail==Enter the email address of the person you wish to invite.
+Game_PlayerJoinedSuffix== has joined

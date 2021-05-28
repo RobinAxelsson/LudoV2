@@ -51,11 +51,26 @@ namespace LudoDataAccess.SMTP
                 }
             }
         }
+        private string GetEmaiLBodyFromResoruce(string resourceName)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            // var resourceName = "MyCompany.MyProduct.MyFile.txt";
+            var result = "";
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var reader = new StreamReader(stream))
+            {
+                result = reader.ReadToEnd();
+            }
+            return result;
+        }
+
         private string GenerateBody(string gameId, string accountId, string gameUrl)
         {
-            
+            /*
             var doc = File.ReadAllText(Path.GetDirectoryName(Assembly.GetEntryAssembly()?.Location) +
                              "/SMTP/Resources/emailbody_raw.html");
+                             */
+            var doc = GetEmaiLBodyFromResoruce("LudoDataAccess.SMTP.Resources.emailbody_raw.html");
             doc = doc
                 .Replace("GAMEID", gameId)
                 .Replace("ACCOUNTID", accountId)

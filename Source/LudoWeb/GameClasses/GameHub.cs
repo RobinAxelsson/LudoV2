@@ -10,6 +10,7 @@ using LudoDataAccess.Database;
 using LudoDataAccess.Models;
 using LudoDataAccess.SMTP;
 using LudoGame.GameEngine.Classes;
+using LudoTranslation;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LudoWeb.GameClasses
@@ -20,11 +21,13 @@ namespace LudoWeb.GameClasses
         private GameNetworkManager _networkManager;
         private readonly IDatabaseManagement _dbm;
         private readonly EmailClient _emailClient;
-        public GameHub(GameNetworkManager manager, IDatabaseManagement dbm, EmailClient emailClient)
+        private readonly TranslationEngine _engine;
+        public GameHub(GameNetworkManager manager, IDatabaseManagement dbm, EmailClient emailClient, TranslationEngine engine)
         {
             _networkManager = manager;
             _dbm = dbm;
             _emailClient = emailClient;
+            _engine = engine;
         }
         public async Task SelectColor(string color)
         {
@@ -197,6 +200,15 @@ namespace LudoWeb.GameClasses
         public async Task SendRoomMessage(string playerName, string input, string gameId)
         {
          await _networkManager.SendGameMessage(playerName, input, gameId);
+        }
+        public async Task RequestTranslation(string[] properties, string language)
+        {
+            var dict = _engine.InitializeLanguage(language);
+            for (var i = 0; i <= properties.Length - 1; i++)
+            {
+                properties[i] = dict.GetPropertyValue(properties[i]);
+            }
+            await Clients.Caller.SendAsync("TranslationDelivery", properties);
         }
         private string ReturnPlayerName()
         {

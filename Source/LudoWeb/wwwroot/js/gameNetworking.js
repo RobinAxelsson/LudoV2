@@ -1,14 +1,60 @@
+var Translations =
+    [
+        "Game_H1Title",
+        "Game_CreateGameButton",
+        "Game_AddPlayerButton",
+        "Game_AddAiButton",
+        "Game_StartGameButton",
+        "Game_CouldNotFindTitle",
+        "Game_InviteEnterEmail",
+        "Game_PlayerJoinedSuffix"
+        
+        //"Enter the email of whom you wish to invite"
+    ];
+console.log(document.cookie);
+/*
+    document.getElementById("h1Title").innerHTML = Translations[0];
+    document.getElementById("btn_createGame").innerHTML = Translations[1];
+    document.getElementById("btn_addplayer").innerHTML = Translations[2];
+    document.getElementById("btn_addai").innerHTML = Translations[3];
+    document.getElementById("btn_startGame").innerHTML = Translations[4];
+*/
 "use strict";
 var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 connection.start();
 var GlobalPlayerName = "";
 var mainLoopId = setInterval(function(){
     if(connection.connectionStarted) {
+        BeginTranslation();
         CheckUrl();
         clearInterval(mainLoopId);
     }
 }, 40);
 var gameId = null;
+function BeginTranslation() {
+    let language = "";
+    if(getCookie("lang") == null) {
+        language = document.getElementById("DefaultLanguage").innerHTML;
+    }
+    else {
+        language = getCookie("lang");
+    }
+    console.log(language);
+    connection.invoke("RequestTranslation", Translations, language);
+}
+connection.on("TranslationDelivery", function(translationArray) {
+    Translations = translationArray;
+    Translate();
+});
+
+function Translate() {
+    document.getElementById("h1Title").innerHTML = Translations[0];
+    document.getElementById("btn_createGame").innerHTML = Translations[1];
+    document.getElementById("btn_addplayer").innerHTML = Translations[2];
+    document.getElementById("btn_addai").innerHTML = Translations[3];
+    document.getElementById("btn_startGame").innerHTML = Translations[4];
+    
+}
 function CheckUrl() {
     if(window.location.href.includes("gameId")) {
         console.log("has gameId in URL");
@@ -80,7 +126,7 @@ connection.on("TokenValidated", function(result) {
          connection.invoke("JoinRoom", connection.connectionId, gameId, GlobalPlayerName, getCookie("token"));
      }
      else {
-         document.getElementById("h1Title").innerHTML = "404 - Could not find the requested game :("
+         document.getElementById("h1Title").innerHTML = Translations[5];
          console.log("Room was not found")
      }
  });
@@ -125,7 +171,7 @@ function getCookie(name) {
     if (parts.length === 2) return parts.pop().split(';').shift();
 }
 function InvitePlayer() {
-    var person = prompt("Enter the email of whom you wish to invite", "Harry Potter");
+    var person = prompt(Translations[6]);
     if (person != null) {
         //string recipient, string gameId, string gameUrl, string token
         let gameUrl = "";
@@ -156,12 +202,12 @@ function SendJoinNotification(hasJoined) {
 }
 //Add name to list
 connection.on("JoinGameMessage", function(playerName, clientArray) {
-       document.getElementById("messagePlayer" + clientArray.toString()).innerHTML = playerName + " has joined";
+       document.getElementById("messagePlayer" + clientArray.toString()).innerHTML = playerName + Translations[7];
         GetRoomMembers();
 });
  connection.on("RetrieveJoinNotifications", function(playerNames, playerIndex, totalLength) {
      for (let i = 0; i < playerIndex.length; i++) {
-         document.getElementById("messagePlayer" + playerIndex[i].toString()).innerHTML = playerNames[i] + " has joined";
+         document.getElementById("messagePlayer" + playerIndex[i].toString()).innerHTML = playerNames[i] + Translations[7];
      }
      if(totalLength >= 4) {
          document.getElementById("btn_addai").disabled = true;
