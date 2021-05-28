@@ -18,6 +18,8 @@ All the game logic happens on the server.
 # Key Classes
 - [GameNetworkManager.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameNetworkManager.cs)
 - [NetworkPlayer.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/NetworkPlayer.cs)
+- [GameRoom.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameRoom.cs)
+- [GamePlay.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoGame/GameEngine/Classes/GamePlay.cs)
 # Architecture depencency diagrams
 ## We have spent a lot of time discussing the project architecture and made a big shift last 5 days when removing the API-project and replacing all API-calls with SignalR.
 ![image](https://user-images.githubusercontent.com/63591629/120038766-0dde3280-c004-11eb-9ae9-acc219e9d768.png)
