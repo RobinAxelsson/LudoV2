@@ -34,11 +34,12 @@ connection.on("ReceiveOption", function (playerOption) {
     optionPawns = playerOption.PawnsToMove;
     diceRoll = playerOption.DiceRoll;
     canTakeOutTwo = playerOption.canTakeOutTwo;
-}); //TODO
-connection.on()
-function receiveOption(playerOption) {
+});
+connection.on("UpdatePawns",
+    function(inPawns) {
+        refreshPawns(inPawns);
+    });
 
-} 
 function refreshPawns(inPawns) {
     let currentPawns = boardPawns;
     console.log(inPawns);

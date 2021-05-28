@@ -26,6 +26,7 @@ namespace LudoGame.GameEngine.Classes
          
         }
 
+
         private readonly Func<IGamePlay, bool> _continuePlay;
         private readonly Func<List<IGamePlayer>, IGamePlayer> _getFirstPlayer;
         private readonly Func<int> _rollDice;
@@ -42,7 +43,7 @@ namespace LudoGame.GameEngine.Classes
         {
             return _orderedPlayers.Select(p => p).ToList();
         }
-        public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players)
+        public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players, Func<Pawn[], Task> refreshPawns)
         {
             try
             {
@@ -69,7 +70,9 @@ namespace LudoGame.GameEngine.Classes
                         //    _gameEvent.InvokeOnInvalidResponseEvent(player);
                         //}
 
-                        _gameEvent.InvokeOnPlayerHasMoved(pawns);
+                        await refreshPawns(pawns);
+
+                        //_gameEvent.InvokeOnPlayerHasMoved(pawns);
                         Debug.WriteLine(player.Color + "has finnished round!");
                     }
 

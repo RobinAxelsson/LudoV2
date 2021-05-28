@@ -8,6 +8,7 @@ using LudoGame.GameEngine.Configuration;
 using LudoGame.GameEngine.Interfaces;
 using LudoDataAccess.Models;
 using LudoGame.GameEngine.AI;
+using LudoGame.GameEngine.Classes;
 using LudoWeb.GameInterfaces;
 using Newtonsoft.Json;
 
@@ -50,6 +51,11 @@ namespace LudoWeb.GameClasses
         private List<(GameEnum.TeamColor Color, Client Client)> _waitingPlayers { get; set; }
         private List<GameEnum.TeamColor> Colors { get; set; }
         private Client GetClient(string connectionId) => Clients.SingleOrDefault(x => x.ConnectionId == connectionId);
+
+        private async Task RefreshPawns(Pawn[] pawns)
+        {
+            await _networkManager.UpdatePawns(pawns, GameId);
+        }
         public async Task StartGame()
         {
             var gamePlayers = CreateGamePlayers();
@@ -58,7 +64,7 @@ namespace LudoWeb.GameClasses
             Game = new Game(GameId);
             Game.GameStatus = ModelEnum.GameStatus.Created;
             Debug.WriteLine("GamePlay is about to start");
-            _gamePlay.Start(gamePlayers);
+            await _gamePlay.Start(gamePlayers, RefreshPawns);
         }
         private List<IGamePlayer> CreateGamePlayers()
         {
