@@ -56,6 +56,9 @@ namespace LudoTranslation {
         public string Game_CouldNotFindTitle { get; private set; }
         public string Game_InviteEnterEmail { get; private set; }
         public string Game_PlayerJoinedSuffix { get; private set; }
+        public string Game_TakeOutTwo { get; set; }
+        public string Game_RollDice { get; set; }
+        public string Game_MoveSelected { get; set; }
         #endregion
         public string GetPropertyValue(string input)
         {

@@ -43,3 +43,6 @@ Game_StartGameButton==Start Game
 Game_CouldNotFindTitle==404 - Could not find the requested game :(
 Game_InviteEnterEmail==Enter the email address of the person you wish to invite.
 Game_PlayerJoinedSuffix== has joined
+Game_TakeOutTwo==Take out two
+Game_RollDice==Roll dice
+Game_MoveSelected==Move selected

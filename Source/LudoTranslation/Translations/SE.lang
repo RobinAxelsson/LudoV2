@@ -43,3 +43,6 @@ Game_StartGameButton==Starta spel
 Game_CouldNotFindTitle==404 - Kunde inte hitta den begärda matchen :(
 Game_InviteEnterEmail==Mata in e-postadressen på personen du vill bjuda in.
 Game_PlayerJoinedSuffix== har gått med
+Game_TakeOutTwo==Ta ut två
+Game_RollDice==Slå tärning
+Game_MoveSelected==Flytta markerad

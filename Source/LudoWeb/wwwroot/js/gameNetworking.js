@@ -7,7 +7,10 @@ var Translations =
         "Game_StartGameButton",
         "Game_CouldNotFindTitle",
         "Game_InviteEnterEmail",
-        "Game_PlayerJoinedSuffix"
+        "Game_PlayerJoinedSuffix",
+        "Game_TakeOutTwo",
+        "Game_RollDice",
+        "Game_MoveSelected"
         
         //"Enter the email of whom you wish to invite"
     ];
@@ -53,6 +56,9 @@ function Translate() {
     document.getElementById("btn_addplayer").innerHTML = Translations[2];
     document.getElementById("btn_addai").innerHTML = Translations[3];
     document.getElementById("btn_startGame").innerHTML = Translations[4];
+    document.getElementById("btn_takeOutTwo").innerHTML = Translations[8];
+    document.getElementById("btn_rollDice").innerHTML = Translations[9];
+    document.getElementById("btn_moveSelected").innerHTML = Translations[10];
     
 }
 function CheckUrl() {
