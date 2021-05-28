@@ -221,6 +221,7 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
  }
  connection.on("GameStarted", function() {
      var audio = new Audio('audio/sound.mp3');
+     audio.loop = true;
      audio.play();
      audio.volume = 0.3;
      document.getElementById("btn_addai").style.display = 'none';
