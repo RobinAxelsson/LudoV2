@@ -1,4 +1,4 @@
-# Project: LudoDataAccess
+# Project: LudoDataAccess; EmailClient
 Generates a HTML Email body and sends it to clients using SMTP-protocol.
 ## Flow:
 <br>
