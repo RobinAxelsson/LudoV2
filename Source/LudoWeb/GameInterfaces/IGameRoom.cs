@@ -12,7 +12,7 @@ namespace LudoWeb.GameInterfaces
         Game Game { get; }
         List<Client> Clients { get; set; }
         Task StartGame();
-        void AddAiPlayer();
+        void ConnectAiPlayer(Client client);
         void ConnectNetworkPlayer(Client client);
     }
 }

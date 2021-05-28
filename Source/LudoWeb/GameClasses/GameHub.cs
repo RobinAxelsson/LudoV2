@@ -37,9 +37,29 @@ namespace LudoWeb.GameClasses
         }
         public async Task ReceivePawns(Pawn[] pawns)
         {
-            var player = Context.ConnectionId;
-            var pawn = pawns[0];
-            Debug.WriteLine(JsonConvert.SerializeObject(pawns[0]));
+            
+            if(pawns != null && pawns.Length != 0)
+            {
+                var player = Context.ConnectionId;
+                var pawn = pawns[0];
+                Debug.WriteLine(JsonConvert.SerializeObject(pawns[0]));
+                if (pawns.Length == 2)
+                {
+                    //Dostuff
+                }
+                else if(pawns.Length == 1)
+                {
+                    //Do other stuff
+                }
+                else
+                {
+                    //Cheater!!!! (or my game is broken idk)
+                }
+
+              
+
+            }
+         
         }
         public async Task ConnectToGameRoom(string gameId)
         {
@@ -121,7 +141,7 @@ namespace LudoWeb.GameClasses
             };
             var client = new Client(null) {Player = player, Name = ReturnPlayerName() + "(AI)"};
             room.Clients.Add(client);
-            room.AddAiPlayer();
+            room.ConnectAiPlayer(client);
             await Clients.Caller.SendAsync("AiAdded");
         }
         public async Task JoinGameMessage(string playerName, string gameId)

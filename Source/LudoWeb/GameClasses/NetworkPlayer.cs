@@ -39,22 +39,27 @@ namespace LudoWeb.GameClasses
         public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
             Debug.WriteLine("Player ChoosePlay");
+       
             if (Disconnected == true && _backupStephan != null)
             {
                 return await _backupStephan.ChoosePlay(playerOption);
             }
+       
+            Debug.WriteLine("About to ask player for option");
             await _networkManager.AskPlayerOption(_client.ConnectionId, playerOption);
-            int Count = 0;
-            do
-            {
-                await Task.Delay(1000);
-                if (_timeoutSeconds < Count)
-                {
-                    Debug.WriteLine("Player was timedout");
-                    return await _backupStephan.ChoosePlay(playerOption);
-                }
-            } while (PawnsToMove.Count == 0);
-
+        
+           int Count = 0;
+           do
+           {
+               Count++;
+               await Task.Delay(1000);
+               if (Count >= _timeoutSeconds) 
+               {
+                   Debug.WriteLine("Player was timedout");
+                   return await _backupStephan.ChoosePlay(playerOption);
+               }
+           } while (PawnsToMove.Count == 0);
+         
             var responsePawn = PawnsToMove.ToArray();
             PawnsToMove.Clear();
             return responsePawn;

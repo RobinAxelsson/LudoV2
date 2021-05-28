@@ -1,7 +1,6 @@
 "use strict";
 
-var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
-connection.start();
+
 
 //set up
 function setUpPawns() {
@@ -27,13 +26,18 @@ var canTakeOutTwo = null;
 var selectedSquare = null;
 var selectedPawn = null;
 setUpPawns();
+
 //SignalR input
-function receiveOption(playerOption) {
+connection.on("ReceiveOption", function (playerOption) {
     console.log("Received from networkmanager:")
     console.log(playerOption);
     optionPawns = playerOption.PawnsToMove;
     diceRoll = playerOption.DiceRoll;
     canTakeOutTwo = playerOption.canTakeOutTwo;
+});
+
+function receiveOption(playerOption) {
+
 } 
 function refreshPawns(inPawns) {
     let currentPawns = boardPawns;
@@ -72,7 +76,7 @@ function rollDice() {
     if (diceRoll !== null) {
         console.log(diceRoll);
     }
-    if (optionPawns.length === 0) {
+    if (optionPawns == null || optionPawns.length === 0) {
         console.log("You will pass.");
         resetOnSend();
         let sendPawns = [];
@@ -114,6 +118,7 @@ function sendTakeOutTwoSelection() {
 //Send SignalR
 function sendPawnArray(pawns) {
     console.log("about to invoke ReceivePawns")
+    console.log(pawns);
     connection.invoke("ReceivePawns", pawns).catch(function (err) {
         return console.error(err.toString());
     });

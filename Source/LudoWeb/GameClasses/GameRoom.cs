@@ -63,24 +63,18 @@ namespace LudoWeb.GameClasses
         private List<IGamePlayer> CreateGamePlayers()
         {
             var gamePlayers = new List<IGamePlayer>();
-            if (_waitingPlayers.Count < 4)
-            {
-                while (_waitingPlayers.Count < 4)
-                {
-                    AddAiPlayer();
-                }
-            }
             foreach (var wp in _waitingPlayers)
             {
-                if (wp.Client == null)
+             if(wp.Client.Player.Type == ModelEnum.PlayerType.Stephan)
                 {
-                    gamePlayers.Add(_factory.AIPlayer(wp.Color, _boardCollection));
+                    var aiPlayer = _factory.AIPlayer(wp.Color, _boardCollection);
+                    gamePlayers.Add(aiPlayer);
                 }
-                else
+             else
                 {
                     var networkPlayer = _factory.NetworkPlayer(
-                        _networkManager, wp.Color, wp.Client,
-                        _factory.AIPlayer(wp.Color, _boardCollection));
+               _networkManager, wp.Color, wp.Client,
+               _factory.AIPlayer(wp.Color, _boardCollection));
                     NetworkPlayers.Add(networkPlayer);
                     gamePlayers.Add(networkPlayer);
                 }
@@ -88,21 +82,23 @@ namespace LudoWeb.GameClasses
 
             return gamePlayers;
         }
-        public void AddAiPlayer()
+        public void ConnectAiPlayer(Client client)
         {
             if (_waitingPlayers.Count < 4)
             {
-                _waitingPlayers.Add((Colors[0], null));
-                Colors.Remove(0);
+                _waitingPlayers.Add((Colors[0], client));
+                Colors.RemoveAt(0);
+               
+              //  Debug.WriteLine(Colors[0]);
             }
         }
         public void ConnectNetworkPlayer(Client client)
         {
            // var client = GetClient(connectionId);
-            if (client.Player != null && _waitingPlayers.Count < 4)
+            if (_waitingPlayers.Count < 4)
             {
                 _waitingPlayers.Add((Colors[0], client));
-                Colors.Remove(0);
+                Colors.RemoveAt(0);
             }
         }
 

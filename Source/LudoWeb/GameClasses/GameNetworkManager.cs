@@ -83,6 +83,7 @@ namespace LudoWeb.GameClasses
         }
         public IClientProxy GetClientProxy(string connectionId)
         {
+        
             return _gameContext.Clients.Client(connectionId);
         }
         public IClientProxy GetGroupProxy(string connectionId)

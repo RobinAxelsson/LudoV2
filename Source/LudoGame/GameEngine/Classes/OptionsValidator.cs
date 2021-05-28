@@ -26,10 +26,13 @@ namespace LudoGame.GameEngine.Classes
             if (pawnResponse.Length > 2) return false;
             if (option.CanTakeOutTwo == false && pawnResponse.Length == 2) return false;
             if (option.CanTakeOutTwo == true && pawnResponse.Length == 2) return true;
-            var pawn = pawnResponse[0];
-            if (option.PawnsToMove.Contains(pawn, _pawnComparer)) return true;
-            if (pawnResponse.Length == 0 && option.PawnsToMove.Length > 0)
-                throw new Exception("Player have to move if they can");
+            if(pawnResponse.Length > 0)
+            {
+                var pawn = pawnResponse[0];
+                if (option.PawnsToMove.Contains(pawn, _pawnComparer)) return true;
+                if (pawnResponse.Length == 0 && option.PawnsToMove.Length > 0)
+                    throw new Exception("Player have to move if they can");
+            } 
             return false;
         }
         private Pawn[] SelectablePawns(GameEnum.TeamColor color, int diceRoll)
