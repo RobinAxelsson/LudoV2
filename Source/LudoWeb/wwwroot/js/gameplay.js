@@ -1,7 +1,5 @@
 "use strict";
 
-
-setUpPawns();
 //set up
 function setUpPawns() {
     fetch('data/set-up-pawns.json')
@@ -195,18 +193,15 @@ function getClickedPawn(square) {
     let imgId = square.firstElementChild.id;
     let pawnId = imgId.split("n")[1];
     for (var i = 0; i < boardPawns.length; i++) {
-        if (boardPawns[i].Id.toString() === pawnId) {
+        if (boardPawns[i].id.toString() === pawnId) {
             return boardPawns[i];
         }
     }
 }
 //if statements
 function hasPawnMoved(inPawns, oldPawn) {
-    console.log("OldPawnHasMoved");
-    console.log(oldPawn);
     for (var i = 0; i < inPawns.length; i++) {
-        console.log("InPawnHasMoved");
-        console.log(inPawns[i]);
+
         let inPawn = inPawns[i];
         if (inPawn.Id === oldPawn.Id && inPawn.X === oldPawn.X && inPawn.Y === oldPawn.Y) {
             return false;
@@ -215,13 +210,7 @@ function hasPawnMoved(inPawns, oldPawn) {
     return true;
 }
 function isPawnEradicated(inPawns, oldPawn) {
-    console.log("OldPawnisPawnEradicated");
-    console.log(oldPawn);
-    console.log("inPawnsEradicated:");
-    console.log(inPawns);
     for (var i = 0; i < inPawns.length; i++) {
-        console.log("InPawnisPawnEradicated");
-        console.log(inPawns[i]);
         let inPawn = inPawns[i];
         if (inPawn.Id === oldPawn.Id) {
             return false;
