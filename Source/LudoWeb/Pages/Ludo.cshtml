@@ -1,10 +1,102 @@
 ﻿@page
+@using System.Diagnostics
 @model LudoWeb.Pages.Ludo
 @{
     ViewData["Title"] = "Play Ludo";
 }
+<html>
+<head>
+    <link rel="stylesheet" href="css/ludo.css">
+</head>
+<body>
+    <var id="DefaultLanguage" style="display: none;">@Model.DefaultRegionCode</var>
+    <img class="centerImg" src="images/LudoBanner_NoShadow.png" style="text-align:center !important;">
+    <div id="welcomeContainer">
+        
+        <br />
+        <h1 id="h1Title" style="text-align:center;">Welcome to Ludo!</h1>
+        <div class="center">
+            <button class="center" id="btn_createGame" onclick="NewGame()">New Game</button>
+        </div>
+    </div>
 
+    <div id="controlBox" style="position: absolute; right: 20px; display: none">
+        <button id="btn_addplayer" onclick="InvitePlayer()" style="margin-bottom:3%; width: 48%">
+            Invite player
+        </button>
+        <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
+            Add AI
+        </button>
+        <button id="btn_moveSelected" onclick="sendPawnSelection()" style="margin-bottom:3%; width: 48%">
+            Move selected
+        </button>
+        <button id="btn_takeOutTwo" onclick="sendTakeOutTwoSelection()" style="margin-bottom:3%; width: 48%">
+            Take out two!
+        </button>
+        <button id="btn_rollDice" onclick="rollDice()" style="margin-bottom:3%; width: 48%">
+            Roll dice!
+        </button>
+        <div id="messageBox" style="border: 2px dotted black;">
+            <p id="messagePlayer0" style="        border: 1px solid darkgray;
+        margin: 10px"></p>
+            <p id="messagePlayer1" style="        border: 1px solid darkgray;
+        margin: 10px"></p>
+            <p id="messagePlayer2" style="        border: 1px solid darkgray;
+        margin: 10px"></p>
+            <p id="messagePlayer3" style="        border: 1px solid darkgray;
+        margin: 10px"></p>
+        </div>
+        <button onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">StartGame game</button>
+        <div style="        margin-top: 10%;
+        border: 1px solid darkgray
+" id="chatBox">
+            <ul id="messagesList"></ul>
+            <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
+        </div>
+    </div>
+    <div id="playingField" class="board-container" style="display: none">
+
+        @for (int y = 0; y < Model.YCount; y++)
+        {
+            <div class="square-row">
+                @for (int x = 0; x < Model.XCount; x++)
+                {
+                    var square = Model.GetGameSquare(x, y);
+                    if (square != null)
+                    {
+
+                        if (string.IsNullOrWhiteSpace(square.Color))
+                        {
+                            square.Color = "white";
+                        }
+
+
+                        <div class="square game-square"
+                             id="@square.Id"
+                             onclick="selectSquareAndPawn(select('@('#' + square.Id)'))"
+                             style="background-color: @square.Color; border-color: darkgray;">
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="square"></div>
+                    }
+                }
+            </div>
+        }
+    </div>
+    <img class="blue-pawn" src="~/images/Pawns/blue_64.png" style="display: none">
+    <img class="red-pawn" src="~/images/Pawns/red_64.png" style="display: none">
+    <img class="yellow-pawn" src="~/images/Pawns/yellow_64.png" style="display: none">
+    <img class="green-pawn" src="~/images/Pawns/green_64.png" style="display: none">
+</body>
 <style>
+    .centerImg {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
 #welcomeContainer {
   height: 200px;
   position: relative;
@@ -19,70 +111,7 @@
   transform: translate(-50%, -50%);
 }
 </style>
-<var id="DefaultLanguage" style="display: none;">@Model.DefaultRegionCode</var>
-<div id="welcomeContainer">
-    <h1 id="h1Title" style="text-align:center;">Welcome to Ludo!</h1>
-    <div class="center">
-        <button class="center" id="btn_createGame" onclick="NewGame()">New Game</button>
-    </div>
-</div>
 
-<div id="controlBox" style="position: absolute; right: 20px; display: none">
-    <button id="btn_addplayer" onclick="InvitePlayer()" style="margin-bottom:3%; width: 48%">
-        Invite player
-    </button>
-    <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
-        Add AI
-    </button>
-    <button id="btn_moveSelected" onclick="sendPawnSelection()" style="margin-bottom:3%; width: 48%">
-        Move selected
-    </button>
-    <button id="btn_takeOutTwo" onclick="sendTakeOutTwoSelection()" style="margin-bottom:3%; width: 48%">
-        Take out two!
-    </button>
-    <button id="btn_rollDice" onclick="rollDice()" style="margin-bottom:3%; width: 48%">
-        Roll dice!
-    </button>
-    <div id="messageBox" style="border: 2px dotted black;">
-        <p id="messagePlayer0" style="border: 1px solid black; margin: 10px"></p>
-        <p id="messagePlayer1" style="border: 1px solid black; margin: 10px"></p>
-        <p id="messagePlayer2" style="border: 1px solid black; margin: 10px"></p>
-        <p id="messagePlayer3" style="border: 1px solid black; margin: 10px"></p>
-    </div>
-    <button onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">StartGame game</button>
-    <div style="margin-top: 10%; border: 1px solid black" id="chatBox">
-        <ul id="messagesList"></ul>
-        <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
-    </div>
-</div>
-<div id="playingField" class="board-container" style="display: none">
-
-    @for (int y = 0; y < Model.YCount; y++)
-    {
-        <div class="square-row">
-            @for (int x = 0; x < Model.XCount; x++)
-            {
-                var square = Model.GetGameSquare(x, y);
-                if (square != null)
-                {
-                    <div class="square game-square"
-                         id="@square.Id"
-                         onclick="selectSquareAndPawn(select('@('#' + square.Id)'))"
-                         style="background-color: @square.Color;">
-                    </div>
-                }
-                else
-                {
-                    <div class="square"></div>
-                }
-            }
-        </div>
-    }
-</div>
-<img class="blue-pawn" src="~/images/Pawns/blue_64.png" style="display: none">
-<img class="red-pawn" src="~/images/Pawns/red_64.png" style="display: none">
-<img class="yellow-pawn" src="~/images/Pawns/yellow_64.png" style="display: none">
-<img class="green-pawn" src="~/images/Pawns/green_64.png" style="display: none">
 
 <script type="text/javascript" src="~/data/set-up-pawns.json"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
