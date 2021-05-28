@@ -13,7 +13,7 @@ function AddInitialPawns(inPawns) {
        
             let gameSquareId = parseGameSquareId(newPawn);
             let gameSquare = select(gameSquareId);
-            let color = inPawns[i].Color;
+            let color = inPawns[i].color;
             let pImg = createPawnImg(color);
             pImg.id = "pawn" + newPawn.id;
             pImg.onclick = function () { selectedPawn = newPawn; }
@@ -70,17 +70,6 @@ connection.on("UpdatePawns",
         for (var i = 0; i < inPawns.length; i++) {
             let newPawn = inPawns[i];
             if (hasPawnMoved(currentPawns, newPawn) === true) {
-                console.log("I should now do stuff!");
-                let gameSquareId = parseGameSquareId(newPawn);
-                let gameSquare = select(gameSquareId);
-                let color = inPawns[i].color;
-                let pImg = createPawnImg(color);
-                pImg.id = "pawn" + newPawn.id;
-                pImg.onclick = function () { selectedPawn = newPawn; }
-                //pImg.onclick = function () { gameSquare }
-                gameSquare.appendChild(pImg);
-            }
-            else {
                 console.log("I should now do stuff!");
                 let gameSquareId = parseGameSquareId(newPawn);
                 let gameSquare = select(gameSquareId);
