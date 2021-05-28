@@ -34,13 +34,13 @@
     <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
         Add AI
     </button>
-    <button id="btn_moveSelected" onclick="" style="margin-bottom:3%; width: 48%">
+    <button id="btn_moveSelected" onclick="sendPawnSelection()" style="margin-bottom:3%; width: 48%">
         Move selected
     </button>
-    <button id="btn_takeOutTwo" onclick="" style="margin-bottom:3%; width: 48%">
+    <button id="btn_takeOutTwo" onclick="sendTakeOutTwoSelection()" style="margin-bottom:3%; width: 48%">
         Take out two!
     </button>
-    <button id="btn_rollDice" onclick="" style="margin-bottom:3%; width: 48%">
+    <button id="btn_rollDice" onclick="rollDice()" style="margin-bottom:3%; width: 48%">
         Roll dice!
     </button>
     <div id="messageBox" style="border: 2px dotted black;">
@@ -84,6 +84,7 @@
 <img class="yellow-pawn" src="~/images/Pawns/yellow_64.png" style="display: none">
 <img class="green-pawn" src="~/images/Pawns/green_64.png" style="display: none">
 
+<script type="text/javascript" src="~/data/startPawns.json"></script>
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/gameplay.js"></script>
 <script src="~/js/gameNetworking.js"></script>

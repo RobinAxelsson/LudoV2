@@ -12,6 +12,7 @@ using LudoDataAccess.SMTP;
 using LudoGame.GameEngine.Classes;
 using LudoTranslation;
 using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 
 namespace LudoWeb.GameClasses
 {
@@ -29,9 +30,9 @@ namespace LudoWeb.GameClasses
             _emailClient = emailClient;
             _engine = engine;
         }
-        public async Task SelectColor(string color)
+        public async Task ReceivePawns(Pawn[] pawns)
         {
-
+            Debug.WriteLine(JsonConvert.SerializeObject(pawns));
         }
         public async Task ConnectToGameRoom(string gameId)
         {

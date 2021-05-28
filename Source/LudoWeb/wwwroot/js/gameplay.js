@@ -3,22 +3,39 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 connection.start();
 
-//global variables
+//set up
+function setUpPawns() {
+    fetch('data/set-up-pawns.json')
+        .then(response => response.json())
+        .then(jsonResponse => refreshPawns(jsonResponse));
+}
+function resetOnSend() {
+    canTakeOutTwo = null;
+    if (selectedSquare !== null) {
+        selectedSquare.style.borderColor = "black";
+        selectedSquare.style.borderWidth = "1px";
+    }
+    selectedSquare = null;
+    selectedPawn = null;
+    optionPawns = [];
+    diceRoll = null;
+}
+var optionPawns = [];
 var diceRoll = null;
-const boardPawns = [];
-const optionPawns = [];
+var boardPawns = [];
 var canTakeOutTwo = null;
 var selectedSquare = null;
 var selectedPawn = null;
-
+setUpPawns();
 //SignalR input
 function receiveOption(playerOption) {
-
+    console.log("Received from networkmanager:")
+    console.log(playerOption);
     optionPawns = playerOption.PawnsToMove;
     diceRoll = playerOption.DiceRoll;
     canTakeOutTwo = playerOption.canTakeOutTwo;
 } 
-function RefreshPawns(inPawns) {
+function refreshPawns(inPawns) {
     let currentPawns = boardPawns;
     console.log(inPawns);
 
@@ -47,24 +64,36 @@ function RefreshPawns(inPawns) {
             gameSquare.appendChild(pImg);
         }
     }
-
     boardPawns = inPawns;
 }
-
 //Button events (SignalR output)
 function rollDice() {
+    console.log("You pressed roll dice button.");
     if (diceRoll !== null) {
         console.log(diceRoll);
     }
-    if (receivedPawns.length === 0) {
-        let pawns = [];
-        //send empty pawn array
-    }
+    if (optionPawns.length === 0) {
+        console.log("You will pass.");
+        resetOnSend();
+        let sendPawns = [];
+        var message = document.getElementById("messageInput").value;
+        connection.invoke("ReceivePawns", sendPawns).catch(function (err) {
+            return console.error(err.toString());
+        });
+        }
+    
 }
 function sendPawnSelection() {
-
+    console.log("You pressed send pawn button.");
+    if (selectedPawn !== null) {
+        let sendPawns = [];
+        sendPawns[0] = selectedPawn;
+        //send pawns
+        resetOnSend();
+    }
 }
 function sendTakeOutTwoSelection() {
+    console.log("You pressed take out two button.");
     if (canTakeOutTwo === true) {
         let pawns = [];
         let pawn1 = {
@@ -80,13 +109,14 @@ function sendTakeOutTwoSelection() {
         pawns[0] = pawn1;
         pawns[1] = pawn2;
         //Send
+        resetOnSend();
     }
     canTakeOutTwo = null;
 }
 
 //onclick squares
 function selectSquareAndPawn(square) {
-
+    
     if (selectedSquare !== null) {
         selectedSquare.style.borderColor = "black";
         selectedSquare.style.borderWidth = "1px";
@@ -148,7 +178,6 @@ function createPawnImg(color) {
 
     let pawnImage = document.createElement("img");
     pawnImage.classList.add("pawn-image");
-    console.log(getColorClass(color));
     pawnImage.classList.add(getColorClass(color));
     pawnImage.src = getPawnImagePath(color);
     return pawnImage;
@@ -172,7 +201,7 @@ function getColorClass(color) {
     }
 }
 function getPawnImagePath(color) {
-    console.log(color);
+   
     //Blue
     if (color === 0) {
         return "images/Pawns/blue_64.png";
