@@ -34,6 +34,15 @@
     <button id="btn_addai" onclick="AddAi()" style="margin-bottom:3%; width: 48%">
         Add AI
     </button>
+    <button id="btn_moveSelected" onclick="" style="margin-bottom:3%; width: 48%">
+        Move selected
+    </button>
+    <button id="btn_takeOutTwo" onclick="" style="margin-bottom:3%; width: 48%">
+        Take out two!
+    </button>
+    <button id="btn_rollDice" onclick="" style="margin-bottom:3%; width: 48%">
+        Roll dice!
+    </button>
     <div id="messageBox" style="border: 2px dotted black;">
         <p id="messagePlayer0" style="border: 1px solid black; margin: 10px"></p>
         <p id="messagePlayer1" style="border: 1px solid black; margin: 10px"></p>
@@ -43,7 +52,7 @@
     <button onclick="StartGame()" disabled id="btn_startGame" style="margin-top:10px; width: 100%">Start game</button>
     <div style="margin-top: 10%; border: 1px solid black" id="chatBox">
         <ul id="messagesList"></ul>
-         <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
+        <input style="width:100%" type="text" id="txt_message" name="Message" value="Send message">
     </div>
 </div>
 <div id="playingField" class="board-container" style="display: none">
@@ -58,6 +67,7 @@
                 {
                     <div class="square game-square"
                          id="@square.Id"
+                         onclick="selectSquareAndPawn(select('@('#' + square.Id)'))"
                          style="background-color: @square.Color;">
                     </div>
                 }
@@ -69,10 +79,10 @@
         </div>
     }
 </div>
-<img class="pawn-image" src="~/images/Pawns/blue_64.png" style="display: none">
-<img class="pawn-image" src="~/images/Pawns/red_64.png" style="display: none">
-<img class="pawn-image" src="~/images/Pawns/yellow_64.png" style="display: none">
-<img class="pawn-image" src="~/images/Pawns/green_64.png" style="display: none">
+<img class="blue-pawn" src="~/images/Pawns/blue_64.png" style="display: none">
+<img class="red-pawn" src="~/images/Pawns/red_64.png" style="display: none">
+<img class="yellow-pawn" src="~/images/Pawns/yellow_64.png" style="display: none">
+<img class="green-pawn" src="~/images/Pawns/green_64.png" style="display: none">
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
 <script src="~/js/gameplay.js"></script>

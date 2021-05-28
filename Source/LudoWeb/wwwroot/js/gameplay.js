@@ -3,104 +3,25 @@
 var connection = new signalR.HubConnectionBuilder().withUrl("/gameHub").build();
 connection.start();
 
-var diceRoll = 0;
-var receivedPawns = [];
+//global variables
+var diceRoll = null;
+const boardPawns = [];
+const optionPawns = [];
+var canTakeOutTwo = null;
+var selectedSquare = null;
+var selectedPawn = null;
 
-function rollDice() {
-    //Html-element = diceRoll;
-
-    if (receivedPawns.length === 0) {
-        let pawns = [];
-        //send pawns
-    }
-}
-
+//SignalR input
 function receiveOption(playerOption) {
 
-    receivedPawns = playerOption.PawnsToMove;
+    optionPawns = playerOption.PawnsToMove;
     diceRoll = playerOption.DiceRoll;
-    let canTwo = playerOption.canTakeOutTwo;
-
-    //rollDiceButton.onclick = display dice;
-
-    for (var i = 0; i < receivedPawns.Length; i++) {
-        let id = parseGameSquareId(receivedPawns[i]);
-        let gameSquare = select(id);
-        gameSquare.onclick = selectPawnEvent(gameSquare);
-    }
-    if (canTwo === true) {
-        //twoButton.onclick = takeOutTwoEvent();
-    }
-}
-
-function noPlayMode() {
-    //rolldicebutton.onclick = disable
-    //twobutton.onclick = disable
-    //activeSquares.onclick = disable
-}
-
-function takeOutTwoEvent() {
-    let pawns = [];
-    let pawn1 = {
-        "Color": 0,
-        "X": 0,
-        "Y": 0
-    }
-    let pawn2 = {
-        "Color": 0,
-        "X": 0,
-        "Y": 0
-    }
-    pawns[0] = pawn1;
-    pawns[1] = pawn2;
-    //send
-    noPlayMode();
-}
-
-//TODO change id split, trim.
-function selectPawnEvent(gameSquare) {
-
-    let colorInt = getColorEnum(gameSquare);
-    let id = gameSquare.id;
-    let X = id.split(',')[0];
-    let Y = id.split(',')[1];
-    let pawn = {
-        "Color": colorInt,
-        "X": X,
-        "Y": Y
-    }
-    let pawns = [];
-    pawns[0] = pawn;
-    //send pawnArray
-    noPlayMode();
-}
-
-function getColorEnum(gameSquare) {
-    let pawnImage = gameSquare.firstChild;
-
-    if (pawnImage.classList.contains("blue-pawn")) {
-        return 0;
-    }
-    if (pawnImage.classList.contains("red-pawn")) {
-        return 1;
-    }
-    if (pawnImage.classList.contains("yellow-pawn")) {
-        return 2;
-    }
-    if (pawnImage.classList.contains("green-pawn")) {
-        return 3;
-    }
-}
-function parseGameSquareId(pawn) {
-    return '#X' + pawn.X + 'Y' + pawn.Y;
-}
-
-var boardPawns = [];
-//Incoming correct pawns from server
+    canTakeOutTwo = playerOption.canTakeOutTwo;
+} 
 function RefreshPawns(inPawns) {
     let currentPawns = boardPawns;
     console.log(inPawns);
-    //TODO translate base coordinates.
+
     //Removes pawns that moved
     for (var i = 0; i < currentPawns.length; i++) {
         let oldPawn = currentPawns[i];
@@ -110,22 +31,99 @@ function RefreshPawns(inPawns) {
         }
     }
 
+    //Add new pawns
     for (var i = 0; i < inPawns.length; i++) {
 
         let newPawn = inPawns[i];
-        
+
         if (hasPawnMoved(currentPawns, newPawn) === true) {
             let gameSquareId = parseGameSquareId(newPawn);
             let gameSquare = select(gameSquareId);
             let color = inPawns[i].Color;
             let pImg = createPawnImg(color);
             pImg.id = "pawn" + newPawn.Id;
+            pImg.onclick = function () { selectedPawn = newPawn; }
+            pImg.onclick = function () { gameSquare }
             gameSquare.appendChild(pImg);
         }
     }
 
     boardPawns = inPawns;
 }
+
+//Button events (SignalR output)
+function rollDice() {
+    if (diceRoll !== null) {
+        console.log(diceRoll);
+    }
+    if (receivedPawns.length === 0) {
+        let pawns = [];
+        //send empty pawn array
+    }
+}
+function sendPawnSelection() {
+
+}
+function sendTakeOutTwoSelection() {
+    if (canTakeOutTwo === true) {
+        let pawns = [];
+        let pawn1 = {
+            "Color": 0,
+            "X": 0,
+            "Y": 0
+        }
+        let pawn2 = {
+            "Color": 0,
+            "X": 0,
+            "Y": 0
+        }
+        pawns[0] = pawn1;
+        pawns[1] = pawn2;
+        //Send
+    }
+    canTakeOutTwo = null;
+}
+
+//onclick squares
+function selectSquareAndPawn(square) {
+
+    if (selectedSquare !== null) {
+        selectedSquare.style.borderColor = "black";
+        selectedSquare.style.borderWidth = "1px";
+        selectedSquare = null;
+    }
+    if (selectedPawn !== null) {
+        selectedPawn = null;
+    }
+    if (optionPawns.length === 0) {
+        return;
+    }
+    if (square.hasChildNodes() === false) {
+        return;
+    }
+    let choosePawn = pawnsToChoose(square);
+    if (choosePawn !== null) {
+        selectedSquare = square;
+        selectedPawn = choosePawn;
+        selectedSquare.style.borderColor = "cyan";
+        selectedSquare.style.borderWidth = "4px";
+        selectedSquare = square;
+    }
+}
+function pawnsToChoose(square) {
+    let imgId = square.firstElementChild.id;
+    let pawnId = imgId.split("n")[1];
+    for (var i = 0; i < optionPawns.length; i++) {
+        let choosePawn = optionPawns[i];
+        let choosePawnId = choosePawn.Id.toString();
+        if (pawnId === choosePawnId) {
+            return choosePawn;
+        }
+    }
+    return null;
+}
+
+//if statements
 function hasPawnMoved(inPawns, oldPawn) {
     for (var i = 0; i < inPawns; i++) {
         let inPawn = inPawns[i];
@@ -145,22 +143,7 @@ function isPawnEradicated(inPawns, oldPawn) {
     }
     return true;
 }
-
-var str = '<a href="http://www.com">item to replace</a>'; //it can be anything
-var Obj = document.getElementById('TargetObject'); //any element to be fully replaced
-if (Obj.outerHTML) { //if outerHTML is supported
-    Obj.outerHTML = str; ///it's simple replacement of whole element with contents of str var
-}
-else { //if outerHTML is not supported, there is a weird but crossbrowsered trick
-    var tmpObj = document.createElement("div");
-    tmpObj.innerHTML = '<!--THIS DATA SHOULD BE REPLACED-->';
-    ObjParent = Obj.parentNode; //Okey, element should be parented
-    ObjParent.replaceChild(tmpObj, Obj); //here we placing our temporary data instead of our target, so we can find it then and replace it into whatever we want to replace to
-    ObjParent.innerHTML = ObjParent.innerHTML.replace('<div><!--THIS DATA SHOULD BE REPLACED--></div>', str);
-}
-
-
-
+//Helper functions
 function createPawnImg(color) {
 
     let pawnImage = document.createElement("img");
@@ -170,7 +153,6 @@ function createPawnImg(color) {
     pawnImage.src = getPawnImagePath(color);
     return pawnImage;
 }
-
 function getColorClass(color) {
     //Blue
     if (color === 0) {
@@ -189,7 +171,6 @@ function getColorClass(color) {
         return "green-pawn";
     }
 }
-
 function getPawnImagePath(color) {
     console.log(color);
     //Blue
@@ -209,7 +190,25 @@ function getPawnImagePath(color) {
         return "images/Pawns/green_64.png";
     }
 }
+function getColorEnum(gameSquare) {
+    let pawnImage = gameSquare.firstChild;
 
+    if (pawnImage.classList.contains("blue-pawn")) {
+        return 0;
+    }
+    if (pawnImage.classList.contains("red-pawn")) {
+        return 1;
+    }
+    if (pawnImage.classList.contains("yellow-pawn")) {
+        return 2;
+    }
+    if (pawnImage.classList.contains("green-pawn")) {
+        return 3;
+    }
+}
+function parseGameSquareId(pawn) {
+    return '#X' + pawn.X + 'Y' + pawn.Y;
+}
 function select(element) {
     if (document.querySelector(element) !== null) {
         return document.querySelector(element);
@@ -219,33 +218,6 @@ function select(element) {
     }
 }
 /*
- Incoming pawn array
- [
-    {
-        "Color": 0,
-        "X": 4,
-        "Y": 0
-    },
-    {
-        "Color": 0,
-        "X": 6,
-        "Y": 0
-    }
-]
-
-  [
-    {
-        Color: 0,
-        X: 4,
-        Y: 0
-    },
-    {
-        Color: 0,
-        X: 6,
-        Y: 0
-    }
-]
-{
     "PawnsToMove": [
             {
                 "Color": 0,
