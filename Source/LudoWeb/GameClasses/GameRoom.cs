@@ -9,6 +9,7 @@ using LudoGame.GameEngine.Interfaces;
 using LudoDataAccess.Models;
 using LudoGame.GameEngine.AI;
 using LudoWeb.GameInterfaces;
+using Newtonsoft.Json;
 
 namespace LudoWeb.GameClasses
 {
@@ -52,11 +53,11 @@ namespace LudoWeb.GameClasses
         public async Task StartGame()
         {
             var gamePlayers = CreateGamePlayers();
-
+            Debug.WriteLine(("gameroom with game id " + GameId + " created gameplayer: " + JsonConvert.SerializeObject(gamePlayers)));
             Game = new Game(GameId);
             Game.GameStatus = ModelEnum.GameStatus.Created;
             Debug.WriteLine("Game created with id");
-            await _gamePlay.Start(gamePlayers);
+            _gamePlay.Start(gamePlayers);
         }
         private List<IGamePlayer> CreateGamePlayers()
         {

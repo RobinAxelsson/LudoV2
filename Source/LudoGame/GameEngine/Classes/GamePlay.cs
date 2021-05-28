@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using LudoGame.GameEngine.Interfaces;
+using Newtonsoft.Json;
 
 namespace LudoGame.GameEngine.Classes
 {
@@ -41,22 +44,27 @@ namespace LudoGame.GameEngine.Classes
         public async Task<GameEnum.GameStatus> Start(List<IGamePlayer> players)
         {
             SetUpTeams(players);
-
+            Debug.WriteLine("Set up Teams");
             _gameEvent.InvokeOnNewGameEvent();
+            var orderedPlayers = players;
             while (_continuePlay(this))
             {
                 foreach (var player in _orderedPlayers)
                 {
                     int diceRoll = _rollDice();
                     var playerOption = _validator.GetPlayerOption(player.Color, diceRoll);
+                    Debug.WriteLine("player option: " + JsonConvert.SerializeObject(playerOption));
                     var pawns = await player.ChoosePlay(playerOption);
                     bool valid = _validator.ValidateResponse(playerOption, pawns);
+
                     if (valid) _action.Act(pawns, diceRoll);
+                    
                     else
                     {
                         await player.ChoosePlay(playerOption);
                         _gameEvent.InvokeOnInvalidResponseEvent(player);
                     }
+                    Debug.WriteLine(player.Color + "has finnished round!");
                 }
 
                 RoundCount++;

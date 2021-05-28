@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using LudoGame.GameEngine.Classes;
@@ -38,6 +40,7 @@ namespace LudoGame.GameEngine.AI
 
         public async Task<Pawn[]> ChoosePlay(PlayerOption playerOption)
         {
+            Debug.WriteLine("Stephan is choosing");
             int diceRoll = playerOption.DiceRoll;
             LoggerMessage = $"\n\n[Method: ChoosePlay] New instance\n\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Rolled: {diceRoll}";
             LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: ChoosePlay] Calculating play...";
