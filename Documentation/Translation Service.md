@@ -3,7 +3,8 @@ Alters strings using reflection and source files
 ## Flow:
 <br>
 
-![GitHub Logo](/Documentation/Images./graph.png)
+![bild](https://user-images.githubusercontent.com/70197523/120022007-19256400-bfec-11eb-8e0e-2bfc95136832.png)
+<br>
 <br>
 First of all we have .lang files which contains lines of the respective translation and it's correspondent property name. The content is split using double equal signs.
 <br>
