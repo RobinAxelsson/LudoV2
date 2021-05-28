@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
@@ -11,50 +12,29 @@ namespace LudoWeb.GameClasses
 {
     public class HtmlBoardBuilder : IHtmlBoardBuilder
     {
-        private List<GameSquare> _gameSquares;
         public int XCount { get; }
         public int YCount { get; }
-        public GameSquareViewModel GetGameSquare(int x, int y)
-        {
-            var square = _gameSquares.Find(s => s.BoardX == x && s.BoardY == y);
-            if (square == null) return null;
-            else
-            {
-                return new GameSquareViewModel(square);
-            }
-        }
-        private GameSquare GetBase(GameEnum.TeamColor color) => _gameSquares.Find(s => s.GetType() == typeof(BaseSquare) && s.Color == color);
-
-        private GameSquare CopyTo(GameSquare square, int x, int y)
-        {
-            var type = square.GetType();
-            var newSquare = (GameSquare) Activator.CreateInstance(type);
-            newSquare.BoardX = x;
-            newSquare.BoardY = y;
-            newSquare.Color = square.Color;
-            return newSquare;
-        }
-        private void CopyPaste(GameSquare original, int X, int Y)
-        {
-            _gameSquares.Add(CopyTo(original, X, Y));
-            _gameSquares.Remove(original);
-        }
-
+        private List<GameSquareViewModel> _squareViews;
         public HtmlBoardBuilder(IBoardOrm boardOrm)
         {
-            _gameSquares = boardOrm.Map();
-            XCount = _gameSquares.Select(s => s.BoardX).Max() + 1;
-            YCount = _gameSquares.Select(s => s.BoardY).Max() + 1;
-            var win = _gameSquares.Find(s => s.GetType() == typeof(WinnerSquare));
-            _gameSquares.Remove(win);
-            var blueBase = GetBase(GameEnum.TeamColor.Blue);
-            CopyPaste(blueBase, 0, 0);
-            var redBase = GetBase(GameEnum.TeamColor.Red);
-            CopyPaste(redBase, XCount - 1, 0);
-            var greenBase = GetBase(GameEnum.TeamColor.Green);
-            CopyPaste(greenBase, XCount - 1, YCount - 1);
-            var yellowBase = GetBase(GameEnum.TeamColor.Yellow);
-            CopyPaste(yellowBase, 0,YCount-1);
+            var gameSquares = boardOrm.Map();
+            XCount = gameSquares.Select(s => s.BoardX).Max() + 1;
+            YCount = gameSquares.Select(s => s.BoardY).Max() + 1;
+            var win = gameSquares.Find(s =>
+            s.GetType() == typeof(WinnerSquare));
+            gameSquares.Remove(win);
+            var squareViews = new List<GameSquareViewModel>();
+            foreach (var gs in gameSquares)
+            {
+                squareViews.Add(new GameSquareViewModel(gs, XCount, YCount));
+            }
+            _squareViews = squareViews;
+
+        }
+
+        public GameSquareViewModel GetGameSquare(int x, int y)
+        {
+            return _squareViews.Find(s => s.X == x && s.Y == y);
         }
     }
 }
