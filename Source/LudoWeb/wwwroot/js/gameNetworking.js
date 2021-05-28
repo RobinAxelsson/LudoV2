@@ -220,6 +220,9 @@ connection.on("JoinGameMessage", function(playerName, clientArray) {
      connection.invoke("StartGame", gameId);
  }
  connection.on("GameStarted", function() {
+     var audio = new Audio('audio/sound.mp3');
+     audio.play();
+     audio.volume = 0.3;
      document.getElementById("btn_addai").style.display = 'none';
      document.getElementById("btn_addplayer").style.display = 'none';
      document.getElementById("btn_startGame").style.display = 'none';
