@@ -1,8 +1,7 @@
-![Logo](/Documentation/LudoBanner_NoShadow.png)
+![image](https://user-images.githubusercontent.com/63591629/120205672-84f51000-c22a-11eb-9017-f352cc1a798f.png)
 
 # PGBSNH20 Group 5 Ludo Web
 ## An online Ludo game based on SignalR
-
 
 # Game Logic
 All the game logic happens on the server.
