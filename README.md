@@ -1,92 +1,211 @@
-# Fia webbapplikation
+![image](https://user-images.githubusercontent.com/63591629/120205672-84f51000-c22a-11eb-9017-f352cc1a798f.png)
 
+# PGBSNH20 Group 5 Ludo Web
 
-![Överblik över delar projekt](ludo2.png)
+Ludo Web project is a .NET online Ludo Board Game Platform. It was made between 10th of may and 30th of may 2021, during our studies to .NET Developer at Teknik Högskolan.
 
-Målet i detta projekt är att bygga ett grafisk web version av Ludo et spel och att denna webbapplikation ska använda REST API till styra al logik och data.
+Albin Alm -> [GitHub](https://github.com/albinalm)
 
-I den webbapplikation som vi ska bygga är planen att vi ska använda så många av dom teknikker som vi har lärt båda under denna kurs men också under Webbutveckling Frontend.
+Robin Axelsson -> [GitHub](https://github.com/robinaxelsson)
 
-## Grundtanken 
-Det ska vara möjligt att spela spelet för mellan två och fyra spelare, "sittande på varje sin dator" (detta kräver en server som alla kommer åt, man kan altivernativt har flera webbläsere öppna på datorn).
+---
+Table of content
+- [PGBSNH20 Group 5 Ludo Web](#pgbsnh20-group-5-ludo-web)
+  - [Features](#features)
+  - [Technologies](#technologies)
+  - [Architecture](#architecture)
+  - [Project: Ludo Game & Ludo Web](#project-ludo-game--ludo-web)
+    - [Server Side Game Loop](#server-side-game-loop)
+    - [A full loop across the network with SignalR](#a-full-loop-across-the-network-with-signalr)
+    - [Custom Dependency Injection of Game](#custom-dependency-injection-of-game)
+  - [Project: LudoDataAccess; EmailClient](#project-ludodataaccess-emailclient)
+    - [Flow:](#flow)
+  - [Project: LudoTranslation](#project-ludotranslation)
+    - [Flow:](#flow-1)
+    - [Why this way?](#why-this-way)
 
-Det ska bara möjligt att starta fler samtidiga spel, på servern, och komma åt ett spel med en given länk.
+---
+## Features
 
-# Krav till projektet
+- Game rooms
+- Multiplayer
+- AI players
+- Email invitations
+- SQL database with users, gamedata
+- Token and cookie authentication
+- Server Side Logic
 
-Allt ni göra, skall göras i ert GitHub repo (båda kod och dokumentation), som ligger på ert Team. Ni skall använda en ["commit tidigt och ofta"](https://blog.codinghorror.com/check-in-early-check-in-often/) ([1](https://sethrobertson.github.io/GitBestPractices/)) strategi, såklart bör ni endast commita kod som kan kompileras.
+## Technologies
 
-## Dokumentation
+- ASP.NET
+- Razor Pages
+- C#
+- SignalR
+- SQL-Server
+- Entity Framework
+- Git version control
+- GitHub
+- JavaScript
+- Visual Studio
+- SMTP client
 
-Dokumentation är till andra utvecklare och måste ge en introduktion till systemet, vilka delar består det av?
+---
 
-Frivilliga element MÅSTA framgå av dokumentationen
+## Architecture
 
-Se till att skriv och uppdatera eran [user stories](https://www.mountaingoatsoftware.com/agile/user-stories) (i docs mappen) eller issues (i Github), så att dom passer med eran Web App. Om ni använder någon externa källor (båda kod och annat) ange dom i dokumentationen.
+With SOLID principles in mind we keep the libraries (LudoGame, LudoTranslation) as libraries - independent of the main projects.
 
-Dokumentation skrivas med markdown (.md), ni väljer själv om ni vill skriva på svenska eller engelska, enda krav är att filerna placeras i */docs* mappen. Vissa delar kan vara svåra att beskriva med text och till dissa kan man med fördel för med bilder, bilder läggs också i docs-mappen och använder ni markdown kan ni länka till dom.
+- LudoGame: is the logic and the factories for the game objects.
+- LudoDataAccess: Manages the data layer with users and game data.
+- LudoTranslation: Manages the language translations in email and web interface.
+- LudoWeb: Manages the frontend (Razor pages and JavaScript), the networking of the game and the game rooms (and more).
 
-```markdown
-![Beskrivning av bild](bildnamn.jpg)
+![image](https://user-images.githubusercontent.com/63591629/120039244-dae86e80-c004-11eb-8ce8-41c00366694f.png)
+
+---
+## Project: Ludo Game & Ludo Web
+
+All the game logic is calculated on the server (to eliminate cheating).
+
+### Server Side Game Loop
+
+```csharp
+
+    foreach (var player in _orderedPlayers)
+    {
+    /*
+    rolling dice
+    check board for valid options to provide the player
+    waits for player response
+    validates the response
+    if valid:
+        update the board in memory
+        send updated pawns through SignalR
+    */
+    }
+}
 ```
 
-Se till att man kommer åt al dokumentation från *docs/readme.md*. Så att ni i readme.md länker till andre dokument.
+### A full loop across the network with SignalR
 
-## Programmering
-I detta projekt ska ni implementera en Web App till ert FLudo spel. Spelet ska vara en ASP.NET Core Web Application (Razor pages).
+This image describes the loop with both a human player connected over the network, but also our AI (called Stefan).
 
-Kod ska ligga i mappen **src**, varje team får enbart ha **en kodbas**. 
+![image](https://user-images.githubusercontent.com/63591629/120044458-2fdcb280-c00e-11eb-907d-2468e1eb94c2.png)
 
-# Hints
-Börja med i teamen med att göra en förväntningsavstämning, vad är erat mål i team, och vad är er individuella styrkor.
+Links to classes in the diagram.
 
-Försök att undvika att någon i teamen är syssellösa, om där är samarbetsvanskligheter se till att ta i dom så tidigt som möjligt.
+- [GameNetworkManager.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameNetworkManager.cs)
+- [NetworkPlayer.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/NetworkPlayer.cs)
+- [GameRoom.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameRoom.cs)
+- [GamePlay.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoGame/GameEngine/Classes/GamePlay.cs)
 
-Om någon i gruppen har svårt vid delar av koden, försök att köra pair-programming, och se till at den om tycker det är svårt är [Driver](https://gist.github.com/jordanpoulton/607a8854673d9f22c696)
+---
 
-Använd Github aktivt: Issues, Pull requets, Projects. Det gör det enklare för alla hänga med på alla förändringar och idéer.
+### Custom Dependency Injection of Game
 
-Försöka att följa SOLID principerna så långt det går.
+A good way to clear up dependencies is a good design for instantiating the Library classes. This is made through stand alone container injection of LudoGame in [LudoProvider.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoGame/GameEngine/Configuration/LudoProvider.cs).
+This design creates an additional dependency injection system separate from ASP.NETs. The system adds a new container of game services for every created instance of the LudoProvider. This makes it possible to have multiple game rooms with different Ludo games at the same time.
 
-## Kom igång
-1. Beskriv med user stories eller issues vad ni förvänter att en använder ska kunna i ert fia spel
-2. Implementera ett LUDO REST Api
-   * ASP.NET Core Web API (webapi)
-   * Unitest + unitest
-3. Skåpa en Razor Page applikation
-   * ASP.NET Core Web App (webapp)
-   * Unittest + Unitetst 
+```csharp
+public LudoProvider()
+{
+    var container = new ServiceCollection();
 
-# Betygsättning
-Detta projekt är betygsgrundande, och startas måndag den 10:e maj 2021.
+    container
+        .AddSingleton<IBoardCollection, BoardCollection>()
+        .AddSingleton<IGameAction, GameAction>()
+        .AddSingleton<IGamePlay, GamePlay>()
+        .AddSingleton<IGameFunction, GameFunction>()
+        .AddSingleton<IGameEvent, DefaultGameEvent>()
+        .AddSingleton<IOptionsValidator, OptionsValidator>()
+        .AddSingleton<IEqualityComparer<Pawn>, PawnComparer>()
+        .AddSingleton<IGameFunction, GameFunction>()
+        .AddSingleton<IBoardOrm, BoardOrm>();
 
-Det är dokumentation och kod som är commitat main-branchen innan fredag den 28:e maj 2021 kl 23:55 som räcknas.
+    _provider = container.BuildServiceProvider();
+}
 
-## Branching och pull request
-Ni kan göra så många branches baseret på *main* som ni önsker. När projektet är slut är det innehållet av **main** på **GitHub** som räcknas, så ni behöver att göra ett pull request eller merge från eran branch(s) till *main* innan deadline (om ni gör ett pull request kom ihåg att det måste appovas innan filerna hamnar i main).
+public T GetGameService<T>()
+{
+    return _provider.GetService<T>();
+}
+```
 
-## Minimum krav
-* Spellogiken styres av ett REST API, och spelen spara i en databas
-* En enkelt grafisk (kan vara text formateret med HTML) repräsentation av spilbräddan med en Razor View (med Razor Pages)
-* Input ska vära valideret, i princip ska alla input till controlers valideras i APIet och till modellen i pages, t.ex. om ett input är antal spelera kan man göra en validering som kolla om man har skrivit en sifre emellan 1 och 4. 
-* Databas körs i en docker compose
-* Varje Ludo spel har en unik URL, t.ek (välj en av dissa alternativ):
-  * med ett ID: https://localhost:5001/ludo/4/
-  * med en GUID: https://localhost:5001/ludo/1c1707cb-86fe-4cce-8ce2-06cd2d16f851/
-  * med en namn: https://localhost:5001/ludo/fiaspel2344/
+This class provide the needed game services for each game and is applied in [GameRoom.cs](https://github.com/PGBSNH20/ludo-v2-group-g5_albin-robin/blob/main/Source/LudoWeb/GameClasses/GameRoom.cs)
 
-## Frivilliga element
-För att ett element räckans med i bedömningen ska det de bekrivas i docs mappen. Gör ett matchande dokument med en beskrivning, namnet på dokumentet är angivet under varje kriterium, med ett förslag till vad innehållet av filen kan innehålla (filen måste vara ett markdown dokument).
+```csharp
+        public GameRoom(AbstractFactory gameFactory, IGameNetworkManager manager, string gameId, LudoNetworkFactory factory)
+        {
+            var provider = gameFactory.BuildLudoProvider();
+            _gamePlay = provider.GetGameService<IGamePlay>();
+            _gameEvent = provider.GetGameService<IGameEvent>();
+            _boardCollection = provider.GetGameService<IBoardCollection>();
+```
 
-* Deployas till en webserver 
-  * *docs/link.md*, hur har progammet deplyas, och vad är länken.
-* Inlogning, som är inplementerat med ASP.NET core [authentication och autherization](/PGBSNH20-backendweb/lectures/aaa-i18n)
-    * *docs/vg_auth.md*, hur kan användern logga på? hur sparas data?
-* Möjlighet att bjuda in/utmana flera spelere via epost, använn en tjänst som [SendGrid](https://sendgrid.com) tiill detta
-    * *docs/vg_email.md*, vilken service använns?
-* Spelets pjäserna på spelet ska uppdateras automatisk via [SignalR](/PGBSNH20-backendweb/lectures/asyncweb) eller en annan async teknologi (som webhooks)
-    * *docs/vg_async.md*, ett diagram som viser dataflowet
-* Stöd för fler språk/kultur (eg. Svenska och engelska) i webbgränssnittet, baseret på vad som är konfigureret i webläseren eller vid login
-    * *docs/vg_i18n.md*, vilka internationaliserings funktioner har ni använt
-* Responsive UI, så att Ludo-spelet funkar även på mobil
-    * *docs/vg_responsive.md*
+---
+
+## Project: LudoDataAccess; EmailClient
+
+Generates a HTML Email body and sends it to clients using SMTP-protocol.
+### Flow:
+<br>
+First of all we instantiate a new SMTP client using Google Server, since our host email is using Gmail.
+<br>
+<br>
+
+![bild](https://user-images.githubusercontent.com/70197523/120022388-a36dc800-bfec-11eb-9681-1ffeb35c5d96.png)
+
+<br>
+We then wish to get a list of all the account objects connected to the recipients. This is because we want the e-mail to be formatted in the receivers preferred language using TranslationEngine.<br><br>
+
+![bild](https://user-images.githubusercontent.com/70197523/120022562-dc0da180-bfec-11eb-89fb-f682671b22ba.png)
+
+<br>
+We are also sending the emails separately using a for-loop. This is of two reasons:
+<ol>
+  <li>We don't want to leak any data to the recipients. Like other receivers.</li>
+  <li>We want the e-mail to be translated individually based on the recipients preferred language</li>
+  </ol>
+Also, notice the email body is set using the method GenerateBody(). This method basically imports our HTML-body and then alters it for the user using simple string.replace.
+<br><br>
+
+![bild](https://user-images.githubusercontent.com/70197523/120022760-25f68780-bfed-11eb-9bf4-c82388b3df2e.png)
+
+---
+
+## Project: LudoTranslation
+Alters strings using reflection and source files
+### Flow:
+<br>
+
+![bild](https://user-images.githubusercontent.com/70197523/120022007-19256400-bfec-11eb-8e0e-2bfc95136832.png)
+<br>
+<br>
+First of all we have .lang files which contains lines of the respective translation and it's correspondent property name. The content is split using double equal signs.
+<br>
+Example: `Game_H1Title==Välkommen till Ludo!`
+<br>
+
+![bild](https://user-images.githubusercontent.com/70197523/120020039-7f5cb780-bfe9-11eb-85d3-92bcf1631f6f.png)
+<br><br>
+Now on the InitializeLanguage() method will firstly make a new instance of the class Dict that contains the properties.
+Secondly, a StreamReader will reach each line in the .lang file and find a property with the same name as the left section in that new instance of Dict. If it finds such property it will set that value to it's correspondant left section. Then this process is repeated until the entire file has been read.<br><br>
+![bild](https://user-images.githubusercontent.com/70197523/120020686-58eb4c00-bfea-11eb-91c9-5982bced1e3f.png)
+
+
+As a final result you will get back the newly instanced Dict class and can access all the properties with it's values.<br>
+Then just set the chosen content value to any property of Dict.<br><br>
+
+### Why this way?
+<br>
+We chose to structure it this way since it is very simple to extend the translation afterwards.<br>
+If we want to add a completely new string, the only thing we gotta do is to create that property in Dict.cs and then add that property and it's value to the language file.
+<br>
+If we instead wish to add another language we just need to name the file a 2-character ISO standard country name(SE, US, RU...) and then .lang.<br>
+In that file just copy over the properties and set the desired values.<br><br>
+
+**Example load:**
+<br><br>
+![bild](https://user-images.githubusercontent.com/70197523/120021278-242bc480-bfeb-11eb-96f1-60fadae121d9.png)
+<br>
+With reflection it becomes very simple.
