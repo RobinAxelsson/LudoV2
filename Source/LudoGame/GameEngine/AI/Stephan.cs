@@ -195,7 +195,7 @@ namespace LudoGame.GameEngine.AI
                 {
                     squarePosition = _boardCollection.GetNext(squarePosition, Color);
                 }
-                if (squarePosition is StartSquare && squarePosition.Color != Color)
+                if (squarePosition is SquareStart && squarePosition.Color != Color)
                 {
                     result = true;
                     pawnsNotToMove.Add(pawn);
@@ -251,7 +251,7 @@ namespace LudoGame.GameEngine.AI
                 for (var i = 0; i <= dice; i++)
                 {
                     squarePositionCalc = _boardCollection.GetNext(squarePositionCalc, Color);
-                    if (squarePositionCalc.GetType() != typeof(SafezoneSquare)) continue;
+                    if (squarePositionCalc.GetType() != typeof(SquareSafeZone)) continue;
                     LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: CheckIfPawnCanReachSafezone] Can reach a Safezone-square. Returning move";
                     if (squarePosition != null) return _boardCollection.PawnsOnSquare(squarePosition)[0];
                 }
@@ -268,7 +268,7 @@ namespace LudoGame.GameEngine.AI
                 for (var i = 0; i <= dice; i++)
                 {
                     squarePositionCalc = _boardCollection.GetNext(squarePositionCalc, Color);
-                    if (squarePositionCalc.GetType() != typeof(GoalSquare)) continue;
+                    if (squarePositionCalc.GetType() != typeof(SquareGoal)) continue;
                     LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: CheckIfPawnCanReachGoal] Can reach a Goal-square. Returning move";
                     if (squarePosition != null) return _boardCollection.PawnsOnSquare(squarePosition)[0];
                 }
@@ -278,7 +278,7 @@ namespace LudoGame.GameEngine.AI
         private Pawn CheckIfPawnIsBlockingSpawn()
         {
             LoggerMessage += $"\n{DateTime.Now.ToShortTimeString()}: [Method: CheckIfPawnIsBlockingSpawn] Checking if there is pawns in base";
-            if (_boardCollection.PawnsOnSquare(_boardCollection.BaseSquare(Color)).Count > 0)
+            if (_boardCollection.PawnsOnSquare(_boardCollection.GetSquareTeamBase(Color)).Count > 0)
             {
                 LoggerMessage +=
                     $"\n{DateTime.Now.ToShortTimeString()}: [Method: CheckIfPawnIsBlockingSpawn] No pawns where found in base, returning null";

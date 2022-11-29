@@ -23,7 +23,7 @@ namespace LudoGame.GameEngine.Interfaces
         GameSquare WinnerSquare();
         List<GameSquare> SafeZoneSquares(GameEnum.TeamColor color);
         GameSquare StartSquare(GameEnum.TeamColor color);
-        GameSquare BaseSquare(GameEnum.TeamColor color);
+        GameSquare GetSquareTeamBase(GameEnum.TeamColor color);
         List<GameSquare> TeamPath(GameEnum.TeamColor color);
         GameSquare GetNext(GameSquare square, GameEnum.TeamColor color);
         GameSquare GetBack(GameSquare square, GameEnum.TeamColor color);

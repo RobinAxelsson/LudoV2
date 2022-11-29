@@ -54,10 +54,10 @@ namespace LudoGame.GameEngine.Classes
             return false;
         }
 
-        public List<Pawn> PawnsInBase(GameEnum.TeamColor color) => _allPawn.FindAll(p => CurrentSquare(p) == BaseSquare(color));
+        public List<Pawn> PawnsInBase(GameEnum.TeamColor color) => _allPawn.FindAll(p => CurrentSquare(p) == GetSquareTeamBase(color));
         public List<Pawn> PawnsOnSquare(GameSquare square) => _allPawn.FindAll(p => CurrentSquare(p) == square);
         public List<Pawn> GetFreeTeamPawns(GameEnum.TeamColor color) =>
-            GetTeamPawns(color).FindAll(p => CurrentSquare(p).GetType() != typeof(BaseSquare));
+            GetTeamPawns(color).FindAll(p => CurrentSquare(p).GetType() != typeof(SquareTeamBase));
         public GameSquare PastSquare(GameSquare square, GameEnum.TeamColor color)
         {
             var defaultDirection = square.DirectionNext(color);
@@ -90,31 +90,31 @@ namespace LudoGame.GameEngine.Classes
         }
         public GameSquare GoalSquare()
         {
-            return _boardSquares.Find(x => x.GetType() == typeof(GoalSquare));
+            return _boardSquares.Find(x => x.GetType() == typeof(SquareGoal));
         }
         public GameSquare WinnerSquare()
         {
-            return _boardSquares.Find(x => x.GetType() == typeof(WinnerSquare));
+            return _boardSquares.Find(x => x.GetType() == typeof(SquareWinner));
         }
         public List<GameSquare> SafeZoneSquares(GameEnum.TeamColor color)
         {
-            return _boardSquares.FindAll(s => s.GetType() == typeof(SafezoneSquare) && s.Color == color);
+            return _boardSquares.FindAll(s => s.GetType() == typeof(SquareSafeZone) && s.Color == color);
         }
         public GameSquare StartSquare(GameEnum.TeamColor color)
         {
-            return _boardSquares.Find(x => x.GetType() == typeof(StartSquare) && x.Color == color);
+            return _boardSquares.Find(x => x.GetType() == typeof(SquareStart) && x.Color == color);
         }
-        public GameSquare BaseSquare(GameEnum.TeamColor color)
+        public GameSquare GetSquareTeamBase(GameEnum.TeamColor color)
         {
-            return _boardSquares.Find(x => x.GetType() == typeof(BaseSquare) && x.Color == color);
+            return _boardSquares.Find(x => x.GetType() == typeof(SquareTeamBase) && x.Color == color);
         }
         public List<GameSquare> TeamPath(GameEnum.TeamColor color)
         {
             var teamSquares = new List<GameSquare>();
-            var baseSquare = BaseSquare(color);
+            var baseSquare = GetSquareTeamBase(color);
             teamSquares.Add(baseSquare);
             GameSquare temp = baseSquare;
-            while (temp.GetType() != typeof(GoalSquare))
+            while (temp.GetType() != typeof(SquareGoal))
             {
                 temp = GetNext(temp, color);
                 teamSquares.Add(temp);

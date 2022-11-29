@@ -1,8 +1,9 @@
 ﻿namespace LudoGame.GameEngine.GameSquares
 {
-    public class StartSquare : GameSquare
+    public class SquareTeamBase : GameSquare
     {
-        public StartSquare(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
+        public SquareTeamBase() { }
+        public SquareTeamBase(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
         {
             BoardX = boardX;
             BoardY = boardY;

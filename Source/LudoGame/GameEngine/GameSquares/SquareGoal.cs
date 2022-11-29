@@ -1,8 +1,8 @@
 ﻿namespace LudoGame.GameEngine.GameSquares
 {
-    public class GoalSquare : GameSquare
+    public class SquareGoal : GameSquare
     {
-        public GoalSquare(int boardX, int boardY)
+        public SquareGoal(int boardX, int boardY)
         {
             BoardX = boardX;
             BoardY = boardY;

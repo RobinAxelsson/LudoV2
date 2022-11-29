@@ -1,8 +1,8 @@
 ﻿namespace LudoGame.GameEngine.GameSquares
 {
-    public class SafezoneSquare : GameSquare
+    public class SquareStart : GameSquare
     {
-        public SafezoneSquare(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
+        public SquareStart(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
         {
             BoardX = boardX;
             BoardY = boardY;

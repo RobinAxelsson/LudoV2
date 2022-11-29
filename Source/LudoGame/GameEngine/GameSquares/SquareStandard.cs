@@ -1,8 +1,8 @@
 ﻿namespace LudoGame.GameEngine.GameSquares
 {
-    public class StandardSquare : GameSquare
+    public class SquareStandard : GameSquare
     {
-        public StandardSquare(int boardX, int boardY, GameEnum.BoardDirection direction)
+        public SquareStandard(int boardX, int boardY, GameEnum.BoardDirection direction)
         {
             BoardX = boardX;
             BoardY = boardY;

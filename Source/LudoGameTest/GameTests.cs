@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using LudoGame.GameEngine;
 using LudoGame.GameEngine.Classes;
 using LudoGame.GameEngine.Configuration;
@@ -17,6 +18,17 @@ namespace LudoGameTest
         {
             var provider = new LudoProvider();
             _provider = provider;
+            var gameAction = provider.GetGameService<IGameAction>();
+            gameAction.refreshPawns = RefreshPawns;
+        }
+
+        private Task RefreshPawns(Pawn[] pawns)
+        {
+            var boardCollection = _provider.GetGameService<IBoardCollection>();
+            var allPawns = boardCollection.GetAllPawns();
+            allPawns.Clear();
+            allPawns.AddRange(pawns);
+            return Task.CompletedTask;
         }
 
         [Fact]
@@ -31,6 +43,7 @@ namespace LudoGameTest
             Assert.True(playerCollection[2].Color == GameEnum.TeamColor.Yellow);
             Assert.True(playerCollection[3].Color == GameEnum.TeamColor.Blue);
         }
+        
         [Fact]
         public void OrderedPlayerCollection_IsIterating()
         {
@@ -45,6 +58,7 @@ namespace LudoGameTest
             var next = playerCollection.Select(p => p.NextToThrow).ToList();
             Assert.False(next.Exists(b => b == false));
         }
+        
         [Fact]
         public void GameAction_SetUpPawns()
         {
@@ -60,6 +74,7 @@ namespace LudoGameTest
             Assert.True(redPawns.Count() == 4);
             Assert.True(greenPawns.Count() == 4);
         }
+        
         [Fact]
         public void BoardCollection_GetNext()
         {
@@ -78,6 +93,7 @@ namespace LudoGameTest
             var redStart = boardCollection.StartSquare(GameEnum.TeamColor.Red);
             Assert.Equal(redStart, actual);
         }
+        
         [Fact]
         public void GameAction_SetUpOldPawn_AssertBlueStart()
         {
@@ -85,7 +101,7 @@ namespace LudoGameTest
             var gameAction = _provider.GetGameService<IGameAction>();
             var boardCollection = _provider.GetGameService<IBoardCollection>();
             var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
-            var pawn = new Pawn(GameEnum.TeamColor.Blue)
+            var pawn = new Pawn(GameEnum.TeamColor.Blue, 1)
             {
                 x = blueStart.BoardX,
                 y = blueStart.BoardY
@@ -107,7 +123,7 @@ namespace LudoGameTest
             var gameAction = _provider.GetGameService<IGameAction>();
             var boardCollection = _provider.GetGameService<IBoardCollection>();
             var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
-            var pawn = new Pawn(GameEnum.TeamColor.Blue)
+            var pawn = new Pawn(GameEnum.TeamColor.Blue, 1)
             {
                 x = blueStart.BoardX,
                 y = blueStart.BoardY
@@ -117,7 +133,7 @@ namespace LudoGameTest
                 pawn
             });
             //Act
-            gameAction.Act(new Pawn[]{pawn}, 12);
+            gameAction.Act(new[]{pawn}, 12);
             //assert
 
             var actualSquare = boardCollection.CurrentSquare(pawn);
@@ -131,23 +147,23 @@ namespace LudoGameTest
             //Arrange
             var gameAction = _provider.GetGameService<IGameAction>();
             var boardCollection = _provider.GetGameService<IBoardCollection>();
-            var blueStart = boardCollection.StartSquare(GameEnum.TeamColor.Blue);
-            var pawn1 = new Pawn(GameEnum.TeamColor.Blue)
+            var blueTeamBase = boardCollection.GetSquareTeamBase(GameEnum.TeamColor.Blue);
+            var pawn1 = new Pawn(GameEnum.TeamColor.Blue, 1)
             {
-                x = blueStart.BoardX,
-                y = blueStart.BoardY
+                x = blueTeamBase.BoardX,
+                y = blueTeamBase.BoardY
             };
-            var pawn2 = new Pawn(GameEnum.TeamColor.Blue)
+            var pawn2 = new Pawn(GameEnum.TeamColor.Blue, 2)
             {
-                x = blueStart.BoardX,
-                y = blueStart.BoardY
+                x = blueTeamBase.BoardX,
+                y = blueTeamBase.BoardY
             };
             gameAction.SetUpPawns(new List<Pawn>()
             {
                 pawn1, pawn2
             });
             //Act
-            gameAction.Act(new Pawn[] { pawn1, pawn2 }, 6);
+            gameAction.Act(new [] { pawn1, pawn2 }, 6);
             //assert
 
             var actualSquare1 = boardCollection.CurrentSquare(pawn1);
@@ -156,7 +172,7 @@ namespace LudoGameTest
 
 
             Assert.Equal(actualSquare1, actualSquare2);
-            Assert.Equal(typeof(StandardSquare), squareType);
+            Assert.Equal(typeof(SquareStart), squareType);
             Assert.Equal(actualSquare1, actualSquare2);
         }
         [Theory]
@@ -201,7 +217,7 @@ namespace LudoGameTest
             var validator = _provider.GetGameService<IOptionsValidator>();
             var playerOption = validator.GetPlayerOption(GameEnum.TeamColor.Blue, 6);
             var pawn = playerOption.PawnsToMove[0];
-            var incomingPawn = new Pawn(pawn.color)
+            var incomingPawn = new Pawn(pawn.color, 1)
             {
                 x = pawn.x,
                 y = pawn.y

@@ -21,7 +21,7 @@ namespace LudoWeb.GameClasses
             XCount = gameSquares.Select(s => s.BoardX).Max() + 1;
             YCount = gameSquares.Select(s => s.BoardY).Max() + 1;
             var win = gameSquares.Find(s =>
-            s.GetType() == typeof(WinnerSquare));
+            s.GetType() == typeof(SquareWinner));
             gameSquares.Remove(win);
             var squareViews = new List<GameSquareViewModel>();
             foreach (var gs in gameSquares)

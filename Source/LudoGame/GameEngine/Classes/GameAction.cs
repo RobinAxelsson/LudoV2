@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using LudoGame.GameEngine.GameSquares;
 using LudoGame.GameEngine.Interfaces;
-using Newtonsoft.Json;
 using static LudoGame.GameEngine.GameEnum;
 
 namespace LudoGame.GameEngine.Classes
@@ -33,7 +32,7 @@ namespace LudoGame.GameEngine.Classes
                 for (int i = 0; i < 2; i++)
                 {
                     
-                    Move(basePawns[0], 1);
+                    Move(basePawns[i], 1);
                 }
                 return;
             }
@@ -57,7 +56,7 @@ namespace LudoGame.GameEngine.Classes
                 int pawnId = 0;
                 for (int t = 0; t < 4; t++)
                 {
-                    var baseSquare = _boardCollection.BaseSquare(colors[t]);
+                    var baseSquare = _boardCollection.GetSquareTeamBase(colors[t]);
 
                     for (int p = 0; p < 4; p++)
                     {
@@ -75,7 +74,7 @@ namespace LudoGame.GameEngine.Classes
             if (allPawns.TrueForAll(p => p.x == 0 && p.y == 0))
             {
                 allPawns.ForEach(p => ChangeCoordinates(
-                    p, _boardCollection.BaseSquare(p.color))
+                    p, _boardCollection.GetSquareTeamBase(p.color))
                 );
                 return;
             }
@@ -85,7 +84,7 @@ namespace LudoGame.GameEngine.Classes
         private void Move(Pawn pawn, int dice)
         {
             var tempSquare = _boardCollection.CurrentSquare(pawn);
-            bool startingSquareIsSafeZoneSquare = tempSquare is SafezoneSquare;
+            bool startingSquareIsSafeZoneSquare = tempSquare is SquareSafeZone;
 
             bool bounced = false;
 
@@ -93,7 +92,7 @@ namespace LudoGame.GameEngine.Classes
             {
                 bool lastIteration = i == dice - 1;
 
-                if (tempSquare is GoalSquare || bounced == true)
+                if (tempSquare is SquareGoal || bounced == true)
                 {
                     tempSquare = _boardCollection.PastSquare(tempSquare, pawn.color);
                     bounced = true;
@@ -102,7 +101,7 @@ namespace LudoGame.GameEngine.Classes
                 {
                     tempSquare = _boardCollection.GetNext(tempSquare, pawn.color);
                 }
-                if (lastIteration == true && tempSquare is GoalSquare)
+                if (lastIteration == true && tempSquare is SquareGoal)
                 {
                     ChangeCoordinates(pawn, _boardCollection.GoalSquare());
 
@@ -133,7 +132,7 @@ namespace LudoGame.GameEngine.Classes
             {
                 enemyColor = enemies[0].color;
                 pawnsToEradicate = enemies.Count;
-                var eradicateBase = _boardCollection.BaseSquare((TeamColor)enemyColor);
+                var eradicateBase = _boardCollection.GetSquareTeamBase((TeamColor)enemyColor);
                 ChangeCoordinates(enemies, eradicateBase);
             }
 
@@ -141,7 +140,7 @@ namespace LudoGame.GameEngine.Classes
             ChangeCoordinates(pawn, tempSquare);
 
             if (bounced == true) _gameEvent.InvokeOnBounceEvent(pawn.color);
-            if (tempSquare is SafezoneSquare && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.color);
+            if (tempSquare is SquareSafeZone && startingSquareIsSafeZoneSquare == false) _gameEvent.InvokeOnSafeZoneEvent(pawn.color);
             enemies.Add(pawn);
             _gameEvent.InvokeOnMoveEvent(enemies.ToArray()); //enemies plus own.
         }
@@ -156,7 +155,7 @@ namespace LudoGame.GameEngine.Classes
         {
             if (pawn != null)
             {
-                if (targetSquare is GoalSquare)
+                if (targetSquare is SquareGoal)
                 {
                     pawn.x = 0;
                     pawn.y = 0;
@@ -172,7 +171,7 @@ namespace LudoGame.GameEngine.Classes
             pawn = _boardCollection.GetTruePawn(pawn);
             if (pawn != null)
             {
-                if (targetSquare is GoalSquare)
+                if (targetSquare is SquareGoal)
                 {
                     pawn.x = 0;
                     pawn.y = 0;

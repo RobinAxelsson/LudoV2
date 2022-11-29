@@ -24,7 +24,7 @@ namespace LudoWebTests
             int pawnId = 0;
             for (int t = 0; t < 4; t++)
             {
-                var baseSquare = squares.Find(x => x.GetType() == typeof(BaseSquare) && x.Color == colors[t]);
+                var baseSquare = squares.Find(x => x.GetType() == typeof(SquareTeamBase) && x.Color == colors[t]);
 
                 for (int p = 0; p < 4; p++)
                 {
@@ -49,7 +49,7 @@ namespace LudoWebTests
         }
         private void ChangeCoordinates(Pawn pawn, GameSquare targetSquare)
         {
-            if (targetSquare is GoalSquare)
+            if (targetSquare is SquareGoal)
             {
                 pawn.x = 0;
                 pawn.y = 0;

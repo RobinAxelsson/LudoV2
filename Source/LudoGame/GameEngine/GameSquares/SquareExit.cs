@@ -1,8 +1,8 @@
 ﻿namespace LudoGame.GameEngine.GameSquares
 {
-    public class ExitSquare : GameSquare
+    public class SquareExit : GameSquare
     {
-        public ExitSquare(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
+        public SquareExit(int boardX, int boardY, GameEnum.TeamColor? color, GameEnum.BoardDirection direction)
         {
             BoardX = boardX;
             BoardY = boardY;

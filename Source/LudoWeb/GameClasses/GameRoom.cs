@@ -22,7 +22,9 @@ namespace LudoWeb.GameClasses
         private readonly IGameNetworkManager _networkManager;
         private readonly LudoNetworkFactory _factory;
         private readonly IGameMessager _messager;
-        public GameRoom(AbstractFactory gameFactory, IGameNetworkManager manager, string gameId, LudoNetworkFactory factory)
+
+        public GameRoom(AbstractFactory gameFactory, IGameNetworkManager manager, string gameId,
+            LudoNetworkFactory factory)
         {
             _networkManager = manager;
             var provider = gameFactory.BuildLudoProvider();
@@ -32,7 +34,7 @@ namespace LudoWeb.GameClasses
             Clients = new();
             _factory = factory;
             _messager = factory.GameMessager(_gameEvent, manager, this);
-            _waitingPlayers = new ();
+            _waitingPlayers = new();
             NetworkPlayers = new();
             Colors = new List<GameEnum.TeamColor>
             {
@@ -43,44 +45,47 @@ namespace LudoWeb.GameClasses
             };
             GameId = gameId;
         }
-        
+
         public string GameId { get; }
         public Game Game { get; private set; }
         public List<Client> Clients { get; set; }
         public List<INetworkPlayer> NetworkPlayers { get; private set; }
         private List<(GameEnum.TeamColor Color, Client Client)> _waitingPlayers { get; set; }
-        private List<GameEnum.TeamColor> Colors { get; set; }
+        private List<GameEnum.TeamColor> Colors { get; }
         private Client GetClient(string connectionId) => Clients.SingleOrDefault(x => x.ConnectionId == connectionId);
 
         private async Task RefreshPawns(Pawn[] pawns)
         {
             await _networkManager.UpdatePawns(pawns, GameId);
         }
+
         public async Task StartGame()
         {
             var gamePlayers = CreateGamePlayers();
-            Debug.WriteLine(("gameroom with game id " + GameId + " created gameplayer: " + JsonConvert.SerializeObject(gamePlayers)));
-            
+            Debug.WriteLine(("gameroom with game id " + GameId + " created gameplayer: " +
+                             JsonConvert.SerializeObject(gamePlayers)));
+
             Game = new Game(GameId);
             Game.GameStatus = ModelEnum.GameStatus.Created;
             Debug.WriteLine("GamePlay is about to start");
             await _gamePlay.Start(gamePlayers, RefreshPawns);
         }
+
         private List<IGamePlayer> CreateGamePlayers()
         {
             var gamePlayers = new List<IGamePlayer>();
             foreach (var wp in _waitingPlayers)
             {
-             if(wp.Client.Player.Type == ModelEnum.PlayerType.Stephan)
+                if (wp.Client.Player.Type == ModelEnum.PlayerType.Stephan)
                 {
                     var aiPlayer = _factory.AIPlayer(wp.Color, _boardCollection);
                     gamePlayers.Add(aiPlayer);
                 }
-             else
+                else
                 {
                     var networkPlayer = _factory.NetworkPlayer(
-               _networkManager, wp.Color, wp.Client,
-               _factory.AIPlayer(wp.Color, _boardCollection));
+                        _networkManager, wp.Color, wp.Client,
+                        _factory.AIPlayer(wp.Color, _boardCollection));
                     NetworkPlayers.Add(networkPlayer);
                     gamePlayers.Add(networkPlayer);
                 }
@@ -88,25 +93,26 @@ namespace LudoWeb.GameClasses
 
             return gamePlayers;
         }
+
         public void ConnectAiPlayer(Client client)
         {
             if (_waitingPlayers.Count < 4)
             {
                 _waitingPlayers.Add((Colors[0], client));
                 Colors.RemoveAt(0);
-               
-              //  Debug.WriteLine(Colors[0]);
+
+                //  Debug.WriteLine(Colors[0]);
             }
         }
+
         public void ConnectNetworkPlayer(Client client)
         {
-           // var client = GetClient(connectionId);
+            // var client = GetClient(connectionId);
             if (_waitingPlayers.Count < 4)
             {
                 _waitingPlayers.Add((Colors[0], client));
                 Colors.RemoveAt(0);
             }
         }
-
     }
 }

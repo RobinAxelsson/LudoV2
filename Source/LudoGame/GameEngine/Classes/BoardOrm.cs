@@ -27,42 +27,54 @@ namespace LudoGame.GameEngine.Classes
             foreach (var charCoord in charCoords)
             {
                 var chr = charCoord.chr;
+
+                if (chr == '/') break;
+                
                 int x = charCoord.X;
                 int y = charCoord.Y;
 
-                GameSquare newSquare =
-                    chr == '0' ? new StandardSquare(x, y, GameEnum.BoardDirection.Up) :
-                    chr == '1' ? new StandardSquare(x, y, GameEnum.BoardDirection.Right) :
-                    chr == '2' ? new StandardSquare(x, y, GameEnum.BoardDirection.Down) :
-                    chr == '3' ? new StandardSquare(x, y, GameEnum.BoardDirection.Left) :
-
-                    chr == 'a' ? new SafezoneSquare(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Down) :
-                    chr == 'b' ? new SafezoneSquare(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Right) :
-                    chr == 'c' ? new SafezoneSquare(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Up) :
-                    chr == 'd' ? new SafezoneSquare(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Left) :
-
-                    chr == 'e' ? new ExitSquare(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Right) :
-                    chr == 'f' ? new ExitSquare(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Up) :
-                    chr == 'g' ? new ExitSquare(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Left) :
-                    chr == 'h' ? new ExitSquare(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Down) :
-
-                    chr == 'r' ? new StartSquare(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Down) :
-                    chr == 'l' ? new StartSquare(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Right) :
-                    chr == 'y' ? new StartSquare(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Up) :
-                    chr == 'n' ? new StartSquare(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Left) :
-
-                    chr == '4' ? new BaseSquare(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Left) :
-                    chr == '5' ? new BaseSquare(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Down) :
-                    chr == '6' ? new BaseSquare(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Right) :
-                    chr == '7' ? new BaseSquare(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Up) :
-
-                    chr == 'w' ? new WinnerSquare(x, y) :
-                    chr == 's' ? new GoalSquare(x, y) : throw new NullReferenceException();
-
+                var newSquare = MapGameSquare(chr, x, y);
+                
                 squares.Add(newSquare);
             }
 
             return squares;
+        }
+
+        private static GameSquare MapGameSquare(char chr, int x, int y)
+        {
+            return chr switch
+            {
+                '0' => new SquareStandard(x, y, GameEnum.BoardDirection.Up),
+                '1' => new SquareStandard(x, y, GameEnum.BoardDirection.Right),
+                '2' => new SquareStandard(x, y, GameEnum.BoardDirection.Down),
+                '3' => new SquareStandard(x, y, GameEnum.BoardDirection.Left),
+
+                'a' => new SquareSafeZone(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Down),
+                'b' => new SquareSafeZone(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Right),
+                'c' => new SquareSafeZone(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Up),
+                'd' => new SquareSafeZone(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Left),
+
+                'e' => new SquareExit(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Right),
+                'f' => new SquareExit(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Up),
+                'g' => new SquareExit(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Left),
+                'h' => new SquareExit(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Down),
+
+                'r' => new SquareStart(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Down),
+                'l' => new SquareStart(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Right),
+                'y' => new SquareStart(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Up),
+                'n' => new SquareStart(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Left),
+
+                '4' => new SquareTeamBase(x, y, GameEnum.TeamColor.Red, GameEnum.BoardDirection.Left),
+                '5' => new SquareTeamBase(x, y, GameEnum.TeamColor.Blue, GameEnum.BoardDirection.Down),
+                '6' => new SquareTeamBase(x, y, GameEnum.TeamColor.Yellow, GameEnum.BoardDirection.Right),
+                '7' => new SquareTeamBase(x, y, GameEnum.TeamColor.Green, GameEnum.BoardDirection.Up),
+
+                's' => new SquareGoal(x, y),
+                'w' => new SquareWinner(x,y),
+
+                _ => throw new NullReferenceException()
+            };
         }
 
         //The file is embedded so all projects can use it with the library
@@ -71,11 +83,27 @@ namespace LudoGame.GameEngine.Classes
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = "LudoGame.GameEngine.Data.BoardMap.txt";
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (StreamReader reader = new StreamReader(stream))
+            Stream stream = null;
+            StreamReader streamReader = null;
+            string fileContent = null;
+            try
             {
-                return reader.ReadToEnd();
+                stream = assembly.GetManifestResourceStream(resourceName) ??
+                         throw new ArgumentNullException("File path did not get resource stream");
+                streamReader = new StreamReader(stream);
+                fileContent = streamReader.ReadToEnd();
             }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            finally
+            {
+                streamReader?.Dispose();
+                stream?.Dispose();
+            }
+
+            return fileContent;
         }
         private List<(char chr, int X, int Y)> ReadCharCoords(string[] lines)
         {
